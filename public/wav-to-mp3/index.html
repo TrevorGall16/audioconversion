@@ -243,17 +243,20 @@
             color: white;
         }
 
-        /* Ad Containers */
+        /* Ad Containers - TESTING MODE (All visible with white backgrounds) */
         .ad-container {
-            background: #f5f5f5;
-            border: 1px solid #ddd;
+            background: white;
+            border: 3px solid #FF6B6B;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
-            font-size: 0.9rem;
+            color: #FF6B6B;
+            font-size: 1.2rem;
+            font-weight: bold;
             margin-bottom: 20px;
+            text-align: center;
+            padding: 20px;
         }
 
         #ad-banner-1 {
@@ -264,7 +267,7 @@
         #ad-banner-2 {
             min-height: 250px;
             width: 100%;
-            display: none;
+            display: flex; /* TESTING: Always visible */
         }
 
         #ad-banner-2.active {
@@ -274,9 +277,10 @@
         #ad-sidebar {
             min-height: 600px;
             background: white;
+            border: 3px solid #4ECDC4;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: none;
+            display: flex; /* TESTING: Always visible on all screens */
         }
 
         @media (min-width: 1024px) {
@@ -288,7 +292,7 @@
         .inline-ad {
             min-height: 100px;
             margin: 15px 0;
-            display: none;
+            display: flex; /* TESTING: Always visible */
         }
 
         .inline-ad.active {
@@ -509,7 +513,13 @@
 
                     <!-- Inline Ad (appears during conversion) -->
                     <div class="ad-container inline-ad" id="inlineAd">
-                        [Advertisement Space - Inline]
+                        <div>
+                            📢 INLINE AD<br>
+                            <small style="font-weight: normal; font-size: 0.9rem;">
+                                During Conversion Only • 300x250 or 320x50<br>
+                                Below Progress Bar
+                            </small>
+                        </div>
                     </div>
 
                     <!-- Result Section -->
@@ -526,12 +536,24 @@
 
                 <!-- Banner Ad #1 (Always visible below conversion box) -->
                 <div class="ad-container" id="ad-banner-1">
-                    [Advertisement Space - Banner #1]
+                    <div>
+                        📢 AD BANNER #1<br>
+                        <small style="font-weight: normal; font-size: 0.9rem;">
+                            Always Visible • 728x90 (Desktop) / 320x50 (Mobile)<br>
+                            Below Conversion Box
+                        </small>
+                    </div>
                 </div>
 
                 <!-- Banner Ad #2 (Shown after conversion) -->
                 <div class="ad-container" id="ad-banner-2">
-                    [Advertisement Space - Banner #2]
+                    <div>
+                        📢 AD BANNER #2<br>
+                        <small style="font-weight: normal; font-size: 0.9rem;">
+                            Shown After Conversion • 728x90 (Desktop) / 320x50 (Mobile)<br>
+                            Mid-Page Position
+                        </small>
+                    </div>
                 </div>
 
                 <!-- Features Section -->
@@ -569,7 +591,14 @@
             <!-- Sidebar Ad (Desktop only) -->
             <aside>
                 <div class="ad-container" id="ad-sidebar">
-                    [Advertisement Space - Sidebar]
+                    <div>
+                        📢 SIDEBAR AD<br>
+                        <small style="font-weight: normal; font-size: 0.9rem;">
+                            Desktop Only (Hidden on Mobile)<br>
+                            300x600 Vertical Rectangle<br>
+                            Right Column
+                        </small>
+                    </div>
                 </div>
             </aside>
         </div>
