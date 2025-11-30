@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ad Placement Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+        .ad-container {
+            background: white;
+            border: 3px solid #FF6B6B;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FF6B6B;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        #ad-banner-1 { min-height: 250px; width: 100%; display: flex !important; }
+        #ad-banner-2 { min-height: 250px; width: 100%; display: flex !important; }
+        #ad-sidebar { min-height: 600px; background: white; border: 3px solid #4ECDC4; display: flex !important; }
+        .inline-ad { min-height: 100px; margin: 15px 0; display: flex !important; }
+        .test-section { background: white; padding: 20px; margin: 20px 0; border: 2px solid #333; }
+    </style>
+</head>
+<body>
+    <h1>Ad Placement Visibility Test</h1>
+    <p>If you can see 4 colored boxes below, all ads are rendering correctly.</p>
+
+    <div class="test-section">
+        <h2>Test Section (simulates content)</h2>
+
+        <div class="ad-container" id="ad-banner-1">
+            📢 AD BANNER #1<br>
+            <small>Always Visible • 728x90</small>
+        </div>
+
+        <div class="ad-container" id="ad-banner-2">
+            📢 AD BANNER #2<br>
+            <small>After Conversion • 728x90</small>
+        </div>
+
+        <div class="ad-container inline-ad" id="inlineAd">
+            📢 INLINE AD<br>
+            <small>During Conversion • 300x250</small>
+        </div>
+
+        <div class="ad-container" id="ad-sidebar">
+            📢 SIDEBAR AD<br>
+            <small>Desktop Only • 300x600</small>
+        </div>
+    </div>
+
+    <script>
+        // Check if all ads exist in DOM
+        const ads = ['ad-banner-1', 'ad-banner-2', 'inlineAd', 'ad-sidebar'];
+        console.log('=== AD VISIBILITY TEST ===');
+        ads.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                const computed = window.getComputedStyle(el);
+                console.log(`${id}:`);
+                console.log(`  - Element exists: YES`);
+                console.log(`  - Display: ${computed.display}`);
+                console.log(`  - Visibility: ${computed.visibility}`);
+                console.log(`  - Width: ${computed.width}`);
+                console.log(`  - Height: ${computed.height}`);
+            } else {
+                console.log(`${id}: MISSING FROM DOM`);
+            }
+        });
+    </script>
+</body>
+</html>
