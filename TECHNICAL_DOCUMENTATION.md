@@ -3,15 +3,16 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Current Implementation Status](#current-implementation-status)
-3. [File Structure](#file-structure)
-4. [Architecture & Design Decisions](#architecture--design-decisions)
-5. [Code Explanation](#code-explanation)
-6. [How the App Works (Current State)](#how-the-app-works-current-state)
-7. [What's Missing (Implementation Needed)](#whats-missing-implementation-needed)
-8. [Implementation Options](#implementation-options)
-9. [Ad Integration Strategy](#ad-integration-strategy)
-10. [Security & Performance Considerations](#security--performance-considerations)
-11. [Next Steps for AI Assistants](#next-steps-for-ai-assistants)
+3. [**CRITICAL ISSUE: Ad Visibility Problem**](#critical-issue-ad-visibility-problem) ⚠️
+4. [File Structure](#file-structure)
+5. [Architecture & Design Decisions](#architecture--design-decisions)
+6. [Code Explanation](#code-explanation)
+7. [How the App Works (Current State)](#how-the-app-works-current-state)
+8. [What's Missing (Implementation Needed)](#whats-missing-implementation-needed)
+9. [Implementation Options](#implementation-options)
+10. [Ad Integration Strategy](#ad-integration-strategy)
+11. [Security & Performance Considerations](#security--performance-considerations)
+12. [Next Steps for AI Assistants](#next-steps-for-ai-assistants)
 
 ---
 
@@ -53,6 +54,233 @@
 - **Real Download**: Downloads a fake file, not converted audio
 
 **CRITICAL**: The conversion is simulated. When a user clicks "Download", they get a text file that says "This is a demo conversion", which is NOT a valid audio file.
+
+---
+
+## CRITICAL ISSUE: Ad Visibility Problem
+
+### ⚠️ ACTIVE DEBUGGING SESSION - UNRESOLVED
+
+**Status**: User reports only 1 out of 4 ad placements is visible when opening generated HTML files.
+
+**Expected Behavior**: All 4 ad containers should be visible with colored borders (testing mode):
+1. `#ad-banner-1` - Red border, 250px height (Below conversion box)
+2. `#ad-banner-2` - Red border, 250px height (Mid-page)
+3. `#inlineAd` - Red border, 100px height (Below progress bar)
+4. `#ad-sidebar` - Cyan border, 600px height (Right sidebar)
+
+**Actual Behavior**:
+- User opens `public/index.html` and `public/ad-test.html`
+- Only sees `#ad-banner-2`
+- Other 3 ads are missing from visible DOM
+
+### Investigation History
+
+**Files Checked**:
+- `template.html` - Source template with placeholders
+- `public/index.html` - Generated homepage
+- `public/ad-test.html` - Diagnostic test file
+
+**What Was Found**:
+1. ✅ All 4 ad elements ARE present in the HTML markup (verified with grep)
+2. ✅ HTML structure is valid (36 opening divs, 36 closing divs)
+3. ✅ Each ad ID appears exactly once in the DOM
+4. ⚠️ CSS issue discovered: `#ad-banner-1` was missing `display: flex` property
+5. ✅ Fixed by adding `display: flex` to `#ad-banner-1` in template.html:265
+6. ✅ Rebuilt all pages with `npm run build`
+7. ❌ User still reports only seeing ad-banner-2
+
+### Current CSS Configuration (template.html lines 246-301)
+
+```css
+/* Ad Containers - TESTING MODE */
+.ad-container {
+    background: white;
+    border: 3px solid #FF6B6B;
+    display: flex;          /* Base class */
+    /* ... other properties */
+}
+
+#ad-banner-1 {
+    min-height: 250px;
+    width: 100%;
+    display: flex; /* TESTING: Always visible */
+}
+
+#ad-banner-2 {
+    min-height: 250px;
+    width: 100%;
+    display: flex; /* TESTING: Always visible */
+}
+
+#ad-sidebar {
+    min-height: 600px;
+    background: white;
+    border: 3px solid #4ECDC4;
+    display: flex; /* TESTING: Always visible on all screens */
+}
+
+.inline-ad {
+    min-height: 100px;
+    margin: 15px 0;
+    display: flex; /* TESTING: Always visible */
+}
+```
+
+### HTML Structure (template.html lines 533-581)
+
+```html
+<div class="main-content">
+    <div class="conversion-area">
+        <div class="conversion-section">
+            <!-- Inline Ad (line 515) -->
+            <div class="ad-container inline-ad" id="inlineAd">...</div>
+        </div>
+
+        <!-- Banner Ad #1 (line 538) -->
+        <div class="ad-container" id="ad-banner-1">...</div>
+
+        <!-- Banner Ad #2 (line 549) -->
+        <div class="ad-container" id="ad-banner-2">...</div>
+    </div>
+
+    <aside>
+        <!-- Sidebar Ad (line 593) -->
+        <div class="ad-container" id="ad-sidebar">...</div>
+    </aside>
+</div>
+```
+
+### Diagnostic Commands Run
+
+```bash
+# Verify all ads exist in generated file
+grep -c "ad-banner-1" public/index.html    # Result: 2 (CSS + HTML)
+grep -c "ad-banner-2" public/index.html    # Result: 6 (CSS + HTML + JS)
+grep -c "ad-sidebar" public/index.html     # Result: 3 (CSS + HTML)
+grep -c "inlineAd" public/index.html       # Result: (multiple)
+
+# Verify HTML structure is valid
+python3 check: <div> count = 36, </div> count = 36 ✓
+
+# Extract exact ad markup
+sed -n '538,546p' public/index.html
+# Shows: <div class="ad-container" id="ad-banner-1">... with proper content
+```
+
+### Possible Causes (NEED INVESTIGATION)
+
+1. **Browser Caching**
+   - User may be viewing cached version despite hard refresh
+   - Solution: Try incognito mode or different browser
+
+2. **CSS Specificity Conflict**
+   - Some other CSS rule might be overriding `display: flex`
+   - Need to check computed styles in browser DevTools
+
+3. **JavaScript Interference**
+   - Some script might be hiding/removing elements after page load
+   - Check: Are there any `.remove()` or `display = 'none'` calls?
+
+4. **Layout Container Issue**
+   - Parent container might have `display: none` or `visibility: hidden`
+   - Check: `.conversion-area`, `.main-content`, `aside` computed styles
+
+5. **File System / Build Issue**
+   - Build script may not be writing files correctly
+   - Generated files might not match what's in memory
+
+### Verification Steps for Next AI
+
+**Step 1**: Check if files are actually updated
+```bash
+# Check file timestamps
+ls -lah public/index.html template.html
+
+# Force clean rebuild
+rm -rf public/
+npm run build
+
+# Verify ad markup is in generated file
+grep -A5 "ad-banner-1" public/index.html
+```
+
+**Step 2**: Create minimal reproduction
+```bash
+# User should open public/ad-test.html
+# This file has ONLY the ad containers with !important flags
+# If ads don't show here, it's a browser/system issue
+```
+
+**Step 3**: Browser Console Debugging
+```javascript
+// User should run this in browser console on public/index.html
+const ads = ['ad-banner-1', 'ad-banner-2', 'inlineAd', 'ad-sidebar'];
+ads.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        const computed = window.getComputedStyle(el);
+        console.log(`${id}:`);
+        console.log(`  Display: ${computed.display}`);
+        console.log(`  Visibility: ${computed.visibility}`);
+        console.log(`  Width: ${computed.width}`);
+        console.log(`  Height: ${computed.height}`);
+        console.log(`  Position: ${computed.position}`);
+        console.log(`  Opacity: ${computed.opacity}`);
+    } else {
+        console.log(`${id}: NOT FOUND IN DOM`);
+    }
+});
+```
+
+**Step 4**: Check parent containers
+```javascript
+// Check if parent containers are visible
+const containers = ['.conversion-area', '.main-content', 'aside'];
+containers.forEach(selector => {
+    const el = document.querySelector(selector);
+    if (el) {
+        const computed = window.getComputedStyle(el);
+        console.log(`${selector}:`);
+        console.log(`  Display: ${computed.display}`);
+        console.log(`  Visibility: ${computed.visibility}`);
+    }
+});
+```
+
+### What User Reports (Latest)
+
+**File**: `public/ad-test.html`
+- Sees: "Ad Placement Visibility Test" heading ✓
+- Sees: Black outlined box with "Test Section" ✓
+- Sees: ONE red outlined box with "AD BANNER #2" ✓
+- Missing: ad-banner-1, inlineAd, ad-sidebar ❌
+
+**File**: `public/index.html`
+- Same issue as ad-test.html
+- Only ad-banner-2 is visible
+
+### Commits Related to This Issue
+
+- `e8d42ed` - TEST: Make all ad placements highly visible for review
+- `65eba84` - Add diagnostic test file for ad visibility verification
+- `d5b152f` - Fix ad-banner-1 visibility issue - add missing display:flex property
+
+### Next Steps
+
+1. **User should provide browser console output** from the JavaScript commands above
+2. **Try different browser** (Chrome, Firefox, Safari) to rule out browser-specific issue
+3. **Check if incognito mode** shows different results
+4. **Take screenshot** of browser DevTools showing element inspector on one of the missing ads
+5. **Verify file was actually updated** by checking modification timestamp
+
+### Critical Questions for User
+
+1. What browser and version are you using?
+2. Are you opening the file with `file://` or via `http://localhost`?
+3. Does the browser console show any JavaScript errors (red text)?
+4. In DevTools Elements tab, can you find `<div id="ad-banner-1">` in the DOM tree?
+5. If you find it in the DOM tree, what are its computed styles?
 
 ---
 
