@@ -1,0 +1,100 @@
+Audio Converter Website — Ad Strategy & Implementation Guidelines
+1. Objective
+
+To maximize ad revenue while maintaining a functional and smooth user experience on the audio converter website. Ads should be visible and monetizable but must not block the core functionality (file upload, conversion, download). High ad density is acceptable as long as it does not disrupt usability or violate Google AdSense or general web ad policies.
+
+2. Ad Types & Placement
+2.1 Banner Ads
+
+Bottom Banner: Persistent across all pages, shown when no inline ad is displayed. Height must be reserved to avoid layout shift.
+
+Inline Banner Ads: Can be embedded within page content (e.g., between conversion steps, near file upload or download buttons).
+
+Frequency & Rules:
+
+No more than 2 inline banners per page is ideal.
+
+Always leave clear spacing between content and ads to avoid accidental clicks.
+
+Inline ads should not cover or interfere with functional buttons.
+
+2.2 Conversion-Triggered Ads
+
+Trigger Condition: After a successful conversion or file download.
+
+Format Options: Interstitial or lightbox ad.
+
+Rules:
+
+Must be skippable or closable immediately (to comply with Google policies).
+
+Only one triggered ad per conversion.
+
+Avoid stacking multiple interstitials if the user repeats conversions in the same session.
+
+2.3 Optional Extra Ads
+
+Sidebars or small rectangle ads can be added if page layout allows, but only if they do not push main content out of view.
+
+3. Implementation Guidelines
+3.1 Central Ad Management
+
+Use a central AdProvider system to handle all ad types:
+
+Initialize ads once and reuse instances.
+
+Refresh ads periodically without full page reload.
+
+Track which ads are shown to prevent duplicates in the same user session.
+
+3.2 Responsive & Non-Intrusive
+
+Ads must adapt to mobile and desktop layouts.
+
+Avoid fullscreen pop-ups that block interaction unless they are conversion-triggered and immediately closable.
+
+Reserve space for ads dynamically so layout does not shift when ads load.
+
+3.3 Compliance & Safety
+
+All ads must comply with:
+
+Google AdSense / AdMob policies.
+
+Do not trick users into clicking ads or hide the close button.
+
+No auto-downloads, forced clicks, or deceptive behavior.
+
+Monitor ad load times to avoid slowing down the website.
+
+4. UX & Conversion Considerations
+
+File conversion process must remain fully functional regardless of ad presence.
+
+Conversion-triggered ads are acceptable because they are after primary action completion.
+
+Keep critical buttons (upload, convert, download) always above the fold or clearly visible.
+
+Avoid excessive frequency that forces users to interact with multiple ads to achieve their goal.
+
+5. Best Practices
+
+Prioritize user task flow: Ads should never block the core workflow of uploading or downloading.
+
+Test ad placement: Check on multiple screen sizes to ensure no overlaps or broken layouts.
+
+Monitor revenue vs UX: High ad density is fine, but if engagement or conversions drop, reconsider placement.
+
+Use asynchronous loading: Ads should not delay page render or conversion speed.
+
+Session management: Track which conversion-triggered ads have been shown to a user to avoid repetition fatigue.
+
+6. Notes for AI / Developer
+
+Treat all ad slots as dynamic and reusable components.
+
+Always maintain clean separation between functional code (converter) and monetization code (ads).
+
+The system should allow for future expansion of ad types without breaking core functionality.
+
+Error handling: If an ad fails to load, fallback gracefully (no blank spaces that break layout).

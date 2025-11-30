@@ -1,0 +1,142 @@
+General App Overview — Audio Converter Website
+1. Purpose of the Application
+
+The app is a web-based audio conversion tool designed for fast, simple, no-signup file conversion. Users can upload an audio file (e.g., MP3, WAV, FLAC…), select a target format, and download the converted file within seconds. The focus is on speed, simplicity, and reliability, with an interface that even non-technical users understand immediately.
+
+The site is also designed to generate revenue through display ads and post-conversion ads, without blocking or slowing down the core conversion workflow.
+
+2. Core Features
+2.1 File Upload
+
+Users upload audio files from desktop or mobile.
+
+Supported formats include MP3, WAV, FLAC, AAC, M4A, OGG, and others.
+
+Validate file size and type before starting the conversion.
+
+2.2 Format Selection
+
+The user selects the desired output format.
+
+List of formats appears in a clean, simple dropdown or tile grid.
+
+2.3 Fast Conversion
+
+The system converts audio files on the server (or locally via WASM depending on implementation).
+
+Conversion should be optimized for speed and stability.
+
+Provide a progress indicator.
+
+2.4 Download
+
+After conversion, a clear “Download” button is shown.
+
+After download is triggered, a conversion-triggered ad may appear.
+
+2.5 No Account Required
+
+No login, registration, or email capture.
+
+Purely functional, task-focused tool.
+
+3. User Flow
+
+User lands on homepage → sees upload section + one banner ad.
+
+Uploads file → sees inline ad depending on layout.
+
+Chooses output format → conversion starts.
+
+Conversion completes → “Download” button appears.
+
+After download, a conversion-triggered ad appears (once per conversion).
+
+User can convert again or leave.
+
+The app should always feel light, minimal, and fast.
+
+4. Target Audience
+
+People needing quick audio conversions without installing software.
+
+Musicians, podcasters, students, casual users, or anyone working with audio files.
+
+Users who want a one-click, no-hassle tool.
+
+Many will come from Google search for specific queries (e.g., “mp3 to wav converter”).
+
+Site must be optimized for both mobile and desktop traffic.
+
+5. Brand & UX Style
+
+Clean, modern, minimalistic interface.
+
+Very few steps: upload → pick format → convert → download.
+
+Avoid clutter — the ads should never feel like they break the site.
+
+Colors and layout should emphasize clarity and functionality.
+
+The overall feeling should be “simple tool that does one thing extremely well.”
+
+6. Technical Expectations
+6.1 Performance
+
+Conversion speed is critical.
+
+Keep the main page under 1.5 seconds load time.
+
+Use deferred loading for ads and non-essential scripts.
+
+6.2 Stability
+
+Handle different browsers and mobile devices safely.
+
+Graceful error handling: invalid files, failed conversions, oversized uploads.
+
+6.3 Security
+
+File handling must be temporary and secure.
+
+Automatically delete files after conversion or after a short timeout.
+
+6.4 SEO
+
+Pages should be SEO-friendly because most traffic will arrive via search.
+
+Include metadata for every conversion format (e.g., MP3 → WAV).
+
+7. Monetization Approach
+
+Displays ads without interrupting the workflow.
+
+Uses banner ads and conversion-triggered ads.
+
+No premium version, no paid downloads.
+
+High ad density is allowed but must be structured and compliant.
+
+(A separate document outlines the detailed ad strategy.)
+
+8. Constraints / Rules
+
+The conversion process must never be blocked by ads.
+
+No forced waiting times.
+
+No deceptive UX.
+
+Respect Google AdSense policies.
+
+Avoid aggressive behavior like forcing users to watch multiple ads per conversion.
+
+9. Goal of the Project
+
+To build a high-traffic, simple and reliable audio conversion website that:
+
+Converts visitors quickly.
+
+Generates passive income through ads.
+
+Remains lightweight and easy to maintain.

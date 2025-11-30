@@ -1,0 +1,107 @@
+Protocol for Building High-Visibility Client-Side Tools (Audio Converter Version)
+
+For: AI Assistants / Web Developers
+Goal: Build ultra-fast, SEO-indexed, "serverless" tools that behave like multi-page websites.
+Philosophy:
+- High speed
+- Full indexability (Clean URLs)
+- Aggressive but compliant monetization
+- Pre-rendered HTML for Bots + Client-Side Speed for Users
+
+1. Core Architecture Constraint: The "Hybrid Static" Model
+
+The previous requirement for a "Single Page App" with query parameters (?tool=x) is strictly FORBIDDEN for the main tools. It destroys SEO ranking potential.
+
+The Rule:
+The website must use Static Site Generation (SSG) principles. 
+Every converter tool must have its own physical directory and index.html file during the build process, or be handled via clean server rewrites.
+
+Required URL Structure:
+❌ Bad (Parameters):  mysite.com/?tool=mp3-to-wav
+✔️ Good (Clean URL): mysite.com/mp3-to-wav/
+
+This puts the keywords (mp3, wav) directly in the URL path, which is a major ranking factor.
+
+2. Data Structure Requirements
+
+Each audio converter must exist as a data object to generate these pages:
+{
+  name: "MP3 to WAV Converter",
+  slug: "mp3-to-wav",
+  description: "Convert MP3 files to WAV format instantly.",
+  input: "mp3",
+  output: "wav"
+}
+
+3. Implementation Strategy: "The Folder Method"
+
+To achieve maximum indexing on static hosts (Netlify/Vercel/Cloudflare) without complex servers:
+
+A. The Build Script
+You need a script (node.js) that runs *before* deployment:
+1. Reads the list of converters (Data Structure).
+2. Takes a master HTML template.
+3. Injects the specific Title, Meta Description, and H1 for that tool.
+4. Saves it as: /dist/mp3-to-wav/index.html
+
+B. The Result
+When GoogleBot hits `mysite.com/mp3-to-wav/`, it receives pure, pre-rendered HTML immediately. No JavaScript required to see the content.
+
+4. Client-Side "Soft" Navigation (Speed + Ads)
+
+While the pages are static files, we still want the speed of an SPA.
+
+A. Intercept Clicks
+When a user clicks a link to "/wav-to-mp3/":
+1. Prevent default browser reload.
+2. Fetch the content of the target page (or swap the UI view using JS).
+3. Update URL via history.pushState(null, "", "/wav-to-mp3/").
+4. Update <title> and <meta> tags.
+5. TRIGGER AD REFRESH (Critical).
+
+This gives you the SEO of a static site with the speed of an app.
+
+5. Monetization Strategy & AdProvider
+(Crucial for Revenue Continuity)
+
+Since we are using "Soft Navigation" (changing the URL without a full page hard-refresh), Adsense will not reload automatically.
+
+5.1 AdProvider Class (Mandatory)
+You must implement a central AdProvider that:
+- Detects URL changes.
+- Destroys existing ad slots.
+- Re-initializes ads for the new "page."
+- Ensures unique views are counted.
+
+5.2 Layout Stability (CLS Prevention)
+Define fixed heights for ad containers in CSS. 
+Example:
+#ad-banner { width: 100%; min-height: 250px; }
+This prevents the layout from "jumping" when ads load, which is critical for retaining search rankings.
+
+5.3 Conversion-Triggered Ad
+- Show after the download is ready.
+- Must be skippable/closable.
+- Do not stack multiple triggers.
+
+6. Sitemaps
+Your build script must generate a standard sitemap.xml.
+- It must list the CLEAN URLs (e.g., https://mysite.com/mp3-to-wav/).
+- Do NOT list parameter URLs.
+
+7. Final Deployment Checklist
+
+The project is NOT complete until:
+✔️ /mp3-to-wav/index.html exists (physical file or SSG route).
+✔️ URL structure is Clean (no ?id= or ?tool=).
+✔️ AdProvider refreshes ads on soft navigation.
+✔️ Canonical tags point to the Clean URL.
+✔️ Sitemap.xml includes all generated tool paths.
+
+8. Summary of SEO Priority
+
+1. Title Tag: "MP3 to WAV Converter - Fast & Free"
+2. H1 Header: Matches Title.
+3. URL: /mp3-to-wav/
+4. Content: Unique description injected into the HTML template for that specific tool.
+5. Speed: Under 1.5s load time.

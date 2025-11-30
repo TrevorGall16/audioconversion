@@ -1,0 +1,127 @@
+Audio Converter Website — Build Specification & Technology Document
+1. Project Goal
+
+Create a lightweight, fast, SEO-friendly audio converter website with stable ad placement, high visibility, maximum indexing potential, and a simple, maintainable codebase.
+The system must prioritize:
+- Speed
+- Security & Cost Control
+- Clean HTML structure
+- Mobile responsiveness
+- Ad compliance (GDPR/CCPA)
+
+2. Recommended Technology Stack
+2.1 Frontend
+- HTML5 + CSS3 + Vanilla JavaScript
+- Keeps everything lightweight and indexable
+- No heavy frameworks unless necessary
+- Instant page loads and maximum Core Web Vitals performance
+- User Interaction: Must support **Drag & Drop** for file uploads with visual feedback (e.g., border change on hover).
+
+2.2 Conversion Engine
+Choose one of the two safe approaches depending on capabilities:
+Option A — Server-Side FFmpeg (Recommended)
+- Use FFmpeg on the backend for actual audio conversion
+- Supports all major formats
+- Stable, fast, predictable
+- Better control and less browser memory usage
+- Safe for large files
+
+Option B — Browser-Side FFmpeg.wasm (Alternative)
+- Runs entirely in browser memory
+- No server processing
+- Lower hosting cost
+- But: higher CPU load for users and less consistent performance
+
+If unsure, Option A (server-side FFmpeg) is the best balance between control, stability, and safety.
+
+3. Backend Layer
+If using server-side:
+- Node.js with Express (Fast setup, lightweight)
+- Python FastAPI or PHP (alternatives)
+
+Backend responsibilities:
+- Validate file or URL input
+- Process conversion with FFmpeg
+- Return downloadable file
+- Log conversions (optional analytics)
+
+4. Hosting & Deployment
+Prioritize:
+- Fast CDN (Cloudflare recommended)
+- HTTPS automatically enabled
+- Minimal server logic
+- Caching of static assets (HTML/CSS/JS)
+
+Deployment suggestions:
+- Netlify or Vercel for frontend
+- Railway / Fly.io / Render for backend with FFmpeg
+- Cloudflare Pages + Worker backend if going serverless
+
+Focus is always on: Ease of maintenance, high uptime, cheap hosting tiers.
+
+5. SEO & Indexing Strategy
+To maximize visibility and ranking:
+- Static HTML where possible (SSG approach preferred)
+- Clean URL structure (e.g., /mp3-to-wav/)
+- H1/H2 hierarchy properly used
+- Super fast load time (<1 s)
+- No layout shifting (CLS)
+- Semantic tags: <main> <section> <article> <nav>
+- Fully responsive layout
+
+6. Ad Stability, Compliance & Technical Implementation
+Ad Loading Method:
+- Use Google AdSense or AdManager
+- Ads must load asynchronously
+- Reserve space (static height) for each ad container to prevent CLS.
+
+**MANDATORY: GDPR & CCPA Compliance (Consent Mode)**
+- Implement a lightweight "Cookie Consent" modal on the first visit.
+- **Critical Rule:** The AdProvider must NOT load any ads until the user clicks "Accept".
+- Store consent status in localStorage.
+- If consent is denied, ads must remain hidden, but the tool must still work.
+
+Ad Containers in Code:
+- Each location should have a dedicated <div id="ad-slot-X"></div>.
+- Keep all ad scripts in one central file (AdProvider).
+
+7. Security & Cost Control Practices
+- **Hard File Limit:** Enforce a strict 50MB (or similar) limit on uploads to prevent server crashes and high bandwidth costs.
+- **Frontend Validation:** Alert the user immediately if the file is too big before uploading.
+- **Auto-Cleanup:** The backend must have a cron job or timeout that automatically deletes uploaded and converted files after 15 minutes.
+- Use HTTPS everywhere.
+- Sanitize file names (remove special characters).
+- Rate limit IP addresses to prevent abuse.
+
+8. Performance Optimization
+- Minify CSS and JS
+- Compress images
+- Preload fonts
+- Use lazy loading where possible
+- Cache common assets aggressively
+- Keep the site under 100 KB total payload excluding ads
+
+9. Accessibility
+- Large buttons
+- Clear copy
+- Simple color contrast
+- Support small screens
+- Keyboard-navigable form fields
+
+10. Recommended Directory Structure
+/public
+   index.html
+   /css
+   /js
+   /assets
+/server
+   ffmpeg-handler.js
+   validator.js
+   cleanup.js  <-- New auto-delete script
+   server.js
+/config
+   ads.js
+   settings.json
+
+Disclaimer
+The AI responsible for building the system may adjust, improve, or replace any part of this plan if a better technical approach is available. All details should be interpreted as flexible guidelines, not mandatory rules.

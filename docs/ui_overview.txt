@@ -1,0 +1,183 @@
+UI & Ad Placement Specification (Enhanced Ad Version)
+Those are just general recommendation. It doesn't have to be followed strictly
+1. Purpose
+
+Defines UI layout and ad strategy for the audio converter website with increased ad density without violating basic usability or ad network policies.
+
+2. UI Layout Overview
+
+Main sections:
+
+Header
+
+Conversion Module
+
+Ad Blocks (multiple)
+
+Results Module
+
+Secondary Info
+
+Footer
+
+Optional Sidebar Ad (desktop only)
+
+3. Core UI (Conversion Module)
+Components
+
+URL Input (large, centered)
+
+Format Dropdown
+
+Convert Button
+
+Minimal error states
+
+This is the “hero” area—must stay perfectly clean, untouched by ads.
+
+4. Final Ad Placement Strategy
+
+You now have a Max 4-ad structure, fully acceptable and common in converter websites:
+
+A. Banner Ad #1 — Top Banner (Below Conversion Box)
+
+Full-width banner
+
+Always present
+
+Loads on page load
+
+Space is reserved to avoid layout jumps
+
+B. Banner Ad #2 — Mid-Page Banner (Below Results)
+
+Appears after conversion result
+
+Positioned between the download button and the secondary info section
+
+Only visible after a conversion is performed
+
+Allowed to refresh each time a new conversion finishes
+
+C. Sidebar Ad — Desktop Only (Right or Left)
+
+Vertical rectangle
+
+Sticky within a static reserved column
+
+Never covers UI
+
+Never floats over content
+
+Loads on page load
+
+Does NOT refresh on its own
+
+On mobile, hidden completely
+
+D. Optional Conversion Trigger Ad
+
+Tiny inline rectangle
+
+Appears after user hits “Convert”
+
+Positioned below the progress bar (never above it)
+
+Must NOT delay or block conversion
+
+Auto-dismisses once progress hits 100%
+
+Total possible ads at once (desktop): 3 banners + 1 small inline
+Total on mobile: 2 banners + 1 small inline
+
+This is perfectly normal for downloader/converter websites.
+
+5. Detailed Page Structure With Ads
+
+[HEADER]
+
+[MAIN CONVERSION UI]
+   - URL box
+   - Format selector
+   - Convert button
+
+[BANNER AD #1 — Full Width]
+
+[PROGRESS + OPTIONAL SMALL INLINE AD]
+
+[RESULT BLOCK — only after conversion]
+   - Progress bar → Completed
+   - Download button
+   - Reconvert button
+
+[BANNER AD #2 — Mid-Page]
+
+[SECONDARY INFO / FAQ]
+
+[FOOTER]
+
+[SIDEBAR AD — DESKTOP ONLY]
+
+6. Behavioral Rules for Ads
+6.1 Page Load Rules
+
+Banner #1 loads immediately
+
+Sidebar loads immediately (desktop)
+
+No modals, no pop-windows, no forced interaction
+
+No autoplay video with sound
+
+6.2 Conversion Trigger Rules
+
+Each conversion is a “page refresh event”
+
+Banner #2 may refresh on each conversion
+
+Conversion-trigger inline ad may appear every conversion
+
+Banner #1 remains stable
+
+6.3 Safety Rules (Google Compliant)
+
+Ads never mimic buttons
+
+Ads never cover UI
+
+Ads never move the UI unpredictably
+
+No redirecting
+
+No uncloseable overlays
+
+No ad stacking inside paragraphs
+
+Sidebar must be coded as part of layout, not floating over content
+
+7. Mobile Rules
+
+Sidebar hidden
+
+Banners switch to mobile format
+
+Inline ad becomes very small or horizontal
+
+Never push the convert button off-screen
+
+No sticky ads
+
+8. Final UX Summary
+
+You get:
+
+Clear conversion flow
+
+Multiple monetization surfaces
+
+No breakage
+
+No deceptive practices
+
+A standard “converter site” ad density
+(which users expect and tolerate)
