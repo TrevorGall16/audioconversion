@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert MP3 files to FLAC lossless format for free. Preserve audio quality with lossless compression.">
+    <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
+    <link rel="canonical" href="/mp3-to-flac/">
+    <title>MP3 to FLAC Converter - Free Online Audio Converter</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr 300px;
+            }
+        }
+
+        .conversion-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 8px;
+            padding: 50px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f8f9ff;
+            margin-bottom: 25px;
+        }
+
+        .upload-area.drag-over {
+            background: #e8ebff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .upload-area:hover {
+            background: #f0f2ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .file-info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .file-info.active {
+            display: block;
+        }
+
+        .format-selection {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .convert-btn:active {
+            transform: translateY(0);
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .result-section {
+            display: none;
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 15px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+        }
+
+        .convert-again-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .convert-again-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Ad Containers */
+        .ad-container {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        #ad-banner-1 {
+            min-height: 250px;
+            width: 100%;
+        }
+
+        #ad-banner-2 {
+            min-height: 250px;
+            width: 100%;
+            display: none;
+        }
+
+        #ad-banner-2.active {
+            display: flex;
+        }
+
+        #ad-sidebar {
+            min-height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            #ad-sidebar {
+                display: flex;
+            }
+        }
+
+        .inline-ad {
+            min-height: 100px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .inline-ad.active {
+            display: flex;
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .features h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 8px;
+        }
+
+        .feature-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .feature-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.9;
+        }
+
+        /* Consent Modal */
+        .consent-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .consent-modal.active {
+            display: block;
+        }
+
+        .consent-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .consent-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .consent-text {
+            flex: 1;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .consent-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .consent-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .consent-accept {
+            background: #4caf50;
+            color: white;
+        }
+
+        .consent-accept:hover {
+            background: #45a049;
+        }
+
+        .consent-decline {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .consent-decline:hover {
+            background: #e0e0e0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- GDPR/CCPA Consent Modal -->
+    <div class="consent-modal" id="consentModal">
+        <div class="consent-content">
+            <div class="consent-text">
+                <strong>Cookie Consent:</strong> We use cookies and ads to keep this service free. By clicking "Accept", you consent to our use of cookies and advertisement services.
+            </div>
+            <div class="consent-buttons">
+                <button class="consent-btn consent-accept" onclick="acceptConsent()">Accept</button>
+                <button class="consent-btn consent-decline" onclick="declineConsent()">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Convert MP3 to FLAC</h1>
+            <p class="subtitle">Convert MP3, WAV, FLAC, AAC, M4A, OGG - Fast & Simple</p>
+        </header>
+
+        <div class="main-content">
+            <div class="conversion-area">
+                <div class="conversion-section">
+                    <h2 style="margin-bottom: 20px; color: #333;">Upload & Convert</h2>
+
+                    <div class="error-message" id="errorMessage"></div>
+
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">Drag & Drop your audio file here</div>
+                        <div style="margin: 15px 0; color: #999;">or</div>
+                        <button style="padding: 10px 30px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer;" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                        <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.flac,.aac,.m4a,.ogg,.wma">
+                        <div style="margin-top: 15px; color: #999; font-size: 0.9rem;">Max file size: 50MB</div>
+                    </div>
+
+                    <!-- File Info -->
+                    <div class="file-info" id="fileInfo">
+                        <strong>Selected file:</strong> <span id="fileName"></span><br>
+                        <strong>Size:</strong> <span id="fileSize"></span>
+                    </div>
+
+                    <!-- Format Selection -->
+                    <div class="format-selection">
+                        <label for="outputFormat">Convert to:</label>
+                        <select id="outputFormat">
+                            <option value="mp3">MP3 (MPEG Audio)</option>
+                            <option value="wav">WAV (Waveform Audio)</option>
+                            <option value="flac">FLAC (Free Lossless)</option>
+                            <option value="aac">AAC (Advanced Audio)</option>
+                            <option value="m4a">M4A (MPEG-4 Audio)</option>
+                            <option value="ogg">OGG (Ogg Vorbis)</option>
+                            <option value="wma">WMA (Windows Media)</option>
+                        </select>
+                    </div>
+
+                    <!-- Convert Button -->
+                    <button class="convert-btn" id="convertBtn" onclick="startConversion()" disabled>
+                        Convert Audio File
+                    </button>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill">0%</div>
+                        </div>
+                        <div style="text-align: center; color: #666;">Converting your file...</div>
+                    </div>
+
+                    <!-- Inline Ad (appears during conversion) -->
+                    <div class="ad-container inline-ad" id="inlineAd">
+                        [Advertisement Space - Inline]
+                    </div>
+
+                    <!-- Result Section -->
+                    <div class="result-section" id="resultSection">
+                        <h3 style="color: #1976d2; margin-bottom: 15px;">✅ Conversion Complete!</h3>
+                        <button class="download-btn" id="downloadBtn" onclick="downloadFile()">
+                            ⬇️ Download Converted File
+                        </button>
+                        <button class="convert-again-btn" onclick="resetConverter()">
+                            Convert Another File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Banner Ad #1 (Always visible below conversion box) -->
+                <div class="ad-container" id="ad-banner-1">
+                    [Advertisement Space - Banner #1]
+                </div>
+
+                <!-- Banner Ad #2 (Shown after conversion) -->
+                <div class="ad-container" id="ad-banner-2">
+                    [Advertisement Space - Banner #2]
+                </div>
+
+                <!-- Features Section -->
+                <section class="features">
+                    <h2>Why Choose Our Audio Converter?</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>🚀 Lightning Fast</h3>
+                            <p>Server-side conversion with optimized FFmpeg processing for maximum speed.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>🔒 Secure & Private</h3>
+                            <p>Files are automatically deleted immediately after download. Zero data retention.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>💯 100% Free</h3>
+                            <p>No signup, no registration, no hidden costs. Just upload and convert.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>📱 Works Everywhere</h3>
+                            <p>Fully responsive design works perfectly on desktop, tablet, and mobile devices.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>🎯 Multiple Formats</h3>
+                            <p>Support for MP3, WAV, FLAC, AAC, M4A, OGG, and more audio formats.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>⚡ High Quality</h3>
+                            <p>Server-side FFmpeg ensures professional-grade audio conversion quality.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar Ad (Desktop only) -->
+            <aside>
+                <div class="ad-container" id="ad-sidebar">
+                    [Advertisement Space - Sidebar]
+                </div>
+            </aside>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Free Audio Converter. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Fast, free, and simple audio file conversion.</p>
+        </footer>
+    </div>
+
+    <script>
+        // State
+        let selectedFile = null;
+        let adsConsent = false;
+        let convertedFileUrl = null;
+
+        // Check consent on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const consent = localStorage.getItem('adsConsent');
+            if (consent === null) {
+                document.getElementById('consentModal').classList.add('active');
+            } else if (consent === 'true') {
+                adsConsent = true;
+                loadAds();
+            }
+
+            // Set default output format based on page
+            const defaultFormat = 'flac';
+            if (defaultFormat) {
+                document.getElementById('outputFormat').value = defaultFormat;
+            }
+        });
+
+        // Consent Functions
+        function acceptConsent() {
+            localStorage.setItem('adsConsent', 'true');
+            adsConsent = true;
+            document.getElementById('consentModal').classList.remove('active');
+            loadAds();
+        }
+
+        function declineConsent() {
+            localStorage.setItem('adsConsent', 'false');
+            adsConsent = false;
+            document.getElementById('consentModal').classList.remove('active');
+        }
+
+        function loadAds() {
+            console.log('Ads loaded with user consent');
+            // Add your Google AdSense code here
+        }
+
+        // File Upload Handling
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const convertBtn = document.getElementById('convertBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Drag and drop events
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            errorMessage.classList.remove('active');
+
+            // Validate file size (50MB limit)
+            const maxSize = 50 * 1024 * 1024;
+            if (file.size > maxSize) {
+                errorMessage.textContent = '❌ File too large! Maximum file size is 50MB.';
+                errorMessage.classList.add('active');
+                return;
+            }
+
+            // Validate file type
+            const validTypes = ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/aac', 'audio/m4a', 'audio/ogg', 'audio/x-m4a', 'audio/x-wav'];
+            const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+                errorMessage.textContent = '❌ Invalid file type! Please upload an audio file.';
+                errorMessage.classList.add('active');
+                return;
+            }
+
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.add('active');
+            convertBtn.disabled = false;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // REAL Server-Side Conversion
+        async function startConversion() {
+            if (!selectedFile) return;
+
+            convertBtn.disabled = true;
+            document.getElementById('progressContainer').classList.add('active');
+            document.getElementById('resultSection').classList.remove('active');
+            document.getElementById('ad-banner-2').classList.remove('active');
+            errorMessage.classList.remove('active');
+
+            if (adsConsent) {
+                document.getElementById('inlineAd').classList.add('active');
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('audioFile', selectedFile);
+            formData.append('format', document.getElementById('outputFormat').value);
+
+            try {
+                updateProgress(10);
+
+                // Send to server
+                const response = await fetch('/convert', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Conversion failed');
+                }
+
+                updateProgress(90);
+
+                // Get the converted file
+                const blob = await response.blob();
+                convertedFileUrl = URL.createObjectURL(blob);
+
+                updateProgress(100);
+
+                setTimeout(() => {
+                    completeConversion();
+                }, 500);
+
+            } catch (error) {
+                console.error('Conversion error:', error);
+                errorMessage.textContent = '❌ Conversion failed: ' + error.message;
+                errorMessage.classList.add('active');
+                resetConverter();
+            }
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = Math.round(percent) + '%';
+        }
+
+        function completeConversion() {
+            document.getElementById('progressContainer').classList.remove('active');
+            document.getElementById('inlineAd').classList.remove('active');
+            document.getElementById('resultSection').classList.add('active');
+
+            if (adsConsent) {
+                document.getElementById('ad-banner-2').classList.add('active');
+            }
+        }
+
+        function downloadFile() {
+            if (!convertedFileUrl) {
+                errorMessage.textContent = '❌ No converted file available.';
+                errorMessage.classList.add('active');
+                return;
+            }
+
+            const outputFormat = document.getElementById('outputFormat').value;
+            const originalName = selectedFile.name.split('.').slice(0, -1).join('.');
+            const newFileName = `${originalName}_converted.${outputFormat}`;
+
+            const a = document.createElement('a');
+            a.href = convertedFileUrl;
+            a.download = newFileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function resetConverter() {
+            selectedFile = null;
+            if (convertedFileUrl) {
+                URL.revokeObjectURL(convertedFileUrl);
+                convertedFileUrl = null;
+            }
+            fileInput.value = '';
+            fileInfo.classList.remove('active');
+            document.getElementById('progressContainer').classList.remove('active');
+            document.getElementById('resultSection').classList.remove('active');
+            document.getElementById('ad-banner-2').classList.remove('active');
+            document.getElementById('inlineAd').classList.remove('active');
+            errorMessage.classList.remove('active');
+            convertBtn.disabled = true;
+            updateProgress(0);
+        }
+    </script>
+</body>
+</html>
