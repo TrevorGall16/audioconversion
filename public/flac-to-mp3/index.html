@@ -772,11 +772,21 @@
                 const response = await fetch('/convert', {
                     method: 'POST',
                     body: formData
+                }).catch(networkError => {
+                    // Network/connection failure - server not reachable
+                    throw new Error('Server Connection Failed');
                 });
 
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Conversion failed');
+                    // Server responded but conversion failed
+                    let errorMsg = 'Conversion failed';
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.message || errorMsg;
+                    } catch (e) {
+                        // Failed to parse error response
+                    }
+                    throw new Error(errorMsg);
                 }
 
                 updateProgress(90);
@@ -793,7 +803,14 @@
 
             } catch (error) {
                 console.error('Conversion error:', error);
-                errorMessage.textContent = '❌ Conversion failed: ' + error.message;
+
+                // Show clear error message to user
+                if (error.message === 'Server Connection Failed') {
+                    errorMessage.textContent = '❌ Server Connection Failed - Please ensure the server is running';
+                } else {
+                    errorMessage.textContent = '❌ ' + error.message;
+                }
+
                 errorMessage.classList.add('active');
                 resetConverter();
             }
