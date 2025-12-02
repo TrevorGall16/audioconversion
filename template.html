@@ -243,12 +243,21 @@
             color: white;
         }
 
-        /* Ad Containers - TESTING MODE (All visible with white backgrounds) */
+        /* ============================================
+           DEBUG MODE FOR AD DEVELOPMENT
+           ============================================
+           All 4 ad containers are FORCED VISIBLE for layout verification.
+           Comment out this entire section when deploying to production.
+           ============================================ */
+
+        /* Base ad container - visible with red border */
         .ad-container {
             background: white;
             border: 3px solid #FF6B6B;
             border-radius: 8px;
             display: block !important; /* FIXED: Changed from flex to block */
+            visibility: visible !important;
+            opacity: 1 !important;
             color: #FF6B6B;
             font-size: 1.2rem;
             font-weight: bold;
@@ -257,46 +266,62 @@
             padding: 20px;
         }
 
-        #ad-banner-1 {
-            min-height: 250px;
-            width: 100%;
-            display: flex; /* TESTING: Always visible */
+        /* Force all ad containers visible - override any JS or class changes */
+        #ad-banner-1,
+        #ad-banner-2,
+        #ad-sidebar,
+        .inline-ad {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            border: 3px solid red !important;
         }
 
+        /* Banner ads - full width, red border */
+        #ad-banner-1,
         #ad-banner-2 {
-            min-height: 250px;
+            min-height: 250px !important;
             width: 100%;
-            display: flex; /* TESTING: Always visible */
         }
 
-        #ad-banner-2.active {
-            display: flex;
+        /* Override active class behavior during debug */
+        #ad-banner-2.active,
+        .inline-ad.active {
+            display: block !important;
         }
 
+        /* Sidebar - tall vertical ad with cyan border */
         #ad-sidebar {
-            min-height: 600px;
+            min-height: 600px !important;
             background: white;
-            border: 3px solid #4ECDC4;
+            border: 3px solid #4ECDC4 !important;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: flex; /* TESTING: Always visible on all screens */
+            display: block !important; /* TESTING: Always visible on all screens */
         }
 
-        @media (min-width: 1024px) {
+        /* Force sidebar visible on ALL screen sizes during debug */
+        @media (max-width: 1023px) {
             #ad-sidebar {
-                display: flex;
+                display: block !important;
             }
         }
 
-        .inline-ad {
-            min-height: 100px;
-            margin: 15px 0;
-            display: flex; /* TESTING: Always visible */
+        /* Desktop sidebar normal behavior */
+        @media (min-width: 1024px) {
+            #ad-sidebar {
+                display: block !important;
+            }
         }
 
-        .inline-ad.active {
-            display: flex;
+        /* Inline ad - smaller, yellow border for distinction */
+        .inline-ad {
+            min-height: 100px !important;
+            margin: 15px 0;
+            border: 3px solid #FFD700 !important;
         }
+
+        /* END DEBUG MODE */
 
         /* Features Section */
         .features {
