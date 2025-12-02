@@ -5,6 +5,11 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 
+// --- NEW FFMPEG SETUP ---
+const ffmpegPath = require('ffmpeg-static'); // Get the path to the binary
+ffmpeg.setFfmpegPath(ffmpegPath);            // Tell fluent-ffmpeg where it is
+// ------------------------
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
