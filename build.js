@@ -123,6 +123,15 @@ converters.forEach(converter => {
     console.log(`✓ Created: /${converter.slug}/index.html`);
 });
 
+// Copy privacy.html from root to public
+const privacyPath = path.join(__dirname, 'privacy.html');
+if (fs.existsSync(privacyPath)) {
+    fs.copyFileSync(privacyPath, path.join(publicDir, 'privacy.html'));
+    console.log('✓ Copied: privacy.html');
+} else {
+    console.log('⚠️ Warning: privacy.html not found in root directory');
+}
+
 // Generate sitemap.xml
 const sitemap = generateSitemap(converters);
 fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
