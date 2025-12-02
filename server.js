@@ -90,8 +90,12 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
         return res.status(400).json({ message: 'Invalid output format' });
     }
 
-    const outputFileName = `${req.file.filename}.${outputFormat}`;
-    const outputPath = path.join(OUTPUT_DIR, outputFileName);
+ // ✅ FIX: Use Original Filename
+    // Get original name without extension (e.g. "MySong.mp3" -> "MySong")
+    const originalName = path.parse(req.file.originalname).name;
+    const cleanName = originalName.replace(/[^a-zA-Z0-9-_]/g, ''); // Safety: Remove weird chars
+    const outputFilename = `${cleanName}_converted.${outputFormat}`;
+    const outputPath = path.join(OUTPUT_DIR, outputFilename);
 
     console.log(`🎵 Converting: ${req.file.originalname} -> .${outputFormat}`);
 
