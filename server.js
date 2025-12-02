@@ -13,16 +13,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// Ensure required directories exist
+// Ensure required directories exist with proper permissions
 const UPLOAD_DIR = 'uploads';
 const OUTPUT_DIR = 'outputs';
 
 if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true, mode: 0o755 });
+    console.log(`📁 Created directory: ${UPLOAD_DIR}`);
 }
 
 if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true, mode: 0o755 });
+    console.log(`📁 Created directory: ${OUTPUT_DIR}`);
 }
 
 // Cleanup on startup - delete any leftover files from previous runs
@@ -100,7 +102,7 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
 
     // Check if file was uploaded
     if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
+        return res.status(400).json({ message: 'No file uploaded' });
     }
 
     inputPath = req.file.path;
@@ -110,7 +112,7 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
     const validFormats = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma'];
     if (!validFormats.includes(outputFormat)) {
         safeDeleteFile(inputPath);
-        return res.status(400).json({ error: 'Invalid output format' });
+        return res.status(400).json({ message: 'Invalid output format' });
     }
 
     const outputFileName = `${req.file.filename}.${outputFormat}`;
@@ -156,8 +158,7 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
             safeDeleteFile(outputPath);
 
             res.status(500).json({
-                error: 'Conversion failed',
-                details: err.message
+                message: `Conversion failed: ${err.message}`
             });
         })
         .save(outputPath);
@@ -182,19 +183,17 @@ app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
             return res.status(413).json({
-                error: 'File too large',
-                message: 'Maximum file size is 50MB'
+                message: 'File too large - Maximum file size is 50MB'
             });
         }
         return res.status(400).json({
-            error: 'Upload error',
-            message: err.message
+            message: `Upload error: ${err.message}`
         });
     }
 
     if (err) {
         return res.status(400).json({
-            error: err.message
+            message: err.message
         });
     }
 
