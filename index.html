@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <meta name="description" content="Free online audio converter. Convert MP3, WAV, FLAC, AAC, M4A, OGG and more. Fast, simple, no signup required.">
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
+    
+    <link rel="canonical" href="https://yourdomain.com/" />
+    
     <title>Free Audio Converter - Convert MP3, WAV, FLAC & More</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
 
     <style>
         * {
@@ -60,75 +64,55 @@
             }
         }
 
-        /* --- AD CONTAINER STYLES --- */
+/* --- AD CONTAINERS (PRODUCTION CLEANUP) --- */
         .ad-container {
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            background: #f9f9f9; /* Subtle grey placeholder */
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
-            font-size: 0.9rem;
-            font-weight: bold;
             margin-bottom: 20px;
-            overflow: hidden; /* Prevents overflow */
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 90px;
+            border: none; /* No more colored borders */
         }
 
-        /* Banner 1 (Top Center) */
-        #test-top-banner {
-            display: block !important;
-            width: 100%;
-            height: 100px; /* Fixed height for header banner */
-            margin-bottom: 20px;
-            border: 3px solid #FF6B6B; /* Red Border for Visibility */
-            background: white;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Banner 2 (Bottom Center) */
-        #ad-banner-2 {
-            min-height: 250px;
-            width: 100%;
-            display: none; /* Hidden until conversion */
-            border: 3px solid #FFA500; /* Orange Border */
-        }
-        #ad-banner-2.active { display: flex; }
-
-        /* Inline Ad (Inside Tool) */
-        #inlineAd {
-            min-height: 100px;
-            margin: 15px 0;
-            display: none;
-            border: 3px solid #9b59b6; /* Purple Border */
-        }
-        #inlineAd.active { display: flex; }
-
-        /* Sidebars (Left & Right) */
-        aside {
-            display: none; /* Hidden on Mobile/Tablet */
-        }
-
-        @media (min-width: 1024px) {
-            aside {
-                display: block !important;
-            }
-        }
+        /* Sidebars */
+        aside { display: none; }
+        @media (min-width: 1024px) { aside { display: block !important; } }
 
         .sidebar-ad {
-            width: 100%;
-            height: 600px;
-            background: white;
-            border-radius: 12px;
-            border: 3px solid #4ECDC4; /* Cyan Border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: sticky; /* Keeps it visible while scrolling */
-            top: 20px;
+            width: 100%; height: 600px; 
+            background: transparent;
+            display: flex; align-items: center; justify-content: center;
+            position: sticky; top: 20px;
+            border: none; /* Remove Cyan border */
+            box-shadow: none;
         }
+
+        /* Top Banner (Renaming ID recommended in HTML too) */
+        #test-top-banner, #ad-banner-1 { 
+            width: 100%; min-height: 100px; 
+            background: #f9f9f9;
+            border: none; /* Remove Red border */
+            display: flex !important;
+        }
+
+        /* Bottom Banner (Hidden until result) */
+        #ad-banner-2 { 
+            width: 100%; min-height: 250px; 
+            display: none; 
+            border: none; /* Remove Orange border */
+        } 
+        #ad-banner-2.active { display: flex; }
+        
+        /* Inline Ad (Hidden until conversion) */
+        #inlineAd { 
+            min-height: 250px; margin: 15px 0; 
+            display: none; 
+            border: none; /* Remove Purple border */
+        }
+        #inlineAd.active { display: flex; }
 
         /* --- COMPONENT STYLES --- */
         .conversion-section {
@@ -294,7 +278,7 @@
 
             <div class="conversion-area">
                 
-                <div class="ad-container" id="test-top-banner">
+                <div class="ad-container" id="test-top-banner"></div>
                     [TOP BANNER AD - 728x90]
                 </div>
 

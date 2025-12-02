@@ -17,10 +17,11 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-// Serve 'public' folder, BUT ALSO serve root index.html if requested
+// Serve 'public' folder. 
+// If user hits root '/', send them public/index.html (The Built Homepage)
 app.use(express.static('public'));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Ensure required directories exist with proper permissions
