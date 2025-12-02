@@ -5,10 +5,11 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 
-// --- NEW FFMPEG SETUP ---
-const ffmpegPath = require('ffmpeg-static'); // Get the path to the binary
-ffmpeg.setFfmpegPath(ffmpegPath);            // Tell fluent-ffmpeg where it is
-// ------------------------
+// --- FFMPEG SETUP (The Robust Way) ---
+const ffmpegPath = require('ffmpeg-static');
+ffmpeg.setFfmpegPath(ffmpegPath);
+console.log(`✅ FFmpeg Engine linked at: ${ffmpegPath}`);
+// -------------------------------------
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,71 +17,47 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Serve 'public' folder, BUT ALSO serve root index.html if requested
 app.use(express.static('public'));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Ensure required directories exist with proper permissions
 const UPLOAD_DIR = 'uploads';
 const OUTPUT_DIR = 'outputs';
 
-if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true, mode: 0o755 });
-    console.log(`📁 Created directory: ${UPLOAD_DIR}`);
-}
+[UPLOAD_DIR, OUTPUT_DIR].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
+        console.log(`📁 Created directory: ${dir}`);
+    }
+});
 
-if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true, mode: 0o755 });
-    console.log(`📁 Created directory: ${OUTPUT_DIR}`);
-}
-
-// Cleanup on startup - delete any leftover files from previous runs
+// Cleanup on startup - delete any leftover files
 function cleanupOnStartup() {
-    console.log('🧹 Cleaning up leftover files from previous sessions...');
-
+    console.log('🧹 Cleaning up leftover files...');
     [UPLOAD_DIR, OUTPUT_DIR].forEach(dir => {
         if (fs.existsSync(dir)) {
-            const files = fs.readdirSync(dir);
-            files.forEach(file => {
-                const filePath = path.join(dir, file);
-                try {
-                    fs.unlinkSync(filePath);
-                    console.log(`   Deleted: ${filePath}`);
-                } catch (err) {
-                    console.error(`   Failed to delete ${filePath}:`, err.message);
-                }
-            });
+            try {
+                const files = fs.readdirSync(dir);
+                files.forEach(file => {
+                    if (file !== '.gitkeep') fs.unlinkSync(path.join(dir, file));
+                });
+            } catch (e) { console.log('Cleanup non-critical error:', e.message); }
         }
     });
-
-    console.log('✅ Cleanup complete\n');
+    console.log('✅ Startup cleanup complete');
 }
-
-// Run cleanup on server start
 cleanupOnStartup();
 
-// Configure multer with HARD file size limit (50MB)
+// Configure multer (50MB limit)
 const upload = multer({
-    dest: UPLOAD_DIR,
-    limits: {
-        fileSize: 50 * 1024 * 1024  // 50MB hard limit
-    },
+    dest: UPLOAD_DIR + '/', // Added slash for safety
+    limits: { fileSize: 50 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        // Validate file type
-        const allowedMimes = [
-            'audio/mpeg',
-            'audio/wav',
-            'audio/wave',
-            'audio/x-wav',
-            'audio/flac',
-            'audio/x-flac',
-            'audio/aac',
-            'audio/m4a',
-            'audio/x-m4a',
-            'audio/ogg',
-            'audio/vorbis',
-            'audio/x-ms-wma'
-        ];
-
-        if (allowedMimes.includes(file.mimetype) || file.originalname.match(/\.(mp3|wav|flac|aac|m4a|ogg|wma)$/i)) {
+        // Simple check: Is it audio?
+        if (file.mimetype.startsWith('audio/') || file.originalname.match(/\.(mp3|wav|flac|aac|m4a|ogg|wma)$/i)) {
             cb(null, true);
         } else {
             cb(new Error('Invalid file type. Only audio files are allowed.'));
@@ -88,150 +65,65 @@ const upload = multer({
     }
 });
 
-// Helper function to safely delete a file
-function safeDeleteFile(filePath) {
-    try {
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-            console.log(`✓ Deleted: ${filePath}`);
-        }
-    } catch (err) {
-        console.error(`✗ Failed to delete ${filePath}:`, err.message);
-    }
+// Helper Codec Selector
+function getAudioCodec(format) {
+    const codecs = {
+        'mp3': 'libmp3lame', 'wav': 'pcm_s16le', 'flac': 'flac',
+        'aac': 'aac', 'm4a': 'aac', 'ogg': 'libvorbis', 'wma': 'wmav2'
+    };
+    return codecs[format] || 'copy';
 }
 
-// Conversion endpoint
+// --- MAIN CONVERSION ROUTE ---
 app.post('/convert', upload.single('audioFile'), (req, res) => {
-    let inputPath = null;
-    let outputPath = null;
+    
+    // 1. Validation
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
-    // Check if file was uploaded
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    inputPath = req.file.path;
+    const inputPath = req.file.path;
     const outputFormat = req.body.format || 'mp3';
-
-    // Validate output format
     const validFormats = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma'];
+    
     if (!validFormats.includes(outputFormat)) {
-        safeDeleteFile(inputPath);
+        if(fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
         return res.status(400).json({ message: 'Invalid output format' });
     }
 
     const outputFileName = `${req.file.filename}.${outputFormat}`;
-    outputPath = path.join(OUTPUT_DIR, outputFileName);
+    const outputPath = path.join(OUTPUT_DIR, outputFileName);
 
-    console.log(`\n🎵 Starting conversion:`);
-    console.log(`   Input: ${req.file.originalname} (${(req.file.size / 1024 / 1024).toFixed(2)} MB)`);
-    console.log(`   Output: ${outputFormat.toUpperCase()}`);
+    console.log(`🎵 Converting: ${req.file.originalname} -> .${outputFormat}`);
 
-    // Perform conversion with try/finally for guaranteed cleanup
+    // 2. Process
     ffmpeg(inputPath)
         .toFormat(outputFormat)
         .audioCodec(getAudioCodec(outputFormat))
-        .on('start', (commandLine) => {
-            console.log(`   Command: ${commandLine}`);
-        })
-        .on('progress', (progress) => {
-            if (progress.percent) {
-                console.log(`   Progress: ${Math.round(progress.percent)}%`);
-            }
+        .on('error', (err) => {
+            console.error(`❌ Error: ${err.message}`);
+            if(fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+            res.status(500).json({ message: `Conversion failed: ${err.message}` });
         })
         .on('end', () => {
-            console.log(`✅ Conversion complete`);
-
-            // Send file to user
-            res.download(outputPath, `converted.${outputFormat}`, (downloadErr) => {
-                // GUARANTEED CLEANUP in finally-style callback
-                console.log(`\n🧹 Cleaning up files...`);
-                safeDeleteFile(inputPath);
-                safeDeleteFile(outputPath);
-                console.log(`✅ Cleanup complete\n`);
-
-                if (downloadErr) {
-                    console.error('Download error:', downloadErr);
-                }
-            });
-        })
-        .on('error', (err) => {
-            console.error(`❌ Conversion error:`, err.message);
-
-            // Clean up on error
-            safeDeleteFile(inputPath);
-            safeDeleteFile(outputPath);
-
-            res.status(500).json({
-                message: `Conversion failed: ${err.message}`
+            console.log(`✅ Success! Sending file...`);
+            res.download(outputPath, `converted.${outputFormat}`, (err) => {
+                // 3. Cleanup after download
+                if(fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+                if(fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
             });
         })
         .save(outputPath);
 });
 
-// Helper function to get appropriate audio codec
-function getAudioCodec(format) {
-    const codecs = {
-        'mp3': 'libmp3lame',
-        'wav': 'pcm_s16le',
-        'flac': 'flac',
-        'aac': 'aac',
-        'm4a': 'aac',
-        'ogg': 'libvorbis',
-        'wma': 'wmav2'
-    };
-    return codecs[format] || 'copy';
-}
-
-// Error handling for multer (file size exceeded, etc.)
+// Error handling (File size, etc)
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
-        if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(413).json({
-                message: 'File too large - Maximum file size is 50MB'
-            });
-        }
-        return res.status(400).json({
-            message: `Upload error: ${err.message}`
-        });
+        return res.status(413).json({ message: 'File too large (Max 50MB)' });
     }
-
-    if (err) {
-        return res.status(400).json({
-            message: err.message
-        });
-    }
-
+    if (err) return res.status(400).json({ message: err.message });
     next();
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({
-        status: 'ok',
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Start server
+// Start
 app.listen(PORT, () => {
-    console.log(`\n🚀 Audio Converter Server`);
-    console.log(`   Running on: http://localhost:${PORT}`);
-    console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`   Max file size: 50MB`);
-    console.log(`\n   Ready to convert audio files!\n`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('\n👋 SIGTERM received, shutting down gracefully...');
-    cleanupOnStartup(); // Clean up files before exit
-    process.exit(0);
-});
-
-process.on('SIGINT', () => {
-    console.log('\n👋 SIGINT received, shutting down gracefully...');
-    cleanupOnStartup(); // Clean up files before exit
-    process.exit(0);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
