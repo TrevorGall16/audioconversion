@@ -262,17 +262,17 @@
         #ad-banner-1 {
             min-height: 250px;
             width: 100%;
-            display: block !important; /* FIXED: Changed from flex to block */
+            display: flex; /* TESTING: Always visible */
         }
 
         #ad-banner-2 {
             min-height: 250px;
             width: 100%;
-            display: block !important; /* FIXED: Changed from flex to block */
+            display: flex; /* TESTING: Always visible */
         }
 
         #ad-banner-2.active {
-            display: block !important;
+            display: flex;
         }
 
         #ad-sidebar {
@@ -281,23 +281,23 @@
             border: 3px solid #4ECDC4;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: block !important; /* FIXED: Changed from flex to block */
+            display: flex; /* TESTING: Always visible on all screens */
         }
 
         @media (min-width: 1024px) {
             #ad-sidebar {
-                display: block !important;
+                display: flex;
             }
         }
 
         .inline-ad {
             min-height: 100px;
             margin: 15px 0;
-            display: block !important; /* FIXED: Changed from flex to block */
+            display: flex; /* TESTING: Always visible */
         }
 
         .inline-ad.active {
-            display: block !important;
+            display: flex;
         }
 
         /* Features Section */
@@ -730,13 +730,11 @@
             convertBtn.disabled = true;
             document.getElementById('progressContainer').classList.add('active');
             document.getElementById('resultSection').classList.remove('active');
-            // TESTING: Comment out to keep ad-banner-2 always visible
-            // document.getElementById('ad-banner-2').classList.remove('active');
+            document.getElementById('ad-banner-2').classList.remove('active');
             errorMessage.classList.remove('active');
 
             if (adsConsent) {
-                // TESTING: Comment out - inlineAd is already visible with display:block
-                // document.getElementById('inlineAd').classList.add('active');
+                document.getElementById('inlineAd').classList.add('active');
             }
 
             // Prepare form data
@@ -786,13 +784,11 @@
 
         function completeConversion() {
             document.getElementById('progressContainer').classList.remove('active');
-            // TESTING: Comment out - inlineAd stays visible with display:block
-            // document.getElementById('inlineAd').classList.remove('active');
+            document.getElementById('inlineAd').classList.remove('active');
             document.getElementById('resultSection').classList.add('active');
 
             if (adsConsent) {
-                // TESTING: Comment out - ad-banner-2 is already visible
-                // document.getElementById('ad-banner-2').classList.add('active');
+                document.getElementById('ad-banner-2').classList.add('active');
             }
         }
 
@@ -825,9 +821,8 @@
             fileInfo.classList.remove('active');
             document.getElementById('progressContainer').classList.remove('active');
             document.getElementById('resultSection').classList.remove('active');
-            // TESTING: Comment out - keep ads always visible
-            // document.getElementById('ad-banner-2').classList.remove('active');
-            // document.getElementById('inlineAd').classList.remove('active');
+            document.getElementById('ad-banner-2').classList.remove('active');
+            document.getElementById('inlineAd').classList.remove('active');
             errorMessage.classList.remove('active');
             convertBtn.disabled = true;
             updateProgress(0);
