@@ -94,7 +94,7 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
     // Get original name without extension (e.g. "MySong.mp3" -> "MySong")
     const originalName = path.parse(req.file.originalname).name;
     const cleanName = originalName.replace(/[^a-zA-Z0-9-_]/g, ''); // Safety: Remove weird chars
-    const outputFilename = `${cleanName}_converted.${outputFormat}`;
+    const outputFilename = `${cleanName}_convertaudiofast.${outputFormat}`;
     const outputPath = path.join(OUTPUT_DIR, outputFilename);
 
     console.log(`🎵 Converting: ${req.file.originalname} -> ${outputFilename}`);
