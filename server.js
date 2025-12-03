@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 // Serve 'public' folder. 
 // If user hits root '/', send them public/index.html (The Built Homepage)
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

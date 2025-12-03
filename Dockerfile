@@ -40,6 +40,7 @@ COPY --from=builder --chown=appuser:appuser /app/node_modules ./node_modules
 COPY --from=builder --chown=appuser:appuser /app/public ./public
 COPY --chown=appuser:appuser server.js ./
 COPY --chown=appuser:appuser package.json ./
+COPY ads.txt ./public/
 
 # Create directories for uploads/outputs with correct permissions
 RUN mkdir -p uploads outputs && \
