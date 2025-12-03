@@ -132,7 +132,7 @@ console.log('✓ Created: /sitemap.xml');
 const robotsTxt = `User-agent: *
 Allow: /
 
-Sitemap: https://convertaudiofast.com/sitemap.xml
+Sitemap: https://www.convertaudiofast.com/sitemap.xml
 `;
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
@@ -152,7 +152,7 @@ if (fs.existsSync(privacySource)) {
 
 // Helper function to generate sitemap
 function generateSitemap(converters) {
-    const baseUrl = 'https://convertaudiofast.com'; // TODO: Replace with your actual domain
+    const baseUrl = 'https://www.convertaudiofast.com'; // TODO: Replace with your actual domain
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';

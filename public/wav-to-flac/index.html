@@ -7,7 +7,7 @@
     <meta name="description" content="Convert WAV files to FLAC format for free. Reduce file size with lossless compression.">
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
     
-    <link rel="canonical" href="https://convertaudiofast.com/wav-to-flac/" />
+    <link rel="canonical" href="https://www.convertaudiofast.com/wav-to-flac/" />
     
     <title>WAV to FLAC Converter - Free Online Audio Converter</title>
 
@@ -367,9 +367,16 @@
                 clearInterval(progInt);
                 progressFill.style.width = '100%';
                 convertBtn.classList.remove('converting');
-                setTimeout(() => {
-                    showDownloadButton(blob, `converted.${document.getElementById('outputFormat').value}`);
-                }, 500);
+setTimeout(() => {
+    // 1. Get original name without extension
+    const originalName = selectedFile.name.substring(0, selectedFile.name.lastIndexOf('.')) || selectedFile.name;
+    
+    // 2. Create the new brand filename
+    const newFilename = `${originalName}_convertaudiofast.${document.getElementById('outputFormat').value}`;
+
+    // 3. Show button with new name
+    showDownloadButton(blob, newFilename);
+}, 500);
             } catch (error) {
                 clearInterval(progInt);
                 convertBtn.disabled = false;
