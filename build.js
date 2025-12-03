@@ -123,15 +123,6 @@ converters.forEach(converter => {
     console.log(`✓ Created: /${converter.slug}/index.html`);
 });
 
-// Copy privacy.html from root to public
-const privacyPath = path.join(__dirname, 'privacy.html');
-if (fs.existsSync(privacyPath)) {
-    fs.copyFileSync(privacyPath, path.join(publicDir, 'privacy.html'));
-    console.log('✓ Copied: privacy.html');
-} else {
-    console.log('⚠️ Warning: privacy.html not found in root directory');
-}
-
 // Generate sitemap.xml
 const sitemap = generateSitemap(converters);
 fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
@@ -141,7 +132,7 @@ console.log('✓ Created: /sitemap.xml');
 const robotsTxt = `User-agent: *
 Allow: /
 
-Sitemap: https://convertaudiofast.com/sitemap.xml
+Sitemap: https://yourdomain.com/sitemap.xml
 `;
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
@@ -152,7 +143,7 @@ console.log('🚀 Run "npm start" to start the server\n');
 
 // Helper function to generate sitemap
 function generateSitemap(converters) {
-    const baseUrl = 'https://convertaudiofast.com'; // TODO: Replace with your actual domain
+    const baseUrl = 'https://yourdomain.com'; // TODO: Replace with your actual domain
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
