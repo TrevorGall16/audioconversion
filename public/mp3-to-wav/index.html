@@ -238,23 +238,6 @@
             color: #94a3b8;
         }
 
-        .convert-btn.loading {
-            background: #475569;
-            cursor: wait;
-            position: relative;
-            color: transparent;
-        }
-
-        .convert-btn.loading::after {
-            content: "Converting...";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: 600;
-        }
-
         .progress-container {
             margin-bottom: 24px;
             display: none;
@@ -600,68 +583,6 @@
             margin-bottom: 10px;
         }
 
-        /* Improved Readability for Static/Informational Pages */
-        .conversion-section h1 {
-            color: #0f172a;
-            margin-bottom: 28px;
-            font-size: 2.25rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-        }
-
-        .conversion-section h2 {
-            color: #0f172a;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.3;
-        }
-
-        .conversion-section h3 {
-            color: #1e293b;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            font-size: 1.35rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .conversion-section p {
-            color: #475569;
-            line-height: 1.9;
-            margin-bottom: 20px;
-            font-size: 1.05rem;
-            font-weight: 400;
-        }
-
-        .conversion-section ul,
-        .conversion-section ol {
-            color: #475569;
-            line-height: 1.9;
-            margin-left: 28px;
-            margin-bottom: 24px;
-            font-size: 1.05rem;
-        }
-
-        .conversion-section li {
-            margin-bottom: 14px;
-        }
-
-        .conversion-section strong {
-            color: #1e293b;
-            font-weight: 600;
-        }
-
-        .conversion-section .last-updated {
-            color: #64748b;
-            font-size: 0.95rem;
-            font-style: italic;
-            margin-bottom: 32px;
-        }
-
         /* Tutorial Steps */
         .tutorial-steps {
             display: grid;
@@ -849,20 +770,11 @@
         }
 
         /* Back to Converter Button (for info pages only) */
-        .back-button-wrapper {
-            text-align: center;
-            margin-top: 48px;
-            margin-bottom: 32px;
-            padding-top: 32px;
-            border-top: 2px solid #f1f5f9;
-        }
-
-        .back-to-converter,
-        .back-link {
+        .back-to-converter {
             display: inline-block;
             padding: 14px 32px;
             background: #0f172a;
-            color: white !important;
+            color: white;
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
@@ -871,12 +783,10 @@
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
         }
 
-        .back-to-converter:hover,
-        .back-link:hover {
+        .back-to-converter:hover {
             background: #1e293b;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
-            text-decoration: none;
         }
 
         @media (max-width: 768px) {
@@ -1000,11 +910,16 @@
                     </div>
 
                     <!-- Inline Ad (appears during conversion) -->
-                    <div class="ad-container inline-ad" id="inlineAd">
-                        <div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                            <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">320x50 or 300x250</div>
-                        </div>
+<div class="ad-container inline-ad" id="inlineAd">
+                        <ins class="adsbygoogle"
+                            style="display:block"
+                            data-ad-client="ca-pub-8732422930809097"
+                            data-ad-slot="6778654588"
+                            data-ad-format="auto"
+                            data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
                     </div>
 
                     <!-- Result Section -->
@@ -1042,19 +957,29 @@
                 </section>
 
                 <!-- Banner Ad #1 -->
-                <div class="ad-container" id="ad-banner-1">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
+<div class="ad-container" id="ad-banner-1">
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="5677309990" 
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
 
                 <!-- Banner Ad #2 -->
-                <div class="ad-container" id="ad-banner-2">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
+ <div class="ad-container" id="ad-banner-2">
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="8283307940"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
 
                 <!-- Concise Summary -->
@@ -1097,16 +1022,19 @@
             </div>
 
             <!-- Sidebar Ad Slot #3 (Desktop Only) -->
-            <aside>
+<aside>
                 <div class="ad-container" id="ad-sidebar">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">300x600 Vertical Rectangle</div>
-                        <div style="font-size: 0.65rem; color: #f1f5f9; margin-top: 8px;">Desktop Only</div>
-                    </div>
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="9973338727"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </aside>
-        </div>
 
         <footer>
             <p style="font-weight: 600; margin-bottom: 10px;">&copy; 2025 Free Audio Converter. All rights reserved.</p>
@@ -1142,7 +1070,7 @@
             }
         });
 
-        // Consent Functions
+// Consent Functions
         function acceptConsent() {
             localStorage.setItem('adsConsent', 'true');
             adsConsent = true;
@@ -1157,8 +1085,17 @@
         }
 
         function loadAds() {
-            // Ad loading logic would go here
-            console.log('Ads consent accepted, loading ads...');
+            // CRITICAL: Load the global AdSense script only ONCE upon consent
+            if (document.getElementById('adsense-script')) return; // Prevent double loading
+
+            const script = document.createElement('script');
+            script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8732422930809097";
+            script.async = true;
+            script.crossOrigin = "anonymous";
+            script.id = 'adsense-script';
+            document.head.appendChild(script);
+            
+            console.log('Ads consent accepted, AdSense script loading...');
         }
 
         // File Upload Handling
@@ -1212,13 +1149,6 @@
             fileInfo.classList.add('active');
             convertBtn.disabled = false;
             errorMessage.classList.remove('active');
-
-            // Update upload area to show filename
-            const uploadText = uploadArea.querySelector('.upload-text');
-            if (uploadText) {
-                uploadText.innerHTML = `<strong>📄 File: ${file.name}</strong>`;
-                uploadText.style.color = '#0f172a';
-            }
         }
 
         function formatFileSize(bytes) {
@@ -1291,7 +1221,6 @@
             if (!selectedFile) return;
 
             convertBtn.disabled = true;
-            convertBtn.classList.add('loading');
             document.getElementById('progressContainer').classList.add('active');
             document.getElementById('resultSection').classList.remove('active');
             document.getElementById('ad-banner-2').classList.remove('active');
@@ -1335,7 +1264,6 @@
                 }
 
                 errorMessage.classList.add('active');
-                convertBtn.classList.remove('loading');
                 resetConverter();
             }
         }
@@ -1347,7 +1275,6 @@
         }
 
         function completeConversion() {
-            convertBtn.classList.remove('loading');
             document.getElementById('progressContainer').classList.remove('active');
             document.getElementById('resultSection').classList.add('active');
 
@@ -1393,13 +1320,6 @@
             errorMessage.classList.remove('active');
             convertBtn.disabled = true;
             updateProgress(0);
-
-            // Reset upload area text
-            const uploadText = uploadArea.querySelector('.upload-text');
-            if (uploadText) {
-                uploadText.innerHTML = 'Drag & Drop your audio file here';
-                uploadText.style.color = '';
-            }
         }
     </script>
 </body>
