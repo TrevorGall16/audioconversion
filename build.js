@@ -136,9 +136,11 @@ Sitemap: https://www.convertaudiofast.com/sitemap.xml
 `;
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
-// --- PASTE THE ADS.TXT COPY COMMAND HERE ---
-fs.copyFileSync('ads.txt', 'public/ads.txt'); // <--- PASTE THIS LINE HERE
+
+// Copy ads.txt for AdSense compliance
+fs.copyFileSync('ads.txt', 'public/ads.txt');
 console.log('✓ Copied: /ads.txt');
+
 // Generate dedicated Audio Knowledge page with educational content
 generateAudioKnowledgePage(publicDir, template);
 
@@ -425,7 +427,8 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
         .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
 
     // Remove the entire conversion UI section and all main content, replace with educational content only
-    const mainContentPattern = /<div class="main-content">[\s\S]*?<aside>[\s\S]*?<\/aside>\s*<\/div>/;
+    // Pattern matches from main-content div through the closing aside tag (template structure has no closing div before footer)
+    const mainContentPattern = /<div class="main-content">[\s\S]*?<\/aside>/;
     const knowledgeMainContent = `
         <div class="main-content" style="display: block; max-width: 1000px; margin: 0 auto;">
             <div class="conversion-area">
