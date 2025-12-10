@@ -1039,6 +1039,64 @@
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
 
+        // Utility function: delay for retry logic
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Attempt conversion with single retry on network failure
+        async function attemptConversion(formData) {
+            let retryCount = 0;
+
+            while (retryCount <= 1) {
+                try {
+                    // Attempt fetch request
+                    const response = await fetch('/convert', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    // Check if server responded with error (non-2xx)
+                    if (!response.ok) {
+                        // Server responded but conversion failed - do NOT retry
+                        let errorMsg = 'Conversion failed';
+                        try {
+                            const errorData = await response.json();
+                            errorMsg = errorData.message || errorMsg;
+                        } catch (e) {
+                            // Failed to parse error response
+                        }
+                        throw new Error(errorMsg);
+                    }
+
+                    // Success - return response
+                    return response;
+
+                } catch (error) {
+                    // Check if this is a network error (fetch promise rejection)
+                    // vs a thrown error from response.ok check
+                    const isNetworkError = error.message === 'Failed to fetch' ||
+                                          error.name === 'TypeError' ||
+                                          !error.message.includes('failed');
+
+                    if (isNetworkError && retryCount === 0) {
+                        // Network failure on first attempt - wait and retry
+                        console.warn('Network error detected, retrying in 2 seconds...');
+                        await delay(2000);
+                        retryCount++;
+                        continue; // Retry the fetch
+                    }
+
+                    // Either not a network error, or already retried - throw error
+                    if (isNetworkError) {
+                        throw new Error('Server Connection Failed');
+                    } else {
+                        throw error; // Re-throw conversion error
+                    }
+                }
+            }
+        }
+
         async function startConversion() {
             if (!selectedFile) return;
 
@@ -1060,26 +1118,8 @@
             try {
                 updateProgress(10);
 
-                // Send to server
-                const response = await fetch('/convert', {
-                    method: 'POST',
-                    body: formData
-                }).catch(networkError => {
-                    // Network/connection failure - server not reachable
-                    throw new Error('Server Connection Failed');
-                });
-
-                if (!response.ok) {
-                    // Server responded but conversion failed
-                    let errorMsg = 'Conversion failed';
-                    try {
-                        const errorData = await response.json();
-                        errorMsg = errorData.message || errorMsg;
-                    } catch (e) {
-                        // Failed to parse error response
-                    }
-                    throw new Error(errorMsg);
-                }
+                // Attempt conversion with retry logic
+                const response = await attemptConversion(formData);
 
                 updateProgress(90);
 
@@ -1098,7 +1138,7 @@
 
                 // Show clear error message to user
                 if (error.message === 'Server Connection Failed') {
-                    errorMessage.textContent = '❌ Server Connection Failed - Please ensure the server is running';
+                    errorMessage.textContent = '❌ Server Connection Failed - Please check your connection and try again';
                 } else {
                     errorMessage.textContent = '❌ ' + error.message;
                 }
