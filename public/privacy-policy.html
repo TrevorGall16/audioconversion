@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Convert MP3 files to WAV format for free. High-quality audio conversion with no signup required.">
+    <meta name="description" content="Privacy Policy - Free Audio Converter">
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
-    <link rel="canonical" href="/mp3-to-wav/">
-    <title>MP3 to WAV Converter - Free Online Audio Converter</title>
+    <link rel="canonical" href="/privacy-policy.html">
+    <title>Privacy Policy</title>
 
     <style>
         * {
@@ -834,7 +834,7 @@
     <div class="container">
         <header>
             <a href="/">
-                <h1>Convert MP3 to WAV</h1>
+                <h1>Privacy Policy</h1>
             </a>
             <p class="subtitle">Convert MP3, WAV, FLAC, AAC, M4A, OGG - Fast & Simple</p>
         </header>
@@ -857,165 +857,133 @@
             </div>
         </div>
 
+        
         <div class="main-content">
-            <div class="conversion-area">
+            <div class="conversion-area" style="max-width: 900px; margin: 0 auto;">
                 <div class="conversion-section">
-                    <h2>Upload & Convert</h2>
+                    
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: January 2025</p>
 
-                    <div class="error-message" id="errorMessage"></div>
+        <section>
+            <h2>1. Information We Collect</h2>
+            <p>Our audio converter service is designed with privacy in mind. We collect minimal information necessary to provide our service:</p>
 
-                    <!-- Upload Area -->
-                    <div class="upload-area" id="uploadArea">
-                        <div class="upload-icon">📁</div>
-                        <div class="upload-text">Drag & Drop your audio file here</div>
-                        <div style="margin: 15px 0; color: #94a3b8;">or</div>
-                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
-                            Browse Files
-                        </button>
-                        <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.flac,.aac,.m4a,.ogg,.wma">
-                        <div style="margin-top: 15px; color: #94a3b8; font-size: 0.9rem;">Max file size: 50MB</div>
-                    </div>
+            <h3>1.1 Files You Upload</h3>
+            <p>When you use our audio converter, you upload audio files to our servers for conversion. These files are:</p>
+            <ul>
+                <li>Temporarily stored during the conversion process</li>
+                <li>Automatically deleted immediately after you download the converted file</li>
+                <li>Never permanently stored on our servers</li>
+                <li>Never shared with third parties</li>
+                <li>Never used for any purpose other than conversion</li>
+            </ul>
 
-                    <!-- File Info -->
-                    <div class="file-info" id="fileInfo">
-                        <strong>Selected file:</strong> <span id="fileName"></span><br>
-                        <strong>Size:</strong> <span id="fileSize"></span>
-                    </div>
+            <h3>1.2 Technical Information</h3>
+            <p>We may automatically collect certain technical information when you visit our site:</p>
+            <ul>
+                <li>IP address (for rate limiting and abuse prevention)</li>
+                <li>Browser type and version</li>
+                <li>Device type (desktop, mobile, tablet)</li>
+                <li>Operating system</li>
+                <li>Pages visited and time spent on site</li>
+            </ul>
+        </section>
 
-                    <!-- Format Selection -->
-                    <div class="format-selection">
-                        <label for="outputFormat">Convert to:</label>
-                        <select id="outputFormat">
-                            <option value="mp3">MP3 (MPEG Audio)</option>
-                            <option value="wav">WAV (Waveform Audio)</option>
-                            <option value="flac">FLAC (Free Lossless)</option>
-                            <option value="aac">AAC (Advanced Audio)</option>
-                            <option value="m4a">M4A (MPEG-4 Audio)</option>
-                            <option value="ogg">OGG (Ogg Vorbis)</option>
-                            <option value="wma">WMA (Windows Media)</option>
-                        </select>
-                    </div>
+        <section>
+            <h2>2. How We Use Your Information</h2>
+            <p>We use the collected information solely for the following purposes:</p>
+            <ul>
+                <li><strong>File Conversion:</strong> To process and convert your audio files</li>
+                <li><strong>Service Improvement:</strong> To understand how users interact with our service</li>
+                <li><strong>Security:</strong> To prevent abuse, implement rate limiting, and ensure service stability</li>
+                <li><strong>Technical Support:</strong> To diagnose and fix technical issues</li>
+            </ul>
+        </section>
 
-                    <!-- Convert Button -->
-                    <button class="convert-btn" id="convertBtn" onclick="startConversion()" disabled>
-                        Convert Audio File
-                    </button>
+        <section>
+            <h2>3. Cookies and Tracking</h2>
+            <p>We use cookies and similar technologies for:</p>
+            <ul>
+                <li><strong>Essential Cookies:</strong> Required for the service to function (e.g., session management)</li>
+                <li><strong>Advertising Cookies:</strong> Used by third-party ad providers (Google AdSense) to display relevant ads</li>
+                <li><strong>Analytics:</strong> To understand user behavior and improve our service</li>
+            </ul>
 
-                    <!-- Progress Bar -->
-                    <div class="progress-container" id="progressContainer">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill">0%</div>
-                        </div>
-                        <div style="text-align: center; color: #64748b; font-size: 0.9rem;">Converting your file...</div>
-                    </div>
+            <p>You can control cookie preferences through our cookie consent banner or your browser settings. Note that disabling essential cookies may affect service functionality.</p>
+        </section>
 
-                    <!-- Inline Ad (appears during conversion) -->
-                    <div class="ad-container inline-ad" id="inlineAd">
-                        <div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                            <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">320x50 or 300x250</div>
-                        </div>
-                    </div>
+        <section>
+            <h2>4. Third-Party Services</h2>
+            <p>We use the following third-party services that may collect information:</p>
 
-                    <!-- Result Section -->
-                    <div class="result-section" id="resultSection">
-                        <h3>✅ Conversion Complete!</h3>
-                        <button class="download-btn" id="downloadBtn" onclick="downloadFile()">
-                            ⬇️ Download Converted File
-                        </button>
-                        <button class="convert-again-btn" onclick="resetConverter()">
-                            Convert Another File
-                        </button>
-                    </div>
+            <h3>4.1 Google AdSense</h3>
+            <p>We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to our website or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google's Ads Settings</a>.</p>
+
+            <h3>4.2 Analytics</h3>
+            <p>We may use analytics services to understand how visitors use our site. These services may collect information about your device and browsing behavior.</p>
+        </section>
+
+        <section>
+            <h2>5. Data Retention</h2>
+            <p><strong>Uploaded Files:</strong> Deleted immediately after download (typically within seconds)</p>
+            <p><strong>Technical Logs:</strong> Retained for up to 30 days for security and troubleshooting purposes</p>
+            <p><strong>Analytics Data:</strong> Anonymized and aggregated, retained according to our analytics provider's policy</p>
+        </section>
+
+        <section>
+            <h2>6. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access any personal information we hold about you</li>
+                <li>Request correction of inaccurate information</li>
+                <li>Request deletion of your information (where applicable)</li>
+                <li>Opt out of non-essential cookies and tracking</li>
+                <li>Object to processing of your personal data</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>7. Data Security</h2>
+            <p>We implement appropriate technical and organizational security measures to protect your data:</p>
+            <ul>
+                <li>All file uploads and downloads use HTTPS encryption</li>
+                <li>Files are stored in secure, isolated server directories</li>
+                <li>Automatic file deletion prevents unauthorized access</li>
+                <li>Rate limiting prevents abuse and ensures fair usage</li>
+                <li>Regular security audits and updates</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>8. Children's Privacy</h2>
+            <p>Our service is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us immediately.</p>
+        </section>
+
+        <section>
+            <h2>9. International Data Transfers</h2>
+            <p>Our servers may be located in different countries. By using our service, you consent to the transfer of your information to countries outside your country of residence, which may have different data protection laws.</p>
+        </section>
+
+        <section>
+            <h2>10. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last updated" date. We encourage you to review this policy periodically.</p>
+        </section>
+
+        <section>
+            <h2>11. Contact Information</h2>
+            <p>If you have questions about this Privacy Policy or our data practices, please contact us through the feedback form on our website.</p>
+        </section>
+
+        <div style="margin-top: 40px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <p style="margin: 0; color: #64748b; font-size: 0.9rem;"><strong>Summary:</strong> We respect your privacy. Your uploaded files are immediately deleted after conversion. We collect minimal technical data for security and service improvement. Third-party ads may use cookies. You can control your privacy settings at any time.</p>
+        </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/" class="back-to-converter">← Back to Audio Converter</a>
+    
                 </div>
-
-                <!-- 3-Step Tutorial -->
-                <section class="content-section">
-                    <h2>How to Use This Converter</h2>
-                    <div class="tutorial-steps">
-                        <div class="tutorial-step">
-                            <div class="tutorial-step-number">1️⃣</div>
-                            <div class="tutorial-step-title">Upload</div>
-                            <div class="tutorial-step-desc">Drag & drop your audio file or click "Browse Files" to select it from your device.</div>
-                        </div>
-                        <div class="tutorial-step">
-                            <div class="tutorial-step-number">2️⃣</div>
-                            <div class="tutorial-step-title">Choose Format</div>
-                            <div class="tutorial-step-desc">Select your desired output format from the dropdown menu (MP3, WAV, FLAC, AAC, etc.).</div>
-                        </div>
-                        <div class="tutorial-step">
-                            <div class="tutorial-step-number">3️⃣</div>
-                            <div class="tutorial-step-title">Download</div>
-                            <div class="tutorial-step-desc">Click "Convert" and wait a few seconds. Download your converted file instantly.</div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Banner Ad #1 -->
-                <div class="ad-container" id="ad-banner-1">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
-                </div>
-
-                <!-- Banner Ad #2 -->
-                <div class="ad-container" id="ad-banner-2">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
-                </div>
-
-                <!-- Concise Summary -->
-                <section class="content-section">
-                    <h2>Why Choose Our Converter?</h2>
-                    <p>Our free audio converter uses FFmpeg, the industry-standard tool trusted by professionals worldwide, to deliver lightning-fast conversions in seconds. Your files are processed securely on our servers and automatically deleted immediately after download—no storage, no tracking, complete privacy guaranteed. Convert between MP3, WAV, FLAC, AAC, and more formats with professional-quality output.</p>
-                    <p style="margin-top: 15px;"><a href="/audio-knowledge/" style="color: #0f172a; font-weight: 600; text-decoration: underline;">→ Learn more about audio conversion, formats, and FAQ</a></p>
-                </section>
-
-                <!-- Key Features Section -->
-                <section class="features">
-                    <h2>Key Features</h2>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <h3>🚀 Lightning Fast Conversion</h3>
-                            <p><strong>How it works:</strong> Our powerful servers use FFmpeg, the industry-standard audio processing engine used by professionals worldwide. Server-side processing means your files are converted faster than browser-based tools, typically completing in seconds regardless of your device's power.</p>
-                        </div>
-                        <div class="feature-item">
-                            <h3>🔒 Maximum Security & Privacy</h3>
-                            <p><strong>Your privacy guaranteed:</strong> Files are automatically deleted from our servers immediately after you download them. We use encrypted HTTPS connections for all uploads and downloads. No user accounts, no tracking, no data retention—your files remain completely private.</p>
-                        </div>
-                        <div class="feature-item">
-                            <h3>💯 Completely Free Forever</h3>
-                            <p><strong>No hidden costs:</strong> This service is 100% free with no signup, registration, or payment required. We keep it free through optional advertisements. No trial periods, no premium tiers—just upload and convert unlimited files.</p>
-                        </div>
-                        <div class="feature-item">
-                            <h3>📱 Universal Compatibility</h3>
-                            <p><strong>Works on any device:</strong> Fully responsive design works perfectly on desktop computers, laptops, tablets, and smartphones. Compatible with all modern browsers including Chrome, Firefox, Safari, and Edge. No software installation required.</p>
-                        </div>
-                        <div class="feature-item">
-                            <h3>🎯 Wide Format Support</h3>
-                            <p><strong>All major audio formats:</strong> Convert between MP3, WAV, FLAC, AAC, M4A, OGG, and WMA. Supports both lossy compressed formats (MP3, AAC) and lossless formats (FLAC, WAV) for professional quality or maximum compatibility.</p>
-                        </div>
-                        <div class="feature-item">
-                            <h3>⚡ Professional Quality Output</h3>
-                            <p><strong>Industry-grade processing:</strong> Using FFmpeg ensures professional-quality audio conversion with proper codec implementation. Your converted files will sound exactly as they should, with no quality degradation beyond what's inherent to the target format.</p>
-                        </div>
-                    </div>
-                </section>
             </div>
-
-            <!-- Sidebar Ad Slot #3 (Desktop Only) -->
-            <aside>
-                <div class="ad-container" id="ad-sidebar">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">300x600 Vertical Rectangle</div>
-                        <div style="font-size: 0.65rem; color: #f1f5f9; margin-top: 8px;">Desktop Only</div>
-                    </div>
-                </div>
-            </aside>
         </div>
 
         <footer>
@@ -1027,6 +995,7 @@
                 <a href="/file-handling.html">Privacy & File Handling</a>
             </p>
         </footer>
+    
     </div>
 
     <script>
@@ -1046,7 +1015,7 @@
             }
 
             // Set default output format based on page
-            const defaultFormat = 'wav';
+            const defaultFormat = 'mp3';
             if (defaultFormat) {
                 document.getElementById('outputFormat').value = defaultFormat;
             }
