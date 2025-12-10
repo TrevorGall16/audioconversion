@@ -140,26 +140,27 @@ console.log('✓ Created: /robots.txt');
 // Generate dedicated Audio Knowledge page with educational content
 generateAudioKnowledgePage(publicDir, template);
 
-// Copy static informational pages to public directory
+// Wrap and copy static informational pages with new SaaS styling
 const staticPages = [
-    'formats-details.html',
-    'legal-disclaimer.html',
-    'file-handling.html'
+    { file: 'formats-details.html', title: 'Audio Format Details - Technical Specifications' },
+    { file: 'legal-disclaimer.html', title: 'Legal Disclaimer & Copyright Information' },
+    { file: 'file-handling.html', title: 'Privacy & File Handling Policy' },
+    { file: 'privacy-policy.html', title: 'Privacy Policy' }
 ];
 
 staticPages.forEach(page => {
-    const sourcePath = path.join(__dirname, page);
-    const destPath = path.join(publicDir, page);
+    const sourcePath = path.join(__dirname, page.file);
+    const destPath = path.join(publicDir, page.file);
 
     if (fs.existsSync(sourcePath)) {
-        fs.copyFileSync(sourcePath, destPath);
-        console.log(`✓ Copied: /${page}`);
+        wrapStaticPageWithTemplate(sourcePath, destPath, page.title, template);
+        console.log(`✓ Wrapped & Copied: /${page.file}`);
     } else {
-        console.warn(`⚠️  Warning: ${page} not found, skipping`);
+        console.warn(`⚠️  Warning: ${page.file} not found, skipping`);
     }
 });
 
-console.log('\n✅ Build complete! Generated', converters.length + 1, 'converter pages + 1 knowledge page + 3 static pages\n');
+console.log('\n✅ Build complete! Generated', converters.length + 1, 'converter pages + 1 knowledge page + 4 static pages\n');
 console.log('📁 All files are in the /public directory');
 console.log('🚀 Run "npm start" to start the server\n');
 
@@ -197,7 +198,8 @@ function generateSitemap(converters) {
     const staticPages = [
         'formats-details.html',
         'legal-disclaimer.html',
-        'file-handling.html'
+        'file-handling.html',
+        'privacy-policy.html'
     ];
 
     staticPages.forEach(page => {
@@ -211,6 +213,55 @@ function generateSitemap(converters) {
     xml += '</urlset>';
 
     return xml;
+}
+
+// Helper function to wrap static pages with new SaaS template
+function wrapStaticPageWithTemplate(sourcePath, destPath, pageTitle, baseTemplate) {
+    // Read the original static page content
+    const originalContent = fs.readFileSync(sourcePath, 'utf-8');
+
+    // Extract just the body content (everything inside .info-page-content or main content area)
+    const bodyMatch = originalContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    let contentToWrap = bodyMatch ? bodyMatch[1] : originalContent;
+
+    // Remove any existing container divs and keep just the core content
+    contentToWrap = contentToWrap.replace(/<div class="container">|<\/div>\s*$/gi, '');
+    contentToWrap = contentToWrap.replace(/<div class="info-page-content">|<\/div>\s*$/gi, '');
+
+    // Create wrapped HTML using the new template structure
+    let wrappedHtml = baseTemplate
+        .replace(/\{\{TITLE\}\}/g, pageTitle)
+        .replace(/\{\{H1\}\}/g, pageTitle.split('|')[0].trim().replace(/&/g, '&amp;'))
+        .replace(/\{\{DESCRIPTION\}\}/g, `${pageTitle} - Free Audio Converter`)
+        .replace(/\{\{CANONICAL_URL\}\}/g, `/${path.basename(destPath)}`)
+        .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
+
+    // Remove the entire main-content section (conversion UI) and replace with static content
+    const conversionAreaPattern = /<div class="main-content">[\s\S]*?<\/footer>/;
+    const staticContentSection = `
+        <div class="main-content">
+            <div class="conversion-area" style="max-width: 900px; margin: 0 auto;">
+                <div class="conversion-section">
+                    ${contentToWrap}
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p style="font-weight: 600; margin-bottom: 10px;">&copy; 2025 Free Audio Converter. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Fast, free, and simple audio file conversion.</p>
+            <p style="margin-top: 15px; font-size: 0.9rem;">
+                <a href="/legal-disclaimer.html">Legal Disclaimer</a> |
+                <a href="/privacy-policy.html">Privacy Policy</a> |
+                <a href="/file-handling.html">Privacy & File Handling</a>
+            </p>
+        </footer>
+    `;
+
+    wrappedHtml = wrappedHtml.replace(conversionAreaPattern, staticContentSection);
+
+    // Write the wrapped content
+    fs.writeFileSync(destPath, wrappedHtml);
 }
 
 // Helper function to generate the dedicated Audio Knowledge page
@@ -371,17 +422,17 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
         .replace(/\{\{CANONICAL_URL\}\}/g, '/audio-knowledge/')
         .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
 
-    // Remove the entire conversion UI section (from main-content to before concise summary)
-    const conversionUIPattern = /<div class="main-content">[\s\S]*?<!-- Concise Summary for AdSense Compliance -->/;
-    knowledgeHtml = knowledgeHtml.replace(conversionUIPattern, '<div class="main-content">\n            <div class="conversion-area">\n                <!-- Concise Summary for AdSense Compliance -->');
+    // Remove the entire conversion UI section and all main content, replace with educational content only
+    const mainContentPattern = /<div class="main-content">[\s\S]*?<aside>[\s\S]*?<\/aside>\s*<\/div>/;
+    const knowledgeMainContent = `
+        <div class="main-content" style="display: block; max-width: 1000px; margin: 0 auto;">
+            <div class="conversion-area">
+                ${knowledgeContent}
+            </div>
+        </div>
+    `;
 
-    // Replace the concise summary section with full educational content
-    const summaryPattern = /<!-- Concise Summary for AdSense Compliance -->\s*<section class="content-section">[\s\S]*?<\/section>/;
-    knowledgeHtml = knowledgeHtml.replace(summaryPattern, knowledgeContent);
-
-    // Remove the Key Features section entirely
-    const featuresPattern = /<!-- Features Section[\s\S]*?<\/section>/;
-    knowledgeHtml = knowledgeHtml.replace(featuresPattern, '');
+    knowledgeHtml = knowledgeHtml.replace(mainContentPattern, knowledgeMainContent);
 
     // Write the HTML file
     const filePath = path.join(knowledgeDir, 'index.html');

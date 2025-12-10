@@ -325,68 +325,25 @@
             border-color: #cbd5e1;
         }
 
-        /* Premium Dark Gradient Sidebar Feature Card */
-        .premium-features-card {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3), 0 1px 3px rgba(0,0,0,0.1);
-            color: white;
+        /* Sidebar Ad Slot #3 (Desktop Only) */
+        #ad-sidebar {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.875rem;
             min-height: 600px;
-            position: relative;
-            overflow: hidden;
+            display: none;
         }
 
-        .premium-features-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .premium-features-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-            position: relative;
-        }
-
-        .premium-feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .premium-feature-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .premium-feature-content h4 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: white;
-        }
-
-        .premium-feature-content p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.75);
-            line-height: 1.5;
+        @media (min-width: 1024px) {
+            #ad-sidebar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         }
 
         /* Ad Containers - Minimal Placeholder Styling */
@@ -858,12 +815,6 @@
                 padding: 8px 14px;
             }
         }
-
-        @media (min-width: 1024px) {
-            .premium-features-card {
-                display: block !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1055,57 +1006,13 @@
                 </section>
             </div>
 
-            <!-- Premium Dark Gradient Feature Card (Sidebar) -->
+            <!-- Sidebar Ad Slot #3 (Desktop Only) -->
             <aside>
-                <div class="premium-features-card">
-                    <h3>✨ Premium Features</h3>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">⚡</div>
-                        <div class="premium-feature-content">
-                            <h4>No File Size Limits</h4>
-                            <p>Convert files up to 50MB with our generous upload limit. Perfect for full albums and long recordings.</p>
-                        </div>
-                    </div>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">🚀</div>
-                        <div class="premium-feature-content">
-                            <h4>High Priority Processing</h4>
-                            <p>Your conversions are processed immediately on powerful dedicated servers with industry-grade FFmpeg.</p>
-                        </div>
-                    </div>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">🔒</div>
-                        <div class="premium-feature-content">
-                            <h4>Zero Data Retention</h4>
-                            <p>Files are automatically deleted within seconds of completion. Your privacy is our top priority.</p>
-                        </div>
-                    </div>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">💯</div>
-                        <div class="premium-feature-content">
-                            <h4>Unlimited Conversions</h4>
-                            <p>No daily limits, no monthly caps. Convert as many files as you need, completely free forever.</p>
-                        </div>
-                    </div>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">🎯</div>
-                        <div class="premium-feature-content">
-                            <h4>Professional Quality</h4>
-                            <p>Industry-standard codecs ensure your audio sounds exactly as it should with proper bitrate handling.</p>
-                        </div>
-                    </div>
-
-                    <div class="premium-feature-item">
-                        <div class="premium-feature-icon">📱</div>
-                        <div class="premium-feature-content">
-                            <h4>Works Everywhere</h4>
-                            <p>Desktop, mobile, tablet - works perfectly on all devices and browsers without any installation.</p>
-                        </div>
+                <div class="ad-container" id="ad-sidebar">
+                    <div>
+                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
+                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">300x600 Vertical Rectangle</div>
+                        <div style="font-size: 0.65rem; color: #f1f5f9; margin-top: 8px;">Desktop Only</div>
                     </div>
                 </div>
             </aside>
@@ -1116,6 +1023,7 @@
             <p style="margin-top: 10px; font-size: 0.9rem;">Fast, free, and simple audio file conversion.</p>
             <p style="margin-top: 15px; font-size: 0.9rem;">
                 <a href="/legal-disclaimer.html">Legal Disclaimer</a> |
+                <a href="/privacy-policy.html">Privacy Policy</a> |
                 <a href="/file-handling.html">Privacy & File Handling</a>
             </p>
         </footer>
@@ -1352,9 +1260,19 @@
             if (!convertedFileUrl) return;
 
             const outputFormat = document.getElementById('outputFormat').value;
+
+            // Extract original filename without extension
+            const originalName = selectedFile.name;
+            const lastDotIndex = originalName.lastIndexOf('.');
+            const nameWithoutExt = lastDotIndex > 0 ? originalName.substring(0, lastDotIndex) : originalName;
+
+            // Sanitize filename (remove special characters, keep alphanumeric, spaces, hyphens, underscores)
+            const sanitized = nameWithoutExt.replace(/[^a-zA-Z0-9\s\-_]/g, '').trim();
+
+            // Create download with new naming format
             const a = document.createElement('a');
             a.href = convertedFileUrl;
-            a.download = `converted.${outputFormat}`;
+            a.download = `${sanitized}_convertaudiofast.${outputFormat}`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
