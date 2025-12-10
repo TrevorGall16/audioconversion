@@ -137,6 +137,9 @@ Sitemap: https://yourdomain.com/sitemap.xml
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
+// Generate dedicated Audio Knowledge page with educational content
+generateAudioKnowledgePage(publicDir, template);
+
 // Copy static informational pages to public directory
 const staticPages = [
     'formats-details.html',
@@ -156,7 +159,7 @@ staticPages.forEach(page => {
     }
 });
 
-console.log('\n✅ Build complete! Generated', converters.length + 1, 'pages + 3 static pages\n');
+console.log('\n✅ Build complete! Generated', converters.length + 1, 'converter pages + 1 knowledge page + 3 static pages\n');
 console.log('📁 All files are in the /public directory');
 console.log('🚀 Run "npm start" to start the server\n');
 
@@ -183,6 +186,13 @@ function generateSitemap(converters) {
         xml += '  </url>\n';
     });
 
+    // Audio Knowledge page (high-value educational content)
+    xml += '  <url>\n';
+    xml += `    <loc>${baseUrl}/audio-knowledge/</loc>\n`;
+    xml += '    <changefreq>monthly</changefreq>\n';
+    xml += '    <priority>0.7</priority>\n';
+    xml += '  </url>\n';
+
     // Static informational pages
     const staticPages = [
         'formats-details.html',
@@ -201,4 +211,177 @@ function generateSitemap(converters) {
     xml += '</urlset>';
 
     return xml;
+}
+
+// Helper function to generate the dedicated Audio Knowledge page
+function generateAudioKnowledgePage(publicDir, baseTemplate) {
+    // Create directory for audio-knowledge page
+    const knowledgeDir = path.join(publicDir, 'audio-knowledge');
+    if (!fs.existsSync(knowledgeDir)) {
+        fs.mkdirSync(knowledgeDir, { recursive: true });
+    }
+
+    // Educational content blocks (extracted from original template)
+    const knowledgeContent = `
+                <!-- How Audio Conversion Works (Priority 1, Item 1) -->
+                <section class="content-section">
+                    <h2>📚 How Audio Conversion Works</h2>
+                    <p>Audio conversion is the process of changing an audio file from one format to another using specialized software called a <strong>codec</strong> (compressor-decompressor). This process involves decoding the original file and re-encoding it into the desired format.</p>
+
+                    <h3>Understanding Audio Formats</h3>
+                    <p>Audio formats fall into two main categories:</p>
+                    <ul>
+                        <li><strong>Compressed Formats (MP3, AAC):</strong> Use lossy compression to reduce file size by removing audio data that humans are less likely to notice. This makes files smaller but permanently removes some audio information.</li>
+                        <li><strong>Uncompressed or Lossless Formats (WAV, FLAC):</strong> Preserve all original audio data. WAV stores everything without compression, while FLAC compresses without losing quality (like a ZIP file for audio).</li>
+                    </ul>
+
+                    <h3>When Is Quality Lost?</h3>
+                    <p><strong>Lossy Conversion:</strong> Converting from any format to MP3, AAC, or OGG results in quality loss because these formats discard audio data to achieve smaller file sizes.</p>
+                    <p><strong>Lossless Conversion:</strong> Converting from WAV to FLAC (or vice versa) preserves perfect quality because both formats retain all audio data. However, converting from MP3 to WAV won't restore lost quality—it just creates a larger file with the same limited quality.</p>
+
+                    <h3>Format Comparison</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Format</th>
+                                <th>Type</th>
+                                <th>Typical Use</th>
+                                <th>Quality</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MP3</strong></td>
+                                <td>Lossy Compressed</td>
+                                <td>Music players, streaming, general use</td>
+                                <td>Good (some data removed)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>WAV</strong></td>
+                                <td>Uncompressed</td>
+                                <td>Professional editing, studio recording</td>
+                                <td>Perfect (no compression)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>FLAC</strong></td>
+                                <td>Lossless Compressed</td>
+                                <td>Archiving, audiophile collections</td>
+                                <td>Perfect (compressed but no loss)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AAC</strong></td>
+                                <td>Lossy Compressed</td>
+                                <td>Apple devices, streaming platforms</td>
+                                <td>Better than MP3 at same bitrate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p><a href="/formats-details.html" style="color: #667eea; font-weight: 600;">→ Learn more about audio formats and technical details</a></p>
+                </section>
+
+                <!-- FAQ Section (Priority 2, Item 6) -->
+                <section class="content-section">
+                    <h2>❓ Frequently Asked Questions</h2>
+
+                    <div class="faq-item">
+                        <div class="faq-question">Does converting MP3 to WAV improve quality?</div>
+                        <div class="faq-answer">No. Converting MP3 to WAV does not improve quality. MP3 is a lossy format that permanently removes audio data during compression. Converting it to WAV only creates a larger file with the same limited quality. The lost data cannot be recovered.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">What is lossless audio?</div>
+                        <div class="faq-answer">Lossless audio formats (like FLAC and WAV) preserve all original audio data without any quality loss. FLAC uses compression similar to ZIP files, reducing file size without removing data. WAV stores audio completely uncompressed.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">Which format is best for music production?</div>
+                        <div class="faq-answer">WAV or FLAC are best for music production and editing. These lossless formats preserve all audio data, giving you the highest quality for processing and editing. Use MP3 or AAC only for final distribution.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">Are my files stored on your server?</div>
+                        <div class="faq-answer">No. All files are automatically deleted immediately after conversion completes. We do not store, retain, or have access to your files after you download them. <a href="/file-handling.html" style="color: #667eea;">Learn more about our privacy policy</a>.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">What's the difference between bitrate and sample rate?</div>
+                        <div class="faq-answer">Bitrate (measured in kbps) determines how much data is used per second of audio—higher bitrate means better quality but larger files. Sample rate (measured in Hz) determines how many times per second the audio is measured—CD quality is 44.1 kHz.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">Can I convert protected or DRM files?</div>
+                        <div class="faq-answer">No. This converter cannot process files with DRM (Digital Rights Management) protection. You can only convert files you legally own or have permission to modify.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">Why is my converted file larger than the original?</div>
+                        <div class="faq-answer">Converting from a compressed format (like MP3) to an uncompressed format (like WAV) results in much larger files because WAV stores all audio data without compression. The quality remains the same as the original MP3—only the file size increases.</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">What's the maximum file size I can convert?</div>
+                        <div class="faq-answer">The maximum file size is 50MB. This limit ensures fast conversion times and prevents server overload. For most audio files, this allows 30-60 minutes of audio depending on the format and quality.</div>
+                    </div>
+                </section>
+
+                <!-- Audio Knowledge Basics (Priority 3, Item 7) -->
+                <section class="content-section">
+                    <h2>🎓 Audio Knowledge Basics</h2>
+                    <p>Understanding these fundamental audio terms will help you make better decisions when converting files:</p>
+
+                    <div class="knowledge-grid">
+                        <div class="knowledge-term">
+                            <strong>Bitrate</strong>
+                            <p>The amount of data processed per second, measured in kbps (kilobits per second). Higher bitrate means better quality but larger file size.</p>
+                        </div>
+
+                        <div class="knowledge-term">
+                            <strong>Sample Rate</strong>
+                            <p>How many times per second audio is measured, expressed in Hz (Hertz). CD quality is 44.1 kHz, meaning 44,100 measurements per second.</p>
+                        </div>
+
+                        <div class="knowledge-term">
+                            <strong>Channels</strong>
+                            <p>Number of independent audio signals. Mono has 1 channel, stereo has 2 channels (left and right), and surround sound has 5 or more channels.</p>
+                        </div>
+
+                        <div class="knowledge-term">
+                            <strong>Dynamic Range</strong>
+                            <p>The difference between the quietest and loudest sounds in an audio file. Greater dynamic range provides more detail and realism.</p>
+                        </div>
+
+                        <div class="knowledge-term">
+                            <strong>Codec</strong>
+                            <p>Software that compresses (encodes) and decompresses (decodes) audio data. Examples include MP3, AAC, and FLAC codecs.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" style="text-align: center; margin-top: 40px;">
+                    <p><a href="/" style="color: #667eea; font-weight: 600; font-size: 1.1rem;">← Back to Audio Converter</a></p>
+                </section>
+    `;
+
+    // Replace the concise summary section with full knowledge content
+    let knowledgeHtml = baseTemplate
+        .replace(/\{\{TITLE\}\}/g, 'Audio Knowledge & FAQ - Understanding Audio Conversion')
+        .replace(/\{\{H1\}\}/g, '🎓 Audio Knowledge & FAQ')
+        .replace(/\{\{DESCRIPTION\}\}/g, 'Learn how audio conversion works, understand audio formats, and find answers to frequently asked questions about MP3, WAV, FLAC, and other audio formats.')
+        .replace(/\{\{CANONICAL_URL\}\}/g, '/audio-knowledge/')
+        .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
+
+    // Find and replace the concise summary section with full educational content
+    const summaryPattern = /<!-- Concise Summary for AdSense Compliance -->\s*<section class="content-section">[\s\S]*?<\/section>/;
+    knowledgeHtml = knowledgeHtml.replace(summaryPattern, knowledgeContent);
+
+    // Remove the file upload/conversion interface for knowledge page
+    const uploadPattern = /<!-- Tutorial Steps[\s\S]*?<!-- Concise Summary/;
+    knowledgeHtml = knowledgeHtml.replace(uploadPattern, '<!-- Tutorial Steps removed for knowledge page -->\n\n                <!-- Concise Summary');
+
+    // Write the HTML file
+    const filePath = path.join(knowledgeDir, 'index.html');
+    fs.writeFileSync(filePath, knowledgeHtml);
+
+    console.log('✓ Created: /audio-knowledge/index.html (Educational content page)');
 }
