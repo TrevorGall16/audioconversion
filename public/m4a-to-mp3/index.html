@@ -113,25 +113,25 @@
             margin-bottom: 25px;
         }
 
-        label {
+        .format-selection label {
             display: block;
-            font-weight: 600;
             margin-bottom: 8px;
-            color: #444;
+            font-weight: 600;
+            color: #333;
         }
 
-        select {
+        .format-selection select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+            border: 2px solid #e0e7ff;
+            border-radius: 8px;
             font-size: 1rem;
             background: white;
             cursor: pointer;
             transition: border-color 0.3s;
         }
 
-        select:focus {
+        .format-selection select:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -146,28 +146,23 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
             margin-bottom: 20px;
         }
 
-        .convert-btn:hover {
+        .convert-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .convert-btn:active {
-            transform: translateY(0);
-        }
-
         .convert-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
         .progress-container {
-            display: none;
             margin-bottom: 20px;
+            display: none;
         }
 
         .progress-container.active {
@@ -177,7 +172,7 @@
         .progress-bar {
             width: 100%;
             height: 30px;
-            background: #e0e0e0;
+            background: #e0e7ff;
             border-radius: 15px;
             overflow: hidden;
             margin-bottom: 10px;
@@ -187,7 +182,7 @@
             height: 100%;
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -197,10 +192,7 @@
 
         .result-section {
             display: none;
-            background: #e3f2fd;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            text-align: center;
         }
 
         .result-section.active {
@@ -217,12 +209,13 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-bottom: 10px;
-            transition: background 0.3s;
+            margin-bottom: 15px;
+            transition: all 0.3s;
         }
 
         .download-btn:hover {
             background: #45a049;
+            transform: translateY(-2px);
         }
 
         .convert-again-btn {
@@ -243,46 +236,12 @@
             color: white;
         }
 
-        /* ============================================
-           AD COLLAPSE RULE (CLS Prevention)
-           ============================================
-           When AdSense sets data-ad-status="unfilled", visually
-           collapse the ad slot while preserving parent min-height.
-           This prevents layout shift while hiding empty ads.
-           ============================================ */
-        ins.adsbygoogle[data-ad-status="unfilled"] {
-            display: none !important;
-            border: none !important;
-            background: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            min-height: 0 !important;
-            height: 0 !important;
-        }
-
-        /* Parent container maintains reserved space */
-        .ad-container {
-            min-height: 250px; /* Reserved for CLS prevention */
-        }
-
-        .ad-container:has(ins[data-ad-status="unfilled"]) {
-            min-height: 0; /* Collapse parent when ad unfilled */
-            margin-bottom: 0;
-        }
-
-        /* ============================================
-           DEBUG MODE FOR AD DEVELOPMENT
-           ============================================
-           All 4 ad containers are FORCED VISIBLE for layout verification.
-           Comment out this entire section when deploying to production.
-           ============================================ */
-
-        /* Base ad container - visible with red border */
+        /* Ad Containers - TESTING MODE (All visible with white backgrounds) */
         .ad-container {
             background: white;
             border: 3px solid #FF6B6B;
             border-radius: 8px;
-            display: block !important; /* FIXED: Changed from flex to block */
+            display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
             color: #FF6B6B;
@@ -293,62 +252,47 @@
             padding: 20px;
         }
 
-        /* Force all ad containers visible - override any JS or class changes */
-        #ad-banner-1,
-        #ad-banner-2,
-        #ad-sidebar,
-        .inline-ad {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            border: 3px solid red !important;
-        }
-
-        /* Banner ads - full width, red border */
         #ad-banner-1,
         #ad-banner-2 {
             min-height: 250px !important;
             width: 100%;
+            border: 3px solid red !important;
         }
 
-        /* Override active class behavior during debug */
-        #ad-banner-2.active,
-        .inline-ad.active {
+        #ad-banner-2.active {
             display: block !important;
         }
 
-        /* Sidebar - tall vertical ad with cyan border */
         #ad-sidebar {
             min-height: 600px !important;
             background: white;
             border: 3px solid #4ECDC4 !important;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: block !important; /* TESTING: Always visible on all screens */
+            display: block !important;
         }
 
-        /* Force sidebar visible on ALL screen sizes during debug */
         @media (max-width: 1023px) {
             #ad-sidebar {
                 display: block !important;
             }
         }
 
-        /* Desktop sidebar normal behavior */
         @media (min-width: 1024px) {
             #ad-sidebar {
                 display: block !important;
             }
         }
 
-        /* Inline ad - smaller, yellow border for distinction */
         .inline-ad {
             min-height: 100px !important;
             margin: 15px 0;
             border: 3px solid #FFD700 !important;
         }
 
-        /* END DEBUG MODE */
+        .inline-ad.active {
+            display: block !important;
+        }
 
         /* Features Section */
         .features {
@@ -397,6 +341,16 @@
             opacity: 0.9;
         }
 
+        footer a {
+            color: white;
+            text-decoration: underline;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            opacity: 0.8;
+        }
+
         /* Consent Modal */
         .consent-modal {
             position: fixed;
@@ -431,9 +385,8 @@
         }
 
         .consent-text {
-            flex: 1;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .consent-buttons {
@@ -460,16 +413,12 @@
         }
 
         .consent-decline {
-            background: #f5f5f5;
-            color: #333;
+            background: #f44336;
+            color: white;
         }
 
         .consent-decline:hover {
-            background: #e0e0e0;
-        }
-
-        .hidden {
-            display: none !important;
+            background: #da190b;
         }
 
         input[type="file"] {
@@ -1025,20 +974,21 @@
         }
 
         function loadAds() {
-            console.log('Ads loaded with user consent');
-            // Add your Google AdSense code here
+            // Ad loading logic would go here
+            console.log('Ads consent accepted, loading ads...');
         }
 
         // File Upload Handling
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
         const convertBtn = document.getElementById('convertBtn');
         const errorMessage = document.getElementById('errorMessage');
 
-        // Drag and drop events
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('drag-over');
@@ -1051,45 +1001,34 @@
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('drag-over');
+            
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                handleFileSelect(files[0]);
+                handleFile(files[0]);
             }
         });
 
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
+                handleFile(e.target.files[0]);
             }
         });
 
-        function handleFileSelect(file) {
-            errorMessage.classList.remove('active');
-
+        function handleFile(file) {
             // Validate file size (50MB limit)
-            const maxSize = 50 * 1024 * 1024;
+            const maxSize = 50 * 1024 * 1024; // 50MB in bytes
             if (file.size > maxSize) {
-                errorMessage.textContent = '❌ File too large! Maximum file size is 50MB.';
-                errorMessage.classList.add('active');
-                return;
-            }
-
-            // Validate file type
-            const validTypes = ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/aac', 'audio/m4a', 'audio/ogg', 'audio/x-m4a', 'audio/x-wav'];
-            const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-
-            if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
-                errorMessage.textContent = '❌ Invalid file type! Please upload an audio file.';
+                errorMessage.textContent = '❌ File too large! Maximum size is 50MB.';
                 errorMessage.classList.add('active');
                 return;
             }
 
             selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
             fileInfo.classList.add('active');
             convertBtn.disabled = false;
+            errorMessage.classList.remove('active');
         }
 
         function formatFileSize(bytes) {
@@ -1100,7 +1039,6 @@
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
 
-        // REAL Server-Side Conversion
         async function startConversion() {
             if (!selectedFile) return;
 
@@ -1178,28 +1116,20 @@
 
         function completeConversion() {
             document.getElementById('progressContainer').classList.remove('active');
-            document.getElementById('inlineAd').classList.remove('active');
             document.getElementById('resultSection').classList.add('active');
-
+            
             if (adsConsent) {
                 document.getElementById('ad-banner-2').classList.add('active');
             }
         }
 
         function downloadFile() {
-            if (!convertedFileUrl) {
-                errorMessage.textContent = '❌ No converted file available.';
-                errorMessage.classList.add('active');
-                return;
-            }
+            if (!convertedFileUrl) return;
 
             const outputFormat = document.getElementById('outputFormat').value;
-            const originalName = selectedFile.name.split('.').slice(0, -1).join('.');
-            const newFileName = `${originalName}_converted.${outputFormat}`;
-
             const a = document.createElement('a');
             a.href = convertedFileUrl;
-            a.download = newFileName;
+            a.download = `converted.${outputFormat}`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

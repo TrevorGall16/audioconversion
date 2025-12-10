@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <meta name="description" content="Free online audio converter. Convert MP3, WAV, FLAC, AAC, M4A, OGG and more. Fast, simple, no signup required.">
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
+    
+    <link rel="canonical" href="https://yourdomain.com/" />
+    
     <title>Free Audio Converter - Convert MP3, WAV, FLAC & More</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
 
     <style>
         * {
@@ -54,81 +58,61 @@
         }
 
         /* Desktop: Left Sidebar (250px) | Content (Flexible) | Right Sidebar (250px) */
-        @media (min-width: 1200px) {
+        @media (min-width: 1024px) {
             .main-content {
                 grid-template-columns: 250px 1fr 250px;
             }
         }
 
-        /* --- AD CONTAINER STYLES --- */
+/* --- AD CONTAINERS (PRODUCTION CLEANUP) --- */
         .ad-container {
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            background: #f9f9f9; /* Subtle grey placeholder */
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #555;
-            font-size: 0.9rem;
-            font-weight: bold;
             margin-bottom: 20px;
-            overflow: hidden; /* Prevents overflow */
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 90px;
+            border: none; /* No more colored borders */
         }
 
-        /* Banner 1 (Top Center) */
-        #test-top-banner {
-            display: block !important;
-            width: 100%;
-            height: 100px; /* Fixed height for header banner */
-            margin-bottom: 20px;
-            border: 3px solid #FF6B6B; /* Red Border for Visibility */
-            background: white;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Banner 2 (Bottom Center) */
-        #ad-banner-2 {
-            min-height: 250px;
-            width: 100%;
-            display: none; /* Hidden until conversion */
-            border: 3px solid #FFA500; /* Orange Border */
-        }
-        #ad-banner-2.active { display: flex; }
-
-        /* Inline Ad (Inside Tool) */
-        #inlineAd {
-            min-height: 100px;
-            margin: 15px 0;
-            display: none;
-            border: 3px solid #9b59b6; /* Purple Border */
-        }
-        #inlineAd.active { display: flex; }
-
-        /* Sidebars (Left & Right) */
-        aside {
-            display: none; /* Hidden on Mobile/Tablet */
-        }
-
-        @media (min-width: 1200px) {
-            aside {
-                display: block !important;
-            }
-        }
+        /* Sidebars */
+        aside { display: none; }
+        @media (min-width: 1024px) { aside { display: block !important; } }
 
         .sidebar-ad {
-            width: 100%;
-            height: 600px;
-            background: white;
-            border-radius: 12px;
-            border: 3px solid #4ECDC4; /* Cyan Border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: sticky; /* Keeps it visible while scrolling */
-            top: 20px;
+            width: 100%; height: 600px; 
+            background: transparent;
+            display: flex; align-items: center; justify-content: center;
+            position: sticky; top: 20px;
+            border: none; /* Remove Cyan border */
+            box-shadow: none;
         }
+
+        /* Top Banner (Renaming ID recommended in HTML too) */
+        #test-top-banner, #ad-banner-1 { 
+            width: 100%; min-height: 100px; 
+            background: #f9f9f9;
+            border: none; /* Remove Red border */
+            display: flex !important;
+        }
+
+        /* Bottom Banner (Hidden until result) */
+        #ad-banner-2 { 
+            width: 100%; min-height: 250px; 
+            display: none; 
+            border: none; /* Remove Orange border */
+        } 
+        #ad-banner-2.active { display: flex; }
+        
+        /* Inline Ad (Hidden until conversion) */
+        #inlineAd { 
+            min-height: 250px; margin: 15px 0; 
+            display: none; 
+            border: none; /* Remove Purple border */
+        }
+        #inlineAd.active { display: flex; }
 
         /* --- COMPONENT STYLES --- */
         .conversion-section {
@@ -294,7 +278,7 @@
 
             <div class="conversion-area">
                 
-                <div class="ad-container" id="test-top-banner">
+                <div class="ad-container" id="test-top-banner"></div>
                     [TOP BANNER AD - 728x90]
                 </div>
 
@@ -347,12 +331,12 @@
                         [INLINE AD - 300x250]
                     </div>
 
-                    <div class="result-section" id="resultSection">
+<div class="result-section" id="resultSection">
                         <h3 style="color: #1976d2; margin-bottom: 15px;">✅ Conversion Complete!</h3>
-                        <button class="download-btn" onclick="downloadFile()">
-                            ⬇️ Download Converted File
-                        </button>
-                        <button class="convert-again-btn" onclick="resetConverter()">
+                        
+                        <div id="downloadContainer"></div>
+
+                        <button class="convert-btn" onclick="location.reload()" style="background: white; color: #667eea; border: 2px solid #667eea; margin-top: 10px;">
                             Convert Another File
                         </button>
                     </div>
@@ -398,97 +382,143 @@
     </div>
 
     <script>
-        // State
+        // --- GLOBAL VARIABLES ---
         let selectedFile = null;
-        let adsConsent = false;
-
-        // Check consent on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            const consent = localStorage.getItem('adsConsent');
-            if (consent === null) {
-                document.getElementById('consentModal').classList.add('active');
-            } else if (consent === 'true') {
-                adsConsent = true;
-                loadAds();
-            }
-        });
-
-        // Consent Functions
-        function acceptConsent() {
-            localStorage.setItem('adsConsent', 'true');
-            adsConsent = true;
-            document.getElementById('consentModal').classList.remove('active');
-            loadAds();
-        }
-
-        function declineConsent() {
-            localStorage.setItem('adsConsent', 'false');
-            adsConsent = false;
-            document.getElementById('consentModal').classList.remove('active');
-        }
-
-        function loadAds() {
-            console.log('Ads loaded with user consent');
-        }
-
-        // File Upload Handling
+        const errorMessage = document.getElementById('errorMessage');
+        const convertBtn = document.getElementById('convertBtn');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const convertBtn = document.getElementById('convertBtn');
-        const errorMessage = document.getElementById('errorMessage');
 
-        // Drag and drop events
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('drag-over');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('drag-over');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
+        // --- CONSENT LOGIC ---
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('adsConsent') === null) {
+                document.getElementById('consentModal').classList.add('active');
             }
         });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-
-        function handleFileSelect(file) {
-            errorMessage.classList.remove('active');
-            const maxSize = 50 * 1024 * 1024; // 50MB
-            if (file.size > maxSize) {
-                errorMessage.textContent = '❌ File too large! Maximum file size is 50MB.';
-                errorMessage.classList.add('active');
-                return;
-            }
-            const validTypes = ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/aac', 'audio/m4a', 'audio/ogg', 'audio/x-m4a'];
-            const validExtensions = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
-                errorMessage.textContent = '❌ Invalid file type! Please upload an audio file.';
-                errorMessage.classList.add('active');
-                return;
-            }
-            selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.classList.add('active');
-            convertBtn.disabled = false;
+        function acceptConsent() {
+            localStorage.setItem('adsConsent', 'true');
+            document.getElementById('consentModal').classList.remove('active');
+        }
+        // Decline just closes modal (ads won't load in production logic)
+        function declineConsent() {
+            document.getElementById('consentModal').classList.remove('active');
         }
 
-        function formatFileSize(bytes) {
+        // --- UPLOAD HANDLING ---
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#764ba2'; });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = '#667eea'; });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if(e.dataTransfer.files.length > 0) handleFileSelect(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+        });
+
+        // --- HANDLE FILE SELECTION (With Green Success Box) ---
+        function handleFileSelect(file) {
+            errorMessage.classList.remove('active');
+
+            // 1. Check Size
+            if (file.size > 50 * 1024 * 1024) {
+                showError('❌ File too large! Limit is 50MB.');
+                return;
+            }
+
+            // 2. Check Type
+            const validExts = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+            if (!validExts.includes(fileExt)) {
+                showError('❌ Invalid file type. Please upload an audio file.');
+                return;
+            }
+
+            selectedFile = file;
+            convertBtn.disabled = false;
+
+            // UI Update: Success State
+            uploadArea.style.borderColor = '#4caf50';
+            uploadArea.style.background = '#f1f8e9';
+            uploadArea.innerHTML = `
+                <div class="upload-icon success" style="font-size: 3rem; margin-bottom: 10px;">🎵</div>
+                <h3 style="color: #2e7d32; margin-bottom: 5px; word-break: break-all;">${file.name}</h3>
+                <p style="color: #555; margin-bottom: 15px;">${formatSize(file.size)}</p>
+                <button onclick="location.reload()" style="padding: 8px 16px; cursor: pointer; background: white; border: 1px solid #ccc; border-radius: 4px;">Change File</button>
+            `;
+        }
+
+        // --- REAL SERVER CONVERSION ---
+        async function startConversion() {
+            if (!selectedFile) return;
+
+            // 1. Lock UI & Add Animations
+            convertBtn.disabled = true;
+            convertBtn.textContent = "Uploading & Converting...";
+            convertBtn.classList.add('converting'); // Pulse Animation
+            
+            // 2. Show Progress UI (and Inline Ad)
+            document.getElementById('progressContainer').classList.add('active');
+            document.getElementById('resultSection').classList.remove('active');
+            document.getElementById('ad-banner-2').classList.remove('active');
+            
+            const formData = new FormData();
+            formData.append('audioFile', selectedFile);
+            formData.append('format', document.getElementById('outputFormat').value);
+
+            // 3. Fake Visual Progress (Just for looks)
+            const progressFill = document.getElementById('progressFill');
+            let w = 0;
+            const progInt = setInterval(() => { if(w<90) w+=2; progressFill.style.width = w+'%'; }, 100);
+
+            try {
+                // 4. SEND TO SERVER
+                const response = await fetch('/convert', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.message || 'Server Connection Failed');
+                }
+
+                const blob = await response.blob();
+                
+                // 5. Success!
+                clearInterval(progInt);
+                progressFill.style.width = '100%';
+                convertBtn.classList.remove('converting'); // Stop Pulse
+                
+                setTimeout(() => {
+                    showDownloadButton(blob, `converted.${document.getElementById('outputFormat').value}`);
+                }, 500);
+
+            } catch (error) {
+                clearInterval(progInt);
+                convertBtn.disabled = false;
+                convertBtn.textContent = "Convert Audio File";
+                convertBtn.classList.remove('converting'); // Stop Pulse
+                showError('❌ ' + error.message);
+                document.getElementById('progressContainer').classList.remove('active');
+            }
+        }
+
+        function showDownloadButton(blob, filename) {
+            document.getElementById('progressContainer').classList.remove('active');
+            document.getElementById('resultSection').classList.add('active');
+            document.getElementById('ad-banner-2').classList.add('active'); // Show Bottom Ad
+            
+            const url = window.URL.createObjectURL(blob);
+            const container = document.getElementById('downloadContainer');
+            
+            container.innerHTML = `
+                <a href="${url}" download="${filename}" style="text-decoration:none;">
+                    <button class="download-btn">⬇️ Download ${filename}</button>
+                </a>
+            `;
+        }
+
+        function formatSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -496,71 +526,18 @@
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
 
-        // Conversion Process
-        function startConversion() {
-            if (!selectedFile) return;
-            convertBtn.disabled = true;
-            document.getElementById('progressContainer').classList.add('active');
-            document.getElementById('resultSection').classList.remove('active');
-            document.getElementById('ad-banner-2').classList.remove('active');
-            if (adsConsent) {
-                document.getElementById('inlineAd').classList.add('active');
-            }
-            let progress = 0;
-            const progressFill = document.getElementById('progressFill');
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    completeConversion();
-                }
-                progressFill.style.width = progress + '%';
-                progressFill.textContent = Math.round(progress) + '%';
-            }, 200);
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.classList.add('active');
         }
 
-        function completeConversion() {
-            setTimeout(() => {
-                document.getElementById('progressContainer').classList.remove('active');
-                document.getElementById('inlineAd').classList.remove('active');
-                document.getElementById('resultSection').classList.add('active');
-                if (adsConsent) {
-                    document.getElementById('ad-banner-2').classList.add('active');
-                }
-            }, 500);
-        }
-
-        function downloadFile() {
-            if (!selectedFile) return;
-            // Fake download for demo - Replaced by server implementation in production
-            const outputFormat = document.getElementById('outputFormat').value;
-            const originalName = selectedFile.name.split('.').slice(0, -1).join('.');
-            const newFileName = `${originalName}_converted.${outputFormat}`;
-            const blob = new Blob(['Demo Conversion'], { type: 'audio/' + outputFormat });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = newFileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
+        // Helper to reset everything (e.g. "Convert Another File")
         function resetConverter() {
-            selectedFile = null;
-            fileInput.value = '';
-            fileInfo.classList.remove('active');
-            document.getElementById('progressContainer').classList.remove('active');
-            document.getElementById('resultSection').classList.remove('active');
-            document.getElementById('ad-banner-2').classList.remove('active');
-            document.getElementById('inlineAd').classList.remove('active');
-            errorMessage.classList.remove('active');
-            convertBtn.disabled = true;
-            document.getElementById('progressFill').style.width = '0%';
-            document.getElementById('progressFill').textContent = '0%';
+            location.reload(); // Simplest way to clear file inputs and UI state
+        }
+        
+        // Helper for "Change File" button inside the Green Box
+        function resetUI() {
+            location.reload();
         }
     </script>
-</body>
-</html>
