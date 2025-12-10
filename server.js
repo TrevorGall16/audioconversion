@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
@@ -8,9 +9,41 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate Limiting Configuration
+// Strict limiter for expensive conversion endpoint
+const conversionLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 conversion requests per windowMs
+    message: {
+        message: 'Too many conversion requests from this IP. Please try again in 15 minutes.'
+    },
+    statusCode: 429,
+    standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+    legacyHeaders: false, // Disable `X-RateLimit-*` headers
+    skipFailedRequests: true, // Don't count failed requests (allows retries on network errors)
+    handler: (req, res) => {
+        res.status(429).json({
+            message: 'Too many conversion requests from this IP. Please try again in 15 minutes.'
+        });
+    }
+});
+
+// General limiter for all other traffic
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: {
+        message: 'Too many requests from this IP. Please try again later.'
+    },
+    statusCode: 429,
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(generalLimiter); // Apply general rate limiting globally
 app.use(express.static('public'));
 
 // Ensure required directories exist with proper permissions
@@ -95,8 +128,8 @@ function safeDeleteFile(filePath) {
     }
 }
 
-// Conversion endpoint
-app.post('/convert', upload.single('audioFile'), (req, res) => {
+// Conversion endpoint with strict rate limiting
+app.post('/convert', conversionLimiter, upload.single('audioFile'), (req, res) => {
     let inputPath = null;
     let outputPath = null;
 

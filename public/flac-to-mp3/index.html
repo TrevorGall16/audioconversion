@@ -244,6 +244,33 @@
         }
 
         /* ============================================
+           AD COLLAPSE RULE (CLS Prevention)
+           ============================================
+           When AdSense sets data-ad-status="unfilled", visually
+           collapse the ad slot while preserving parent min-height.
+           This prevents layout shift while hiding empty ads.
+           ============================================ */
+        ins.adsbygoogle[data-ad-status="unfilled"] {
+            display: none !important;
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-height: 0 !important;
+            height: 0 !important;
+        }
+
+        /* Parent container maintains reserved space */
+        .ad-container {
+            min-height: 250px; /* Reserved for CLS prevention */
+        }
+
+        .ad-container:has(ins[data-ad-status="unfilled"]) {
+            min-height: 0; /* Collapse parent when ad unfilled */
+            margin-bottom: 0;
+        }
+
+        /* ============================================
            DEBUG MODE FOR AD DEVELOPMENT
            ============================================
            All 4 ad containers are FORCED VISIBLE for layout verification.
