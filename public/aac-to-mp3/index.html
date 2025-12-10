@@ -602,6 +602,60 @@
         footer a:hover {
             opacity: 0.8;
         }
+
+        /* Informational Bar - Priority SEO Links */
+        .info-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .info-bar-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .info-bar-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .info-bar-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .info-bar-icon {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .info-bar-links {
+                gap: 15px;
+            }
+            .info-bar-link {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -623,6 +677,20 @@
             <h1>Convert AAC to MP3</h1>
             <p class="subtitle">Convert MP3, WAV, FLAC, AAC, M4A, OGG - Fast & Simple</p>
         </header>
+
+        <!-- Informational Bar - Priority Navigation Links -->
+        <div class="info-bar">
+            <div class="info-bar-links">
+                <a href="/audio-knowledge/" class="info-bar-link">
+                    <span class="info-bar-icon">📚</span>
+                    <span>Audio Knowledge & FAQ</span>
+                </a>
+                <a href="/formats-details.html" class="info-bar-link">
+                    <span class="info-bar-icon">📋</span>
+                    <span>Audio Format Details</span>
+                </a>
+            </div>
+        </div>
 
         <div class="main-content">
             <div class="conversion-area">
@@ -801,8 +869,6 @@
             <p>&copy; 2025 Free Audio Converter. All rights reserved.</p>
             <p style="margin-top: 10px; font-size: 0.9rem;">Fast, free, and simple audio file conversion.</p>
             <p style="margin-top: 15px; font-size: 0.9rem;">
-                <a href="/audio-knowledge/">Audio Knowledge & FAQ</a> |
-                <a href="/formats-details.html">Audio Format Details</a> |
                 <a href="/legal-disclaimer.html">Legal Disclaimer</a> |
                 <a href="/file-handling.html">Privacy & File Handling</a>
             </p>
