@@ -371,13 +371,17 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
         .replace(/\{\{CANONICAL_URL\}\}/g, '/audio-knowledge/')
         .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
 
-    // Find and replace the concise summary section with full educational content
+    // Remove the entire conversion UI section (from main-content to before concise summary)
+    const conversionUIPattern = /<div class="main-content">[\s\S]*?<!-- Concise Summary for AdSense Compliance -->/;
+    knowledgeHtml = knowledgeHtml.replace(conversionUIPattern, '<div class="main-content">\n            <div class="conversion-area">\n                <!-- Concise Summary for AdSense Compliance -->');
+
+    // Replace the concise summary section with full educational content
     const summaryPattern = /<!-- Concise Summary for AdSense Compliance -->\s*<section class="content-section">[\s\S]*?<\/section>/;
     knowledgeHtml = knowledgeHtml.replace(summaryPattern, knowledgeContent);
 
-    // Remove the file upload/conversion interface for knowledge page
-    const uploadPattern = /<!-- Tutorial Steps[\s\S]*?<!-- Concise Summary/;
-    knowledgeHtml = knowledgeHtml.replace(uploadPattern, '<!-- Tutorial Steps removed for knowledge page -->\n\n                <!-- Concise Summary');
+    // Remove the Key Features section entirely
+    const featuresPattern = /<!-- Features Section[\s\S]*?<\/section>/;
+    knowledgeHtml = knowledgeHtml.replace(featuresPattern, '');
 
     // Write the HTML file
     const filePath = path.join(knowledgeDir, 'index.html');
