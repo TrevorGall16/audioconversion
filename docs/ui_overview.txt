@@ -1,98 +1,156 @@
 UI & Ad Placement Specification (Enhanced Ad Version)
 Those are just general recommendations. It doesn't have to be followed strictly.
 
-1. Purpose
+Purpose
 Defines UI layout and ad strategy for the audio converter website with increased ad density without violating basic usability or ad network policies.
 
-2. UI Layout Overview
+UI Layout Overview
 Main sections:
-- Header
-- Conversion Module
-- Ad Blocks (multiple)
-- Results Module
-- Secondary Info
-- Footer
-- Sidebar Ad (desktop only)
 
-3. Core UI (Conversion Module)
+Header
+
+Conversion Module
+
+Ad Blocks (multiple)
+
+Results Module
+
+Secondary Info
+
+Footer
+
+Sidebar Ad (desktop only)
+
+Core UI (Conversion Module)
 Components:
-- URL Input (large, centered)
-- Format Dropdown
-- Convert Button
-- Minimal error states
+
+URL Input (large, centered)
+
+Format Dropdown
+
+Convert Button
+
+Minimal error states
 This is the “hero” area—must stay perfectly clean, untouched by ads.
 
-4. Final Ad Placement Strategy
+Final Ad Placement Strategy
 You now have a Max 4-ad structure.
 
-**CRITICAL DEVELOPER NOTE:** While some ads are "logic-triggered" (hidden until conversion), during the BUILD phase, all ad containers must have a "debug mode" or distinct placeholders (borders/colors) that are visible in the code structure so the user can verify layout. Do not use 'display: none' permanently in the CSS for testing.
+CRITICAL DEVELOPER NOTE: While some ads are "logic-triggered" (hidden until conversion), during the BUILD phase, all ad containers must have a "debug mode" or distinct placeholders (borders/colors) that are visible in the code structure so the user can verify layout. Do not use 'display: none' permanently in the CSS for testing.
 
 A. Banner Ad #1 — Top Banner (Above Conversion Box)
-- Full-width banner
-- Always present
-- Loads on page load
-- Space is reserved to avoid layout jumps
+
+Full-width banner
+
+Always present
+
+Loads on page load
+
+Space is reserved to avoid layout jumps
 
 B. Banner Ad #2 — Mid-Page Banner (Below Results)
-- Production Behavior: Appears after conversion result.
-- Development Behavior: Keep the container strictly defined in the DOM. Even if empty or hidden via JS, the CSS class should allow for visibility testing (e.g., via a .debug class).
-- Positioned between the download button and the secondary info section.
+
+Production Behavior: Appears after conversion result.
+
+Development Behavior: Keep the container strictly defined in the DOM. Even if empty or hidden via JS, the CSS class should allow for visibility testing (e.g., via a .debug class).
+
+Positioned between the download button and the secondary info section.
 
 C. Sidebar Ad — Desktop Only (Right and/or Left)
-- Vertical rectangle
-- Sticky within a static reserved column
-- Never covers UI
-- Loads on page load
-- Mobile: Hidden completely via CSS media queries.
+
+Vertical rectangle
+
+Sticky within a static reserved column
+
+Never covers UI
+
+Loads on page load
+
+Mobile: Hidden completely via CSS media queries.
 
 D. Optional Conversion Trigger Ad
-- Tiny inline rectangle
-- Production Behavior: Appears after user hits “Convert”.
-- Positioned below the progress bar.
-- Must NOT delay or block conversion.
 
-5. Detailed Page Structure With Ads
+Tiny inline rectangle
+
+Production Behavior: Appears after user hits “Convert”.
+
+Positioned below the progress bar.
+
+Must NOT delay or block conversion.
+
+Detailed Page Structure With Ads
 [HEADER]
 [LEFT SIDEBAR - Desktop] [MAIN CONTENT CENTER] [RIGHT SIDEBAR - Desktop]
 
 Center Column Flow:
-1. [BANNER AD #1 — Full Width]
-2. [MAIN CONVERSION UI]
-   - URL box / Format selector / Convert button
-3. [PROGRESS + INLINE AD]
-4. [RESULT BLOCK]
-   - Download button / Reconvert button
-5. [BANNER AD #2 — Mid-Page]
-6. [SECONDARY INFO / FAQ]
-7. [FOOTER]
 
-6. Behavioral Rules for Ads
+[BANNER AD #1 — Full Width]
+
+[MAIN CONVERSION UI]
+
+URL box / Format selector / Convert button
+
+[PROGRESS + INLINE AD]
+
+[RESULT BLOCK]
+
+Download button / Reconvert button
+
+[BANNER AD #2 — Mid-Page]
+
+[SECONDARY INFO / FAQ]
+
+[FOOTER]
+
+Behavioral Rules for Ads
 
 6.1 Page Load Rules
-- Banner #1 loads immediately.
-- Sidebars load immediately (desktop).
-- No modals, no pop-windows, no forced interaction.
+
+Banner #1 loads immediately.
+
+Sidebars load immediately (desktop).
+
+No modals, no pop-windows, no forced interaction.
 
 6.2 Conversion Trigger Rules
-- Each conversion is a “page refresh event”.
-- Banner #2 may refresh on each conversion.
-- Inline ad may appear every conversion.
+
+Each conversion is a “page refresh event”.
+
+Banner #2 may refresh on each conversion.
+
+Inline ad may appear every conversion.
 
 6.3 Safety Rules (Google Compliant)
-- Ads never mimic buttons.
-- Ads never cover UI.
-- No uncloseable overlays.
-- Sidebar must be coded as part of layout, not floating over content.
 
-7. Mobile Rules
-- Sidebars hidden (display: none).
-- Banners switch to mobile format.
-- Inline ad becomes very small or horizontal.
-- Never push the convert button off-screen.
+Ads never mimic buttons.
 
-8. Final UX Summary
+Ads never cover UI.
+
+No uncloseable overlays.
+
+Sidebar must be coded as part of layout, not floating over content.
+
+6.4 COLLAPSE RULE (NEW)
+
+CSS Requirement: When the ad container is empty (or the ad fails to load in production), the associated CSS class must remove borders and backgrounds and set padding: 0; margin-top: 0; to visually collapse the container (though the CLS-preventing min-height remains).
+
+Mobile Rules
+
+Sidebars hidden (display: none).
+
+Banners switch to mobile format.
+
+Inline ad becomes very small or horizontal.
+
+Never push the convert button off-screen.
+
+Final UX Summary
 You get:
-- Clear conversion flow
-- Multiple monetization surfaces
-- No breakage
-- A standard “converter site” ad density.
+
+Clear conversion flow
+
+Multiple monetization surfaces
+
+No breakage
+
+A standard “converter site” ad density.

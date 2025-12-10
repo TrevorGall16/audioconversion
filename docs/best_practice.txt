@@ -1,0 +1,100 @@
+BEST_PRACTICES_GUIDELINES.md
+
+For: AI Assistants / Developers
+Goal: Ensure all websites follow consistent, high-quality development patterns for maintainability, SEO, speed, and scalability.
+Rules should be followed but are not strict. if you need to break or not follow a rule for this website, feel free to do so.
+Project Organization
+
+Directory Structure: Strictly follow the structure defined in the TechStackGuideline.md for the specific project type (Vanilla vs Framework). Do not invent new folders.
+
+Imports:
+
+Frameworks: Use path aliases (@/components/...) if configured.
+
+Vanilla: Use relative paths (./utils.js).
+
+File Size: Keep files small and focused (max ~300 lines if possible).
+
+Large Content Management: For static sites using a build script, large content blocks (FAQ, Tutorials, etc.) must be moved into external HTML partials/snippets (e.g., /content_blocks/) and injected by the build script (build.js) into the master template. The master template (template.html) itself should remain under 500 lines.
+
+Coding Standards
+
+KISS (Keep It Simple, Stupid): Prefer simple, readable code over complex optimizations.
+
+DRY (Don’t Repeat Yourself): Reuse functions, components, and patterns.
+
+Formatting: Always format code after each task (bun format or project-specific formatter).
+
+Docstrings: Include clear docstrings for functions, classes, and components describing: Purpose, Inputs & outputs, Side effects.
+
+Component & UI Practices
+
+Reusability: Create reusable components (buttons, modals, loaders).
+
+Naming: Follow consistent naming conventions (PascalCase for Components, camelCase for functions).
+
+Styling: Check existing files for style patterns before adding new CSS.
+
+Accessibility: Ensure components are responsive and accessible (ARIA roles, keyboard navigation).
+
+Validation: Use prop validation (TypeScript interfaces or PropTypes).
+
+Performance & Speed
+
+Dependencies: Minimize external libraries. Only include what is strictly necessary.
+
+Assets: Optimize images (WebP/AVIF) and use lazy loading (loading="lazy").
+
+Scripts: Avoid blocking JS; defer non-critical scripts.
+
+Bundles: Ensure fast build times and minimal bundle size (< 100KB initial load for Frameworks, < 50KB for Vanilla).
+
+SEO & Indexing
+
+Source of Truth: Refer to SEO_TRAFFIC_PROTOCOL.md for exact implementation details regarding routing and meta-tags.
+
+URLs: Ensure unique, shareable URLs for each data item.
+
+Metadata: Dynamic updates of document.title and <meta> tags on virtual routing (or framework equivalent).
+
+Semantics: Use semantic HTML (<main>, <section>, <article>) for better indexing.
+
+Version Control & Collaboration
+
+Commits: Commit early and often; use descriptive messages starting with a verb.
+
+Branches: Create feature branches for larger tasks.
+
+Logs: Document all major changes in logs/YYYY-MM-DD-feature-name.md.
+
+Testing & Validation
+
+Coverage: Always write tests for new features: component tests, API tests, and logic validation.
+
+Mock Data: Include mock data for testing UI without backend.
+
+Automation: Automate testing where possible (bun test or equivalent).
+
+QA: Validate SEO tags, performance (Lighthouse), and accessibility regularly.
+
+Security Best Practices
+
+Secrets: Never store API keys or secrets in frontend code.
+
+Input: Validate and sanitize all user inputs.
+
+Errors: Ensure robust error handling to prevent leaking system info to users.
+
+Documentation & Instructions
+
+Maintenance: Maintain clear documentation for each component, module, and feature.
+
+AI Guides: Include guides for AI assistants if code generation is automated.
+
+Logs: Maintain a common mistakes / lessons learned log.
+
+Continuous Improvement
+
+Reflect on project outcomes and iterate on best practices.
+
+Update BEST_PRACTICES_GUIDELINES.md as new patterns emerge.

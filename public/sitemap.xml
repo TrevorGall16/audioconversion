@@ -45,4 +45,19 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://yourdomain.com/formats-details.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://yourdomain.com/legal-disclaimer.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://yourdomain.com/file-handling.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>

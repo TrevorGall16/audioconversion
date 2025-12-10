@@ -1,0 +1,61 @@
+ERROR_HANDLING_GUIDELINES.md
+
+For: AI Assistants / Developers
+Goal: Systematically catch, log, and resolve errors to maintain user experience and SEO.
+Rules should be followed but are not strict. if you need to break or not follow a rule for this website, feel free to do so.
+
+General Philosophy
+
+Prevent silent failures.
+
+Separate user-facing messages ("Something went wrong") from developer logs.
+
+Error Categories & Handling
+
+A. Data Errors (Missing Fields/Slugs)
+
+Action: Fallback to a default value or hide the specific element.
+
+Critical: Do not crash the entire page if one item is missing a tag.
+
+B. Navigation Errors
+
+Path A (Vanilla): Catch history.pushState errors. If URL parsing fails, redirect to Home.
+
+Path B (Framework): Use error.tsx (Next.js) or Error Boundaries to catch route failures.
+
+C. Ad Errors
+
+Action: If an ad fails to load, collapse the container height safely or show a placeholder.
+
+Log: Retry initialization once, then stop.
+
+Visual Rule (CSS): Ad containers must have a reserved min-height (CLS prevention). When the ad fails or is empty, remove background/borders and set height to 0 or use overflow: hidden; to collapse the visual debug state while maintaining the reserved space defined by the min-height property.
+
+Error Logging
+
+Maintain a local log or console group during development.
+
+Format: [Error Type] - [Component/File] - Message.
+
+Recovery Strategies
+
+Rendering Failures:
+
+Path A: Try-Catch blocks around DOM manipulation.
+
+Path B: React Error Boundaries around complex components.
+
+Network Failures:
+
+Retry critical fetches 1 time.
+
+If failing, show "Offline" or "Cached" state.
+
+Testing & QA
+
+Simulate a "Missing Data" scenario (delete a field in JSON).
+
+Simulate a "Broken URL" scenario.
+
+Ensure the "Back" button works after an error.

@@ -1,0 +1,75 @@
+SEO_TRAFFIC_PROTOCOL
+
+Purpose:
+This document provides the universal protocol for building high-ranking, indexable websites. It defines how to simulate multi-page architecture for crawlers, regardless of the technology stack used.
+Rules should be followed but are not strict. if you need to break or not follow a rule for this website, feel free to do so.
+
+1. CORE PHILOSOPHY
+
+Speed is Ranking: TTFB < 200ms, LCP < 2.5s.
+
+Zero "Soft 404s": Every navigable content piece must have a unique, indexable URL.
+
+Virtual Routing: The application must update the browser History API and Page Metadata on every view change.
+
+2. ARCHITECTURE PROTOCOLS (SELECT ONE)
+
+The Builder AI must determine the Tech Stack from TechStackGuideline.md and apply the matching protocol below.
+
+Protocol A: The "Vanilla Lite" (Client-Side / No Build)
+
+Applies when using: Vanilla JS, jQuery, plain HTML/CSS.
+
+File Structure: index.html, app.js, style.css (Root only).
+
+Routing: Use history.pushState() manually.
+
+Initialization: On window.onload, parse window.location.search to determine content.
+
+Google Visibility: Google does not click buttons. All clickable items must be <a href="?item=slug"> or managed via pushState with a fallback.
+
+Protocol B: The "Modern Framework" (Next.js / Astro / Svelte)
+
+Applies when using: Next.js, Astro, React Router, SvelteKit.
+
+Routing: NEVER use history.pushState manually. Use the framework's router (e.g., next/navigation, react-router-dom).
+
+Rendering: Prefer Server-Side Rendering (SSR) or Static Site Generation (SSG) for content pages.
+
+Hydration: Ensure metadata (Title, Meta Description) is updated by the framework's head manager (e.g., Next.js generateMetadata).
+
+3. DATA STRUCTURING FOR SEO
+
+3.1 Slug Rule (MANDATORY)
+
+Every distinct object (product, calculator result, directory item) must have a slug.
+
+BAD: ?id=123
+
+GOOD: ?item=camera-lens (Vanilla) or /item/camera-lens (Framework)
+
+3.2 Sitemap Logic
+
+Vanilla Projects: Create a standalone script (e.g., scripts/generate_sitemap.js) that reads the JSON data and outputs sitemap.xml to root.
+
+Framework Projects: Use the framework's sitemap generation tools (e.g., next-sitemap or a sitemap.ts route).
+
+4. GLOBAL INDEXING STRATEGY
+
+4.1 The "One Page" Trap
+
+Single Page Apps (SPAs) appear to Google as 1 page unless explicit routes exist.
+
+Requirement: Ensure direct access to any deep URL (e.g., domain.com/?item=slug) loads the specific item immediately without user interaction.
+
+4.2 Internal Linking Protocol
+
+Rule: For high-value static content blocks on the homepage (FAQ, Knowledge Basics), use internal jump links (e.g., <a href="#faq-section">FAQ</a>) in the header/footer to provide anchor links. This simulates deep-linking and increases the crawl depth of the primary page.
+
+4.3 Robots.txt
+
+Standard configuration:
+
+User-agent: *
+Allow: /
+Sitemap: [Insert Production URL]/sitemap.xml

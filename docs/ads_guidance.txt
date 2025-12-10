@@ -1,100 +1,228 @@
-Audio Converter Website — Ad Strategy & Implementation Guidelines
-1. Objective
+ADS_AND_INDEXING_GUIDELINES
 
-To maximize ad revenue while maintaining a functional and smooth user experience on the audio converter website. Ads should be visible and monetizable but must not block the core functionality (file upload, conversion, download). High ad density is acceptable as long as it does not disrupt usability or violate Google AdSense or general web ad policies.
+This document defines exact rules for generating your website's Ads Placement Strategy and Indexing / SEO Strategy.
+Rules should be followed but are not strict. if you need to break or not follow a rule for this website, feel free to do so.
+1. PURPOSE OF THIS DOCUMENT
 
-2. Ad Types & Placement
-2.1 Banner Ads
+The AI reading this document must understand:
 
-Bottom Banner: Persistent across all pages, shown when no inline ad is displayed. Height must be reserved to avoid layout shift.
+Google AdSense Strictness: Tool/Utility sites are often rejected for "Low Value Content". This document prevents that.
 
-Inline Banner Ads: Can be embedded within page content (e.g., between conversion steps, near file upload or download buttons).
+Where ads must appear (Placement Strategy).
 
-Frequency & Rules:
+How ads must be implemented based on the Tech Stack (Vanilla vs. Framework).
 
-No more than 2 inline banners per page is ideal.
+How the website must be indexed for maximum search visibility.
 
-Always leave clear spacing between content and ads to avoid accidental clicks.
+2. OUTPUT FORMAT
 
-Inline ads should not cover or interfere with functional buttons.
+When an AI writes the "Ads & Indexing" document, it must follow this structure exactly:
 
-2.2 Conversion-Triggered Ads
+AdSense Compliance Strategy (The "High-Value" Rule)
 
-Trigger Condition: After a successful conversion or file download.
+Ads Strategy Summary
 
-Format Options: Interstitial or lightbox ad.
+Ad Placements (Visual Rules)
 
-Rules:
+Ad Behavior Logic (Technical Implementation)
 
-Must be skippable or closable immediately (to comply with Google policies).
+Indexing Strategy Summary
 
-Only one triggered ad per conversion.
+Technical SEO Requirements
 
-Avoid stacking multiple interstitials if the user repeats conversions in the same session.
+Metadata Requirements
 
-2.3 Optional Extra Ads
+Sitemap & Robots Rules
 
-Sidebars or small rectangle ads can be added if page layout allows, but only if they do not push main content out of view.
+Schema Markup Requirements
 
-3. Implementation Guidelines
-3.1 Central Ad Management
+3. ADSENSE COMPLIANCE STRATEGY (CRITICAL)
 
-Use a central AdProvider system to handle all ad types:
+To avoid "Low Value Content" rejection, the Architect AI must enforce the following Content-First rules:
 
-Initialize ads once and reuse instances.
+3.1 The "High-Value" Homepage Rule
 
-Refresh ads periodically without full page reload.
+Prohibition: The homepage MUST NOT consist only of inputs, buttons, or a search bar.
 
-Track which ads are shown to prevent duplicates in the same user session.
+Requirement: The initial view (Main Container) must contain 300-500 words of static, helpful content visible immediately.
 
-3.2 Responsive & Non-Intrusive
+Content Types: "How to use this tool", "Methodology", "Common Rules", or "FAQ".
 
-Ads must adapt to mobile and desktop layouts.
+Reasoning: Google bots do not click buttons. If the value only appears after interaction, the bot sees an empty page.
 
-Avoid fullscreen pop-ups that block interaction unless they are conversion-triggered and immediately closable.
+3.2 The "Content Silo Protocol" (Audio Converter Specific)
 
-Reserve space for ads dynamically so layout does not shift when ads load.
+Rule: Long-form, highly searchable content (FAQ, Knowledge Basics) must remain physically present on the homepage for AdSense value but should be modularized using a Build Script Injection approach (as implemented in build.js). This keeps the visual content density high while maintaining a small template.html file size.
 
-3.3 Compliance & Safety
+Requirement: Every major static content block (e.g., FAQ) must be wrapped in a semantic HTML tag and given a unique ID (e.g., <section id="faq-section">) for deep-linking.
 
-All ads must comply with:
+3.3 The "Reset" Protocol
 
-Google AdSense / AdMob policies.
+Logic: When a user resets the tool or clicks "Back":
 
-Do not trick users into clicking ads or hide the close button.
+Path A (Vanilla): The resetToHome() function must re-inject the full text block (from 3.1). It must NEVER leave the container empty.
 
-No auto-downloads, forced clicks, or deceptive behavior.
+Path B (Framework): The home route must always render the text component by default.
 
-Monitor ad load times to avoid slowing down the website.
+4. ADS STRATEGY GUIDELINES
 
-4. UX & Conversion Considerations
+4.1 Principles
 
-File conversion process must remain fully functional regardless of ad presence.
+Ads must never be intrusive.
 
-Conversion-triggered ads are acceptable because they are after primary action completion.
+Ads must blend visually but remain identifiable.
 
-Keep critical buttons (upload, convert, download) always above the fold or clearly visible.
+Ads must follow responsiveness rules.
 
-Avoid excessive frequency that forces users to interact with multiple ads to achieve their goal.
+4.2 Types of Allowed Ads
 
-5. Best Practices
+The AI may generate documentation that includes:
 
-Prioritize user task flow: Ads should never block the core workflow of uploading or downloading.
+Banner Ads (horizontal)
 
-Test ad placement: Check on multiple screen sizes to ensure no overlaps or broken layouts.
+Square Ads (box / tile)
 
-Monitor revenue vs UX: High ad density is fine, but if engagement or conversions drop, reconsider placement.
+Native In-feed Ads
 
-Use asynchronous loading: Ads should not delay page render or conversion speed.
+4.3 Placement Logic (Mandatory Visual Patterns)
 
-Session management: Track which conversion-triggered ads have been shown to a user to avoid repetition fatigue.
+The AI must always follow these rules regarding location:
 
-6. Notes for AI / Developer
+A. Forbidden Areas (Strict)
 
-Treat all ad slots as dynamic and reusable components.
+NO ADS in the Navigation Panel / Sidebar (Left Panel).
 
-Always maintain clean separation between functional code (converter) and monetization code (ads).
+NO ADS on screens that have no publisher content (e.g., a loading screen or empty result state).
 
-The system should allow for future expansion of ad types without breaking core functionality.
+NO ADS that disappear when the user interacts (causes layout shift violations).
 
-Error handling: If an ad fails to load, fallback gracefully (no blank spaces that break layout).
+B. Header Area
+
+1 banner allowed.
+
+Must never push down the main navigation.
+
+C. Main Page Content (Right Panel)
+
+Insert ads after text blocks or below specific results.
+
+Minimum spacing: 500–700 px vertical distance.
+
+Max 3 ads per page view.
+
+D. Mobile Rules
+
+Max 1–2 ads visible at any time.
+
+Ads must respect viewport height (no >25% of screen).
+
+4.4 Technical Implementation (CRITICAL)
+
+The AI must define the implementation method based on the chosen Tech Stack:
+
+IF PATH A (Vanilla JS):
+
+Method: Manual DOM Injection.
+
+Logic: On navigation (virtual route change), the code must explicitly clear the .ad-container HTML and re-run the ad script.
+
+Class: Use a global AdManager class.
+
+IF PATH B (Next.js / Framework):
+
+Method: Component-based.
+
+Logic: Wrap ads in an <AdUnit /> component.
+
+Refresh: Use useEffect (React) to detect route changes and trigger a refresh of the specific ad slot.
+
+Constraint: NEVER use innerHTML or document.write.
+
+4.5 CLS Prevention (All Stacks)
+
+All ad containers must have a CSS min-height (e.g., 250px) to reserve space before the ad loads.
+
+Deployment Rule: When a container is empty (during debugging or after ad fails), the container must collapse visually (e.g., background: transparent; border: none; and set height to 0 using CSS for visual cleanliness) while maintaining the reserved min-height space to prevent layout shifts.
+
+5. INDEXING & SEO STRATEGY
+
+5.1 Indexing Guidelines
+
+The AI must:
+
+Define how crawlers navigate the site.
+
+Explicitly state which pages are indexed vs noindexed.
+
+5.2 URL Structure Rules
+
+Use clean, lowercase, hyphen-separated URLs.
+
+Path A (Vanilla): Use query slugs (?item=camera-lens).
+
+Path B (Framework): Use path slugs (/item/camera-lens).
+
+5.3 Title & Meta Description Rules
+
+Titles: 50–60 characters.
+
+Descriptions: 140–160 characters.
+
+Dynamic Update:
+
+Vanilla: document.title = ...
+
+Framework: Use export const metadata or <Head> tags.
+
+5.4 Header Structure Rules
+
+H1 = Page Title (Only one per view)
+
+H2 = Section Title
+
+H3 = Sub-section
+
+6. TECHNICAL SEO REQUIREMENTS
+
+Lighthouse Targets:
+
+Performance: >90
+
+SEO: >95
+
+Images: All images must include alt text and explicit width/height.
+
+Lazy Loading: Native loading="lazy" on all images below the fold.
+
+7. SITEMAP & ROBOTS RULES
+
+7.1 Sitemap
+
+Must include all indexable pages (or slugs).
+
+Generation:
+
+Path A: Custom Node/Bun script.
+
+Path B: Framework-native sitemap generation.
+
+7.2 Robots.txt
+
+Allow list.
+
+Disallow list for private pages.
+
+Link to Sitemap.
+
+8. SCHEMA MARKUP RULES
+
+The AI must generate schema.org markup using JSON-LD.
+Required:
+
+WebSite
+
+WebPage
+
+BreadcrumbList
+
+9. END OF DOCUMENT
