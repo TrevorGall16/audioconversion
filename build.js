@@ -359,7 +359,7 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
                 </section>
 
                 <section class="content-section" style="text-align: center; margin-top: 40px;">
-                    <p><a href="/" style="color: #667eea; font-weight: 600; font-size: 1.1rem;">← Back to Audio Converter</a></p>
+                    <a href="/" class="back-to-converter">← Back to Audio Converter</a>
                 </section>
     `;
 
