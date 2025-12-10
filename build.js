@@ -136,9 +136,11 @@ Sitemap: https://www.convertaudiofast.com/sitemap.xml
 `;
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
-// --- PASTE THE ADS.TXT COPY COMMAND HERE ---
-fs.copyFileSync('ads.txt', 'public/ads.txt'); // <--- PASTE THIS LINE HERE
+
+// Copy ads.txt for AdSense compliance
+fs.copyFileSync('ads.txt', 'public/ads.txt');
 console.log('✓ Copied: /ads.txt');
+
 // Generate dedicated Audio Knowledge page with educational content
 generateAudioKnowledgePage(publicDir, template);
 
