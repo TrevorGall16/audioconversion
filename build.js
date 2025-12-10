@@ -137,7 +137,26 @@ Sitemap: https://yourdomain.com/sitemap.xml
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
-console.log('\n✅ Build complete! Generated', converters.length + 1, 'pages\n');
+// Copy static informational pages to public directory
+const staticPages = [
+    'formats-details.html',
+    'legal-disclaimer.html',
+    'file-handling.html'
+];
+
+staticPages.forEach(page => {
+    const sourcePath = path.join(__dirname, page);
+    const destPath = path.join(publicDir, page);
+
+    if (fs.existsSync(sourcePath)) {
+        fs.copyFileSync(sourcePath, destPath);
+        console.log(`✓ Copied: /${page}`);
+    } else {
+        console.warn(`⚠️  Warning: ${page} not found, skipping`);
+    }
+});
+
+console.log('\n✅ Build complete! Generated', converters.length + 1, 'pages + 3 static pages\n');
 console.log('📁 All files are in the /public directory');
 console.log('🚀 Run "npm start" to start the server\n');
 
@@ -161,6 +180,21 @@ function generateSitemap(converters) {
         xml += `    <loc>${baseUrl}/${converter.slug}/</loc>\n`;
         xml += '    <changefreq>weekly</changefreq>\n';
         xml += '    <priority>0.8</priority>\n';
+        xml += '  </url>\n';
+    });
+
+    // Static informational pages
+    const staticPages = [
+        'formats-details.html',
+        'legal-disclaimer.html',
+        'file-handling.html'
+    ];
+
+    staticPages.forEach(page => {
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}/${page}</loc>\n`;
+        xml += '    <changefreq>monthly</changefreq>\n';
+        xml += '    <priority>0.6</priority>\n';
         xml += '  </url>\n';
     });
 
