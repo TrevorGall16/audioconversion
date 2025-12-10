@@ -7,6 +7,7 @@
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
     <link rel="canonical" href="{{CANONICAL_URL}}">
     <title>{{TITLE}}</title>
+    <meta name="google-site-verification" content="6-KQgsyvigvOEMKCs9VP4Byh0hMKej1CLRlowGGJtmc" />
 
     <style>
         * {
@@ -910,11 +911,16 @@
                     </div>
 
                     <!-- Inline Ad (appears during conversion) -->
-                    <div class="ad-container inline-ad" id="inlineAd">
-                        <div>
-                            <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                            <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">320x50 or 300x250</div>
-                        </div>
+<div class="ad-container inline-ad" id="inlineAd">
+                        <ins class="adsbygoogle"
+                            style="display:block"
+                            data-ad-client="ca-pub-8732422930809097"
+                            data-ad-slot="6778654588"
+                            data-ad-format="auto"
+                            data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
                     </div>
 
                     <!-- Result Section -->
@@ -952,19 +958,29 @@
                 </section>
 
                 <!-- Banner Ad #1 -->
-                <div class="ad-container" id="ad-banner-1">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
+<div class="ad-container" id="ad-banner-1">
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="5677309990" 
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
 
                 <!-- Banner Ad #2 -->
-                <div class="ad-container" id="ad-banner-2">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">728x90 (Desktop) / 320x50 (Mobile)</div>
-                    </div>
+ <div class="ad-container" id="ad-banner-2">
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="8283307940"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
 
                 <!-- Concise Summary -->
@@ -1007,16 +1023,19 @@
             </div>
 
             <!-- Sidebar Ad Slot #3 (Desktop Only) -->
-            <aside>
+<aside>
                 <div class="ad-container" id="ad-sidebar">
-                    <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">AD SPACE</div>
-                        <div style="font-size: 0.7rem; color: #e2e8f0; margin-top: 4px;">300x600 Vertical Rectangle</div>
-                        <div style="font-size: 0.65rem; color: #f1f5f9; margin-top: 8px;">Desktop Only</div>
-                    </div>
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-8732422930809097"
+                        data-ad-slot="9973338727"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </aside>
-        </div>
 
         <footer>
             <p style="font-weight: 600; margin-bottom: 10px;">&copy; 2025 Free Audio Converter. All rights reserved.</p>
@@ -1052,7 +1071,7 @@
             }
         });
 
-        // Consent Functions
+// Consent Functions
         function acceptConsent() {
             localStorage.setItem('adsConsent', 'true');
             adsConsent = true;
@@ -1067,8 +1086,17 @@
         }
 
         function loadAds() {
-            // Ad loading logic would go here
-            console.log('Ads consent accepted, loading ads...');
+            // CRITICAL: Load the global AdSense script only ONCE upon consent
+            if (document.getElementById('adsense-script')) return; // Prevent double loading
+
+            const script = document.createElement('script');
+            script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8732422930809097";
+            script.async = true;
+            script.crossOrigin = "anonymous";
+            script.id = 'adsense-script';
+            document.head.appendChild(script);
+            
+            console.log('Ads consent accepted, AdSense script loading...');
         }
 
         // File Upload Handling

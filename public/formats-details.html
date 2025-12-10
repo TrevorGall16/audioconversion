@@ -7,6 +7,7 @@
     <meta name="keywords" content="audio converter, mp3 converter, wav converter, audio format converter, free audio converter">
     <link rel="canonical" href="/formats-details.html">
     <title>Audio Format Details - Technical Specifications</title>
+    <meta name="google-site-verification" content="6-KQgsyvigvOEMKCs9VP4Byh0hMKej1CLRlowGGJtmc" />
 
     <style>
         * {
@@ -1054,7 +1055,7 @@
             </table>
         </div>
 
-        <div style="text-align: center;">
+        <div class="back-link-wrapper">
             <a href="/" class="back-link">← Back to Converter</a>
         </div>
 
@@ -1101,7 +1102,7 @@
             }
         });
 
-        // Consent Functions
+// Consent Functions
         function acceptConsent() {
             localStorage.setItem('adsConsent', 'true');
             adsConsent = true;
@@ -1116,8 +1117,17 @@
         }
 
         function loadAds() {
-            // Ad loading logic would go here
-            console.log('Ads consent accepted, loading ads...');
+            // CRITICAL: Load the global AdSense script only ONCE upon consent
+            if (document.getElementById('adsense-script')) return; // Prevent double loading
+
+            const script = document.createElement('script');
+            script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8732422930809097";
+            script.async = true;
+            script.crossOrigin = "anonymous";
+            script.id = 'adsense-script';
+            document.head.appendChild(script);
+            
+            console.log('Ads consent accepted, AdSense script loading...');
         }
 
         // File Upload Handling
