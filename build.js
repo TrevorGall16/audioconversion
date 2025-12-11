@@ -99,6 +99,15 @@ const homepageHtml = template
 
 fs.writeFileSync(path.join(publicDir, 'index.html'), homepageHtml);
 console.log('✓ Created: /index.html (Homepage)');
+// --- START FAVICON COPY ---
+fs.copyFileSync('favicon-96x96.png', 'public/favicon-96x96.png');
+fs.copyFileSync('favicon.svg', 'public/favicon.svg');
+fs.copyFileSync('favicon.ico', 'public/favicon.ico');
+fs.copyFileSync('apple-touch-icon.png', 'public/apple-touch-icon.png');
+fs.copyFileSync('site.webmanifest', 'public/site.webmanifest');
+fs.copyFileSync('android-chrome-192x192.png', 'public/android-chrome-192x192.png'); 
+fs.copyFileSync('android-chrome-512x512.png', 'public/android-chrome-512x512.png'); 
+console.log('✓ Copied: Favicon assets');
 
 // Generate each converter page
 converters.forEach(converter => {

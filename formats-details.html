@@ -1,370 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Format Details & Technical Specifications | Free Audio Converter</title>
-    <meta name="description" content="Learn about different audio formats including MP3, WAV, FLAC, and AAC. Understand bitrates, use cases, and compatibility for each format.">
-    <style>
-        /* --- GLOBAL RESET & BASE STYLES (Unchanged) --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<div class="content-section">
+    <header style="margin-bottom: 40px; text-align: center;">
+        <h2>🎵 Audio Format Details</h2>
+        <p class="subtitle" style="font-size: 1.1rem; color: #64748b;">Technical Specifications & Use Cases</p>
+    </header>
 
-        body {
-            /* Updated to light background for SaaS feel */
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f8f9fa; /* Light Gray/Off-White */
-            min-height: 100vh;
-            padding: 40px 20px; /* Added more vertical space */
-            color: #1e293b; /* Darker text */
-        }
+    <div class="format-section">
+        <h3>MP3 (MPEG Audio Layer III)</h3>
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            /* Updated for rounded-3xl and softer shadow */
-            border-radius: 24px; 
-            padding: 40px 50px; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1); 
-            border: 1px solid #e2e8f0; /* Soft border */
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            /* Changed border color to match new dark theme */
-            border-bottom: 3px solid #0f172a; 
-        }
-
-        h1 {
-            /* Updated size and color */
-            font-size: 2.8rem; 
-            color: #0f172a; /* Dark theme title color */
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem; /* Slightly larger */
-            color: #64748b; /* Slate Gray */
-        }
-
-        /* --- FORMAT SECTION (Readability Improvements) --- */
-        .format-section {
-            margin-bottom: 50px; /* Increased spacing between formats */
-            padding: 30px;
-            background: #ffffff; /* White card background */
-            border-radius: 16px; /* Rounded-2xl equivalent */
-            border: 1px solid #e2e8f0; /* Soft border */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .format-section h2 {
-            /* Darker, bolder titles */
-            color: #0f172a; 
-            margin-bottom: 20px;
-            font-size: 2.2rem; /* Bolder size */
-            font-weight: 700;
-        }
-
-        .format-section h3 {
-            /* Increased size and spacing for key headers (Type, Use Cases) */
-            color: #0f172a;
-            margin-top: 30px; /* Increased top margin for separation */
-            margin-bottom: 15px; /* Increased bottom margin */
-            font-size: 1.35rem; 
-            font-weight: 600; /* Bolder */
-            padding-left: 10px; /* Indent slightly */
-            border-left: 4px solid #6366f1; /* Small accent line */
-        }
-
-        .format-section p, .format-section ul {
-            /* CRITICAL FIX: Improved Readability */
-            color: #334155; 
-            line-height: 1.9; /* Increased line spacing */
-            margin-bottom: 20px; /* Increased space after paragraphs */
-        }
-
-        .format-section ul {
-            margin-left: 25px;
-            padding-left: 5px;
-        }
-
-        .format-section li {
-            margin-bottom: 10px;
-        }
-        
-        /* --- COMPARISON TABLE (Minor Styling) --- */
-        .spec-table {
-            width: 100%;
-            border-collapse: separate; /* Use separate for rounded corners */
-            border-spacing: 0;
-            margin: 30px 0;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden; /* Ensures borders are contained */
-        }
-
-        .spec-table th, .spec-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .spec-table th {
-            /* Darker header to match new theme */
-            background: #0f172a; 
-            color: white;
-            font-weight: 600;
-        }
-
-        .spec-table tr:nth-child(even) {
-            background: #f8fafc; /* Lighter alternating row */
-        }
-        
-        /* --- BACK TO CONVERTER BUTTON FIX --- */
-        .back-link-wrapper {
-            /* Wrapper to separate button from content */
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px 0;
-            border-top: 1px solid #e2e8f0;
-        }
-        
-        .back-link {
-            /* New SaaS Button Style */
-            display: inline-block;
-            padding: 14px 40px;
-            background: #0f172a; /* Dark button */
-            color: white;
-            text-decoration: none;
-            border-radius: 12px; /* Rounded-xl equivalent */
-            transition: all 0.3s;
-            font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .back-link:hover {
-            background: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-        }
-
-        /* --- FOOTER (Minor Styling) --- */
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🎵 Audio Format Details</h1>
-            <p class="subtitle">Technical Specifications & Use Cases</p>
-        </header>
-
-        <div class="format-section">
-            <h2>MP3 (MPEG Audio Layer III)</h2>
-
-            <h3>Type</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Type</strong>
             <p><strong>Lossy Compression</strong> - MP3 uses lossy compression, which means some audio data is permanently removed to reduce file size.</p>
-
-            <h3>Bitrate Range</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Bitrate Range</strong>
             <p>32 kbps to 320 kbps (most common: 128 kbps, 192 kbps, 320 kbps)</p>
+        </div>
 
-            <h3>Use Cases</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Use Cases</strong>
             <ul>
                 <li>Music streaming and portable devices</li>
                 <li>Podcasts and audiobooks</li>
                 <li>General audio sharing where file size matters</li>
                 <li>Web audio playback</li>
             </ul>
-
-            <h3>Pros</h3>
-            <ul>
-                <li>Universal compatibility across all devices and platforms</li>
-                <li>Small file sizes (approximately 1MB per minute at 128 kbps)</li>
-                <li>Good quality-to-size ratio</li>
-                <li>Widely supported by all audio players</li>
-            </ul>
-
-            <h3>Cons</h3>
-            <ul>
-                <li>Quality loss due to lossy compression</li>
-                <li>Not ideal for professional audio editing</li>
-                <li>Cannot recover lost data after compression</li>
-            </ul>
-
-            <h3>Compatibility</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Compatibility</strong>
             <p>Works on all devices, operating systems, and audio players. Supported by Windows, macOS, Linux, iOS, Android, and all web browsers.</p>
         </div>
+    </div>
+    
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0;">
 
-        <div class="format-section">
-            <h2>WAV (Waveform Audio File Format)</h2>
+    <div class="format-section">
+        <h3>WAV (Waveform Audio File Format)</h3>
 
-            <h3>Type</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Type</strong>
             <p><strong>Uncompressed (Lossless)</strong> - WAV stores audio data without compression, preserving original quality.</p>
+        </div>
 
-            <h3>Bitrate Range</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Bitrate Range</strong>
             <p>1411 kbps (CD quality: 16-bit, 44.1 kHz stereo) or higher depending on sample rate and bit depth</p>
+        </div>
 
-            <h3>Use Cases</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Use Cases</strong>
             <ul>
                 <li>Professional audio production and editing</li>
                 <li>Recording studios and mastering</li>
                 <li>High-fidelity archival storage</li>
                 <li>Audio that requires further processing</li>
             </ul>
-
-            <h3>Pros</h3>
-            <ul>
-                <li>Perfect audio quality with no compression</li>
-                <li>Ideal for professional editing and production</li>
-                <li>Lossless format preserves all original data</li>
-                <li>Wide compatibility</li>
-            </ul>
-
-            <h3>Cons</h3>
-            <ul>
-                <li>Very large file sizes (approximately 10MB per minute)</li>
-                <li>Not practical for streaming or portable devices</li>
-                <li>Requires significant storage space</li>
-            </ul>
-
-            <h3>Compatibility</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Compatibility</strong>
             <p>Excellent compatibility. Supported by Windows, macOS, Linux, and all professional audio software including DAWs (Digital Audio Workstations).</p>
         </div>
+    </div>
 
-        <div class="format-section">
-            <h2>FLAC (Free Lossless Audio Codec)</h2>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0;">
 
-            <h3>Type</h3>
+    <div class="format-section">
+        <h3>FLAC (Free Lossless Audio Codec)</h3>
+
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Type</strong>
             <p><strong>Lossless Compression</strong> - FLAC compresses audio without losing any quality, similar to ZIP for audio.</p>
+        </div>
 
-            <h3>Bitrate Range</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Bitrate Range</strong>
             <p>Variable (typically 700-1000 kbps for CD-quality audio, approximately 50-60% of WAV size)</p>
+        </div>
 
-            <h3>Use Cases</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Use Cases</strong>
             <ul>
                 <li>High-quality music archiving</li>
                 <li>Audiophile collections</li>
                 <li>When you need perfect quality with smaller size than WAV</li>
                 <li>Streaming services offering lossless audio</li>
             </ul>
-
-            <h3>Pros</h3>
-            <ul>
-                <li>Perfect audio quality (identical to WAV)</li>
-                <li>Smaller file size than WAV (40-60% reduction)</li>
-                <li>Open-source and royalty-free</li>
-                <li>Supports metadata and album art</li>
-            </ul>
-
-            <h3>Cons</h3>
-            <ul>
-                <li>Still relatively large compared to MP3</li>
-                <li>Limited support on older devices</li>
-                <li>Not as universally compatible as MP3</li>
-                <li>Requires more processing power to decode</li>
-            </ul>
-
-            <h3>Compatibility</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Compatibility</strong>
             <p>Good compatibility with modern devices. Supported by Windows 10+, macOS, Linux, Android, and most modern audio players. Limited support on iOS and older devices.</p>
         </div>
+    </div>
 
-        <div class="format-section">
-            <h2>AAC (Advanced Audio Coding)</h2>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0;">
+    
+    <div class="format-section">
+        <h3>AAC (Advanced Audio Coding)</h3>
 
-            <h3>Type</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Type</strong>
             <p><strong>Lossy Compression</strong> - AAC is a lossy format designed as the successor to MP3 with better quality at the same bitrate.</p>
+        </div>
 
-            <h3>Bitrate Range</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Bitrate Range</strong>
             <p>8 kbps to 529 kbps (most common: 128 kbps, 192 kbps, 256 kbps)</p>
+        </div>
 
-            <h3>Use Cases</h3>
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Use Cases</strong>
             <ul>
                 <li>Apple ecosystem (iTunes, Apple Music)</li>
                 <li>YouTube and streaming platforms</li>
                 <li>Mobile applications</li>
                 <li>Broadcasting and digital radio</li>
             </ul>
-
-            <h3>Pros</h3>
-            <ul>
-                <li>Better sound quality than MP3 at the same bitrate</li>
-                <li>Efficient compression for streaming</li>
-                <li>Native support in Apple devices</li>
-                <li>Modern codec with advanced features</li>
-            </ul>
-
-            <h3>Cons</h3>
-            <ul>
-                <li>Quality loss due to lossy compression</li>
-                <li>Not as universally compatible as MP3</li>
-                <li>Some older devices don't support AAC</li>
-                <li>Slightly larger file sizes than equivalent MP3</li>
-            </ul>
-
-            <h3>Compatibility</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 8px;">Compatibility</strong>
             <p>Excellent on modern devices. Native support on iOS, macOS, Android 4.1+, Windows 10+, and all modern web browsers. Limited support on older MP3 players.</p>
         </div>
-
-        <div class="format-section">
-            <h2>Quick Comparison Table</h2>
-            <table class="spec-table">
-                <thead>
-                    <tr>
-                        <th>Format</th>
-                        <th>Type</th>
-                        <th>File Size (per min)</th>
-                        <th>Best For</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>MP3</strong></td>
-                        <td>Lossy</td>
-                        <td>~1 MB</td>
-                        <td>General use, streaming, portability</td>
-                    </tr>
-                    <tr>
-                        <td><strong>WAV</strong></td>
-                        <td>Uncompressed</td>
-                        <td>~10 MB</td>
-                        <td>Professional editing, archival</td>
-                    </tr>
-                    <tr>
-                        <td><strong>FLAC</strong></td>
-                        <td>Lossless</td>
-                        <td>~5 MB</td>
-                        <td>High-quality storage, audiophiles</td>
-                    </tr>
-                    <tr>
-                        <td><strong>AAC</strong></td>
-                        <td>Lossy</td>
-                        <td>~1 MB</td>
-                        <td>Apple devices, modern streaming</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="back-link-wrapper">
-            <a href="/" class="back-link">← Back to Converter</a>
-        </div>
-
-        <footer>
-            <p>&copy; 2025 Free Audio Converter. All rights reserved.</p>
-        </footer>
     </div>
-</body>
-</html>
+
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0;">
+
+    <div class="format-section">
+        <h2>Quick Comparison Table</h2>
+        <table class="comparison-table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Format</th>
+                    <th>Type</th>
+                    <th>File Size (per min)</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MP3</strong></td>
+                    <td>Lossy</td>
+                    <td>~1 MB</td>
+                    <td>General use, streaming, portability</td>
+                </tr>
+                <tr>
+                    <td><strong>WAV</strong></td>
+                    <td>Uncompressed</td>
+                    <td>~10 MB</td>
+                    <td>Professional editing, archival</td>
+                </tr>
+                <tr>
+                    <td><strong>FLAC</strong></td>
+                    <td>Lossless</td>
+                    <td>~5 MB</td>
+                    <td>High-quality storage, audiophiles</td>
+                </tr>
+                <tr>
+                    <td><strong>AAC</strong></td>
+                    <td>Lossy</td>
+                    <td>~1 MB</td>
+                    <td>Apple devices, modern streaming</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="/" class="back-to-converter">← Back to Converter</a>
+    </div>
+</div>
