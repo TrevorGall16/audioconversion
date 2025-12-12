@@ -141,6 +141,27 @@ console.log('✓ Created: /robots.txt');
 fs.copyFileSync('ads.txt', 'public/ads.txt');
 console.log('✓ Copied: /ads.txt');
 
+// Copy Favicon Assets
+const faviconFiles = [
+    'favicon.ico', 
+    'favicon.svg', 
+    'favicon-96x96.png', 
+    'apple-touch-icon.png', 
+    'site.webmanifest',
+    'web-app-manifest-192x192.png',
+    'web-app-manifest-512x512.png'
+];
+
+faviconFiles.forEach(file => {
+    if (fs.existsSync(file)) {
+        fs.copyFileSync(file, path.join(publicDir, file));
+    } else {
+        console.warn(`⚠️ Warning: Favicon asset '${file}' not found in root directory.`);
+    }
+});
+console.log('✓ Copied: Favicon assets');
+// --- END OF BLOCK ---
+
 // Generate dedicated Audio Knowledge page with educational content
 generateAudioKnowledgePage(publicDir, template);
 
