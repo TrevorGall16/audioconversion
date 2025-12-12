@@ -540,7 +540,7 @@
             display: block;
         }
 
-       /* Educational Content Sections */
+        /* Educational Content Sections */
         .content-section {
             background: white;
             border-radius: 24px;
@@ -583,6 +583,57 @@
         .content-section li {
             margin-bottom: 10px;
         }
+        
+        /* --- STRENGTHENED STATIC PAGE READABILITY FIX --- */
+
+        /* Target all content elements inside the wrapped static pages */
+        .conversion-section .content-section h2,
+        .conversion-section .content-section h3 {
+            /* Ensure static page headings are styled correctly when wrapped */
+            color: #0f172a;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 700;
+            font-size: 1.75rem; /* Ensure H2/H3 stands out */
+        }
+        
+        .conversion-section .content-section p,
+        .conversion-section .content-section ul,
+        .conversion-section .content-section ol {
+            /* Ensure generous spacing for paragraphs and lists in static pages */
+            color: #475569;
+            line-height: 1.8; /* Increased line spacing */
+            margin-bottom: 18px; /* Increased space after paragraphs */
+            font-size: 1.05rem;
+        }
+
+        .conversion-section .content-section ul {
+            list-style: disc inside;
+            margin-left: 0; /* Remove default padding from wrapper */
+        }
+        
+        /* --- BACK BUTTON FIX (Ensures new style overrides old) --- */
+
+        .conversion-section a.back-to-converter {
+            /* Target the specific link class and give it high specificity */
+            display: inline-block;
+            padding: 14px 32px;
+            background: #0f172a;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+            transition: all 0.2s ease;
+        }
+        
+        .conversion-section a.back-to-converter:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+        }
+
 
         /* Tutorial Steps */
         .tutorial-steps {
@@ -657,57 +708,6 @@
         .comparison-table tr:hover {
             background: #f1f5f9;
         }
-        
-        /* --- STRENGTHENED STATIC PAGE READABILITY FIX --- */
-
-        /* Target all content elements inside the wrapped static pages */
-        .conversion-section .content-section h2,
-        .conversion-section .content-section h3 {
-            /* Ensure static page headings are styled correctly when wrapped */
-            color: #0f172a;
-            margin-bottom: 20px;
-            margin-top: 30px;
-            font-weight: 700;
-            font-size: 1.75rem; /* Ensure H2/H3 stands out */
-        }
-        
-        .conversion-section .content-section p,
-        .conversion-section .content-section ul,
-        .conversion-section .content-section ol {
-            /* Ensure generous spacing for paragraphs and lists in static pages */
-            color: #475569;
-            line-height: 1.8; /* Increased line spacing */
-            margin-bottom: 18px; /* Increased space after paragraphs */
-            font-size: 1.05rem;
-        }
-
-        .conversion-section .content-section ul {
-            list-style: disc inside;
-            margin-left: 0; /* Remove default padding from wrapper */
-        }
-        
-        /* --- BACK BUTTON FIX (Ensures new style overrides old) --- */
-
-        .conversion-section a.back-to-converter {
-            /* Target the specific link class and give it high specificity */
-            display: inline-block;
-            padding: 14px 32px;
-            background: #0f172a;
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
-            transition: all 0.2s ease;
-        }
-        
-        .conversion-section a.back-to-converter:hover {
-            background: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
-        }
-
 
         /* FAQ Section */
         .faq-item {
@@ -870,7 +870,6 @@
     </style>
 </head>
 <body>
-    <!-- GDPR/CCPA Consent Modal -->
     <div class="consent-modal" id="consentModal">
         <div class="consent-content">
             <div class="consent-text">
@@ -891,7 +890,6 @@
             <p class="subtitle">Convert MP3, WAV, FLAC, AAC, M4A, OGG - Fast & Simple</p>
         </header>
 
-        <!-- Informational Bar - Priority Navigation Links -->
         <div class="info-bar">
             <div class="info-bar-links">
                 <a href="/" class="info-bar-link">
@@ -916,25 +914,22 @@
 
                     <div class="error-message" id="errorMessage"></div>
 
-                    <!-- Upload Area -->
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">📁</div>
                         <div class="upload-text">Drag & Drop your audio file here</div>
                         <div style="margin: 15px 0; color: #94a3b8;">or</div>
-                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                        <button type="button" class="browse-btn" onclick="document.getElementById('fileInput').click()">
                             Browse Files
                         </button>
-                        <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.flac,.aac,.m4a,.ogg,.wma">
+                        <input type="file" id="fileInput" accept="audio/*">
                         <div style="margin-top: 15px; color: #94a3b8; font-size: 0.9rem;">Max file size: 50MB</div>
                     </div>
 
-                    <!-- File Info -->
                     <div class="file-info" id="fileInfo">
                         <strong>Selected file:</strong> <span id="fileName"></span><br>
                         <strong>Size:</strong> <span id="fileSize"></span>
                     </div>
 
-                    <!-- Format Selection -->
                     <div class="format-selection">
                         <label for="outputFormat">Convert to:</label>
                         <select id="outputFormat">
@@ -948,12 +943,10 @@
                         </select>
                     </div>
 
-                    <!-- Convert Button -->
-                    <button class="convert-btn" id="convertBtn" onclick="startConversion()" disabled>
+                    <button type="button" class="convert-btn" id="convertBtn" onclick="startConversion()" disabled>
                         Convert Audio File
                     </button>
 
-                    <!-- Progress Bar -->
                     <div class="progress-container" id="progressContainer">
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill">0%</div>
@@ -961,8 +954,7 @@
                         <div style="text-align: center; color: #64748b; font-size: 0.9rem;">Converting your file...</div>
                     </div>
 
-                    <!-- Inline Ad (appears during conversion) -->
-<div class="ad-container inline-ad" id="inlineAd">
+                    <div class="ad-container inline-ad" id="inlineAd">
                         <ins class="adsbygoogle"
                             style="display:block"
                             data-ad-client="ca-pub-8732422930809097"
@@ -974,7 +966,6 @@
                         </script>
                     </div>
 
-                    <!-- Result Section -->
                     <div class="result-section" id="resultSection">
                         <h3>✅ Conversion Complete!</h3>
                         <button class="download-btn" id="downloadBtn" onclick="downloadFile()">
@@ -986,7 +977,6 @@
                     </div>
                 </div>
 
-                <!-- 3-Step Tutorial -->
                 <section class="content-section">
                     <h2>How to Use This Converter</h2>
                     <div class="tutorial-steps">
@@ -1008,8 +998,7 @@
                     </div>
                 </section>
 
-                <!-- Banner Ad #1 -->
-<div class="ad-container" id="ad-banner-1">
+                <div class="ad-container" id="ad-banner-1">
                     <ins class="adsbygoogle"
                         style="display:block"
                         data-ad-client="ca-pub-8732422930809097"
@@ -1021,8 +1010,7 @@
                     </script>
                 </div>
 
-                <!-- Banner Ad #2 -->
- <div class="ad-container" id="ad-banner-2">
+                <div class="ad-container" id="ad-banner-2">
                     <ins class="adsbygoogle"
                         style="display:block"
                         data-ad-client="ca-pub-8732422930809097"
@@ -1034,14 +1022,12 @@
                     </script>
                 </div>
 
-                <!-- Concise Summary -->
                 <section class="content-section">
                     <h2>Why Choose Our Converter?</h2>
                     <p>Our free audio converter uses FFmpeg, the industry-standard tool trusted by professionals worldwide, to deliver lightning-fast conversions in seconds. Your files are processed securely on our servers and automatically deleted immediately after download—no storage, no tracking, complete privacy guaranteed. Convert between MP3, WAV, FLAC, AAC, and more formats with professional-quality output.</p>
                     <p style="margin-top: 15px;"><a href="/audio-knowledge/" style="color: #0f172a; font-weight: 600; text-decoration: underline;">→ Learn more about audio conversion, formats, and FAQ</a></p>
                 </section>
 
-                <!-- Key Features Section -->
                 <section class="features">
                     <h2>Key Features</h2>
                     <div class="feature-grid">
@@ -1073,8 +1059,7 @@
                 </section>
             </div>
 
-            <!-- Sidebar Ad Slot #3 (Desktop Only) -->
-<aside>
+            <aside>
                 <div class="ad-container" id="ad-sidebar">
                     <ins class="adsbygoogle"
                         style="display:block"
