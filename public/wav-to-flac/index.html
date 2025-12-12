@@ -540,7 +540,7 @@
             display: block;
         }
 
-        /* Educational Content Sections */
+       /* Educational Content Sections */
         .content-section {
             background: white;
             border-radius: 24px;
@@ -657,6 +657,57 @@
         .comparison-table tr:hover {
             background: #f1f5f9;
         }
+        
+        /* --- STRENGTHENED STATIC PAGE READABILITY FIX --- */
+
+        /* Target all content elements inside the wrapped static pages */
+        .conversion-section .content-section h2,
+        .conversion-section .content-section h3 {
+            /* Ensure static page headings are styled correctly when wrapped */
+            color: #0f172a;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 700;
+            font-size: 1.75rem; /* Ensure H2/H3 stands out */
+        }
+        
+        .conversion-section .content-section p,
+        .conversion-section .content-section ul,
+        .conversion-section .content-section ol {
+            /* Ensure generous spacing for paragraphs and lists in static pages */
+            color: #475569;
+            line-height: 1.8; /* Increased line spacing */
+            margin-bottom: 18px; /* Increased space after paragraphs */
+            font-size: 1.05rem;
+        }
+
+        .conversion-section .content-section ul {
+            list-style: disc inside;
+            margin-left: 0; /* Remove default padding from wrapper */
+        }
+        
+        /* --- BACK BUTTON FIX (Ensures new style overrides old) --- */
+
+        .conversion-section a.back-to-converter {
+            /* Target the specific link class and give it high specificity */
+            display: inline-block;
+            padding: 14px 32px;
+            background: #0f172a;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+            transition: all 0.2s ease;
+        }
+        
+        .conversion-section a.back-to-converter:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+        }
+
 
         /* FAQ Section */
         .faq-item {
