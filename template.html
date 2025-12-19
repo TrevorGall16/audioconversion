@@ -1193,7 +1193,7 @@
             }
         }
 
-async function startConversion() {
+        async function startConversion() {
             if (!selectedFile) return;
 
             convertBtn.disabled = true;
@@ -1210,37 +1210,53 @@ async function startConversion() {
             formData.append('audioFile', selectedFile);
             formData.append('format', document.getElementById('outputFormat').value);
 
-            // --- START FIX: Simulated Progress ---
-            let currentProgress = 0;
-            // Move bar every 500ms so it doesn't look frozen
-            const progressInterval = setInterval(() => {
+            // ===== SIMULATED PROGRESS BAR LOGIC =====
+            // Problem: Server processing takes 10-40 seconds with no real-time updates
+            // Solution: Fake gradual progress to prevent "frozen" UI perception
+            
+            let currentProgress = 10; // Start at 10% immediately for instant feedback
+            updateProgress(currentProgress);
+            
+            let progressInterval = setInterval(() => {
                 if (currentProgress < 90) {
-                    currentProgress += Math.random() * 5; // Add 0-5% randomly
-                    if (currentProgress > 90) currentProgress = 90; // Cap at 90%
+                    // Add 2-4% every 600ms (feels natural, not too fast/slow)
+                    const increment = 2 + Math.random() * 2;
+                    currentProgress += increment;
+                    
+                    // Hard cap at 90% - never reach 100% until server responds
+                    if (currentProgress > 90) currentProgress = 90;
+                    
                     updateProgress(currentProgress);
                 }
-            }, 500);
-            // --- END FIX ---
+            }, 600); // 600ms interval = smooth but not jittery
+            // ===== END SIMULATED PROGRESS =====
 
             try {
-                updateProgress(10);
-
-                // Attempt conversion with retry logic
+                // This await blocks for 10-40 seconds (upload + server processing)
                 const response = await attemptConversion(formData);
+                
+                // CRITICAL: Stop the fake progress loop immediately
+                clearInterval(progressInterval);
+                
+                // Jump to 95% to show we're downloading the result
+                updateProgress(95);
 
-                updateProgress(90);
-
-                // Get the converted file
+                // Get the converted file (downloading response can take 2-5 seconds)
                 const blob = await response.blob();
                 convertedFileUrl = URL.createObjectURL(blob);
 
+                // Now we're truly done - show 100%
                 updateProgress(100);
 
+                // Brief pause so user sees 100%, then show download button
                 setTimeout(() => {
                     completeConversion();
                 }, 500);
 
             } catch (error) {
+                // CRITICAL: Stop the fake progress loop on error
+                clearInterval(progressInterval);
+                
                 console.error('Conversion error:', error);
 
                 // Show clear error message to user
