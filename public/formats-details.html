@@ -1251,6 +1251,7 @@
 
             // --- START FIX: Simulated Progress (THIS IS THE NEW CODE) ---
             let currentProgress = 0;
+            updateProgress(10); // <--- FORCE VISIBLE START IMMEDIATELY
             // Move bar every 500ms so it doesn't look frozen
             const progressInterval = setInterval(() => {
                 if (currentProgress < 90) {
