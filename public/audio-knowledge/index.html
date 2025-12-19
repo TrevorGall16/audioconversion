@@ -1152,7 +1152,7 @@
             }
         }
 
-async function startConversion() {
+        async function startConversion() {
             if (!selectedFile) return;
 
             convertBtn.disabled = true;
@@ -1165,11 +1165,12 @@ async function startConversion() {
                 document.getElementById('inlineAd').classList.add('active');
             }
 
+            // Prepare form data
             const formData = new FormData();
             formData.append('audioFile', selectedFile);
             formData.append('format', document.getElementById('outputFormat').value);
 
-            // --- START FIX: Simulated Progress ---
+            // --- START FIX: Simulated Progress (THIS IS THE NEW CODE) ---
             let currentProgress = 0;
             // Move bar every 500ms so it doesn't look frozen
             const progressInterval = setInterval(() => {
@@ -1182,12 +1183,15 @@ async function startConversion() {
             // --- END FIX ---
 
             try {
-                updateProgress(10);
+                // Remove old manual updateProgress(10) since interval handles it
+                // updateProgress(10); 
 
                 // Attempt conversion with retry logic
                 const response = await attemptConversion(formData);
 
-                updateProgress(90);
+                // --- STOP SIMULATION ---
+                clearInterval(progressInterval);
+                updateProgress(95);
 
                 // Get the converted file
                 const blob = await response.blob();
@@ -1200,6 +1204,9 @@ async function startConversion() {
                 }, 500);
 
             } catch (error) {
+                // --- STOP SIMULATION ON ERROR ---
+                clearInterval(progressInterval);
+                
                 console.error('Conversion error:', error);
 
                 // Show clear error message to user
