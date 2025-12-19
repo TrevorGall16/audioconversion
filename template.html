@@ -1193,7 +1193,7 @@
             }
         }
 
-        async function startConversion() {
+async function startConversion() {
             if (!selectedFile) return;
 
             convertBtn.disabled = true;
@@ -1206,10 +1206,21 @@
                 document.getElementById('inlineAd').classList.add('active');
             }
 
-            // Prepare form data
             const formData = new FormData();
             formData.append('audioFile', selectedFile);
             formData.append('format', document.getElementById('outputFormat').value);
+
+            // --- START FIX: Simulated Progress ---
+            let currentProgress = 0;
+            // Move bar every 500ms so it doesn't look frozen
+            const progressInterval = setInterval(() => {
+                if (currentProgress < 90) {
+                    currentProgress += Math.random() * 5; // Add 0-5% randomly
+                    if (currentProgress > 90) currentProgress = 90; // Cap at 90%
+                    updateProgress(currentProgress);
+                }
+            }, 500);
+            // --- END FIX ---
 
             try {
                 updateProgress(10);
