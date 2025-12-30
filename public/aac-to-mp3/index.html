@@ -184,14 +184,14 @@
 
         /* Sidebar */
         .sidebar { display: flex; flex-direction: column; gap: 24px; }
-        .info-card {
+        .info-card, .features-box {
             background: white;
             border-radius: 20px;
             padding: 32px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 20px rgba(0,0,0,0.02);
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
-        .info-card h3 {
+        .info-card h3, .features-box h3 {
             font-size: 1.4rem;
             margin-bottom: 20px;
             color: #0f172a;
@@ -425,7 +425,7 @@
                         <div class="upload-text">Drag & Drop your audio file here</div>
                         <div style="margin: 15px 0; color: #94a3b8;">or</div>
                         
-                        <button type="button" class="browse-btn">
+                        <button type="button" class="browse-btn" onclick="document.getElementById('fileInput').click()">
                             Browse Files
                         </button>
                         <input type="file" id="fileInput" accept="audio/*" style="display: none;">
@@ -476,7 +476,11 @@
                     </div>
                 </div>
 
-                <!-- Educational Content Section -->
+                <div style="margin: 30px 0; display: flex; justify-content: center;">
+                    <script async="async" data-cfasync="false" src="https://pl28362942.effectivegatecpm.com/e47ed53060fddab9bd61ace6c036baf8/invoke.js"></script>
+                    <div id="container-e47ed53060fddab9bd61ace6c036baf8"></div>
+                </div>
+
                 <div class="educational-content">
                     <h2>Understanding Audio Format Conversion</h2>
                     
@@ -526,35 +530,30 @@
             </div>
 
             <aside class="sidebar">
-                <div class="info-card">
-                    <h3>✨ Key Features</h3>
+                <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : 'fd100a56284a7742ca2c8f546b7e338a',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="https://www.highperformanceformat.com/fd100a56284a7742ca2c8f546b7e338a/invoke.js"></script>
+                </div>
+
+                <div class="features-box">
+                    <h3>✨ Features</h3>
                     <ul class="feature-list">
-                        <li>Convert between 10+ popular audio formats instantly</li>
-                        <li>Fast server-side processing with FFmpeg</li>
-                        <li>Files deleted immediately after conversion</li>
-                        <li>No registration or account required</li>
-                        <li>Support for files up to 50MB in size</li>
-                        <li>Completely free with no hidden fees</li>
+                        <li>Free & Unlimited</li>
+                        <li>Secure (Files deleted instantly)</li>
+                        <li>High Quality (FFmpeg powered)</li>
+                        <li>Works on Mobile & Desktop</li>
                     </ul>
                 </div>
-
-                <!-- Sidebar Ad -->
-                <div class="ad-container" id="ad-sidebar">
-                    <ins class="adsbygoogle"
-                        style="display:block"
-                        data-ad-client="ca-pub-8732422930809097"
-                        data-ad-slot="9973338727"
-                        data-ad-format="auto"
-                        data-full-width-responsive="true"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
             </aside>
-        </div>
-    </div>
-
-    <footer>
+        </div> </div> <footer>
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/audio-knowledge/">Audio Knowledge & FAQ</a>
