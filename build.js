@@ -137,11 +137,6 @@ Sitemap: https://www.convertaudiofast.com/sitemap.xml
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
-// Copy ads.txt for AdSense compliance
-if (fs.existsSync('ads.txt')) {
-    fs.copyFileSync('ads.txt', 'public/ads.txt');
-    console.log('✓ Copied: /ads.txt');
-}
 
 // Copy Favicon Assets
 const faviconFiles = [
@@ -388,6 +383,11 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
                     </table>
                 </div>
             </section>
+
+            <div style="margin: 40px 0; display: flex; justify-content: center;">
+                <script async="async" data-cfasync="false" src="https://pl28362942.effectivegatecpm.com/e47ed53060fddab9bd61ace6c036baf8/invoke.js"></script>
+                <div id="container-e47ed53060fddab9bd61ace6c036baf8"></div>
+            </div>
 
             <section class="content-section">
                 <h2>❓ Frequently Asked Questions</h2>
