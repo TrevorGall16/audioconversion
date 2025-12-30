@@ -240,6 +240,7 @@ function wrapStaticPageWithTemplate(sourcePath, destPath, pageTitle, baseTemplat
     const bodyMatch = originalContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
     let contentToWrap = bodyMatch ? bodyMatch[1] : originalContent;
 
+    // Clean up potentially conflicting containers from the source file
     contentToWrap = contentToWrap.replace(/<div class="container">|<\/div>\s*$/gi, '');
     contentToWrap = contentToWrap.replace(/<div class="info-page-content">|<\/div>\s*$/gi, '');
 
@@ -250,15 +251,51 @@ function wrapStaticPageWithTemplate(sourcePath, destPath, pageTitle, baseTemplat
         .replace(/\{\{CANONICAL_URL\}\}/g, `/${path.basename(destPath)}`)
         .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
 
+    // Replace the Main Content area with a Two-Column Layout (Content + Sidebar)
+    // This ensures the 300x250 Banner appears in the sidebar
+    // and the Native Banner appears below the content.
+    
     const conversionAreaPattern = /<div class="main-content">[\s\S]*?<\/footer>/;
+    
     const staticContentSection = `
         <div class="main-content">
-            <div class="conversion-area" style="max-width: 900px; margin: 0 auto;">
+            <div>
                 <div class="conversion-section">
                     ${contentToWrap}
                 </div>
+
+                <div style="margin: 30px 0; display: flex; justify-content: center;">
+                    <script async="async" data-cfasync="false" src="https://pl28362942.effectivegatecpm.com/e47ed53060fddab9bd61ace6c036baf8/invoke.js"></script>
+                    <div id="container-e47ed53060fddab9bd61ace6c036baf8"></div>
+                </div>
             </div>
+
+            <aside class="sidebar">
+                <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : 'fd100a56284a7742ca2c8f546b7e338a',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="https://www.highperformanceformat.com/fd100a56284a7742ca2c8f546b7e338a/invoke.js"></script>
+                </div>
+
+                <div class="features-box">
+                    <h3>✨ Features</h3>
+                    <ul class="feature-list">
+                        <li>Free & Unlimited</li>
+                        <li>Secure (Files deleted instantly)</li>
+                        <li>High Quality (FFmpeg powered)</li>
+                        <li>Works on Mobile & Desktop</li>
+                    </ul>
+                </div>
+            </aside>
         </div>
+
         <footer>
             <p style="font-weight: 600; margin-bottom: 10px;">&copy; 2025 Free Audio Converter. All rights reserved.</p>
             <p style="margin-top: 10px; font-size: 0.9rem;">Fast, free, and simple audio file conversion.</p>
@@ -282,8 +319,6 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
     }
 
     // --- IMPROVED FORMATTING (STYLES + CONTENT) ---
-    // We inject a specialized <style> block just for this page so it looks pretty
-    // without affecting the main template.
     const knowledgeStyles = `
         <style>
             /* Specific formatting for Knowledge Page */
@@ -444,6 +479,19 @@ function generateAudioKnowledgePage(publicDir, baseTemplate) {
                     </div>
                 </div>
             </section>
+
+            <div style="display: flex; justify-content: center; margin: 40px 0;">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : 'fd100a56284a7742ca2c8f546b7e338a',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/fd100a56284a7742ca2c8f546b7e338a/invoke.js"></script>
+            </div>
 
             <section style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
                 <a href="/" style="display: inline-block; padding: 14px 28px; background: #0f172a; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">← Back to Audio Converter</a>
