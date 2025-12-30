@@ -45,20 +45,26 @@ app.post('/convert', upload.single('audioFile'), (req, res) => {
     const outputPath = path.join(__dirname, 'uploads', outputFilename);
 
     // Run FFmpeg
-    ffmpeg(inputPath)
-        .toFormat(outputFormat)
+ffmpeg(inputPath)
+        // REMOVED: .toFormat(outputFormat) <--- This was causing the crash!
+        // We let FFmpeg guess the format based on the .m4a or .aac extension below
         .on('error', (err) => {
             console.error('Conversion Error:', err);
+            // Cleanup input on error
             fs.unlink(inputPath, () => {}); 
+            // Attempt to remove output if partially created
+            fs.unlink(outputPath, () => {});
             res.status(500).json({ message: 'Conversion failed: ' + err.message });
         })
         .on('end', () => {
+            // Send the file back to the browser
             res.download(outputPath, outputFilename, (err) => {
+                // Cleanup files after download is done
                 fs.unlink(inputPath, () => {}); 
                 fs.unlink(outputPath, () => {}); 
             });
         })
-        .save(outputPath);
+        .save(outputPath); // FFmpeg sees ".m4a" here and automatically uses the correct settings
 });
 
 // Ensure 'uploads' directory exists
