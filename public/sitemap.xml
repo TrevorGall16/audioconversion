@@ -46,6 +46,21 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.convertaudiofast.com/ogg-to-wav/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.convertaudiofast.com/aac-to-wav/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.convertaudiofast.com/m4a-to-wav/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.convertaudiofast.com/audio-knowledge/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -66,6 +66,30 @@ const converters = [
         description: 'Convert WAV files to FLAC format for free. Reduce file size with lossless compression.',
         inputFormat: 'wav',
         outputFormat: 'flac'
+    },
+    {
+        slug: 'ogg-to-wav',
+        title: 'OGG to WAV Converter - High Quality Audio Conversion',
+        h1: 'Convert OGG to WAV',
+        description: 'Convert OGG files to WAV format for free. High-fidelity audio conversion without losing quality.',
+        inputFormat: 'ogg',
+        outputFormat: 'wav'
+    },
+    {
+        slug: 'aac-to-wav',
+        title: 'AAC to WAV Converter - Convert Apple Audio to WAV',
+        h1: 'Convert AAC to WAV',
+        description: 'Convert AAC to WAV online for free. Get uncompressed audio quality from your AAC files.',
+        inputFormat: 'aac',
+        outputFormat: 'wav'
+    },
+    {
+        slug: 'm4a-to-wav',
+        title: 'M4A to WAV Converter - Convert M4A to Uncompressed WAV',
+        h1: 'Convert M4A to WAV',
+        description: 'Convert M4A files to WAV format for free. Simple, fast, and secure audio conversion.',
+        inputFormat: 'm4a',
+        outputFormat: 'wav'
     }
 ];
 
