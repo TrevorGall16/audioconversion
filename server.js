@@ -5,11 +5,26 @@ const fs = require('fs');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const compression = require('compression');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.DOMAIN || 'convertaudiofast.com';
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// --- PERFORMANCE: Gzip Compression (reduces bandwidth by ~70%) ---
+app.use(compression({
+    level: 6, // Compression level (0-9, 6 is recommended balance)
+    threshold: 1024, // Only compress responses larger than 1KB
+    filter: (req, res) => {
+        // Don't compress if client explicitly requests no compression
+        if (req.headers['x-no-compression']) {
+            return false;
+        }
+        // Use compression for all compressible content types
+        return compression.filter(req, res);
+    }
+}));
 
 // --- SECURITY: Helmet.js (Security Headers) ---
 app.use(helmet({
@@ -43,8 +58,23 @@ app.use((req, res, next) => {
 // Configure Uploads (Stored in 'uploads/' temp folder)
 const upload = multer({ dest: 'uploads/' });
 
-// Serve static files
-app.use(express.static('public'));
+// Serve static files with caching
+app.use(express.static('public', {
+    maxAge: '7d', // Cache static files for 7 days
+    etag: true,   // Enable ETags for cache validation
+    lastModified: true,
+    setHeaders: (res, path) => {
+        // Cache CSS/JS/images longer
+        if (path.endsWith('.css') || path.endsWith('.js') || path.endsWith('.png') ||
+            path.endsWith('.jpg') || path.endsWith('.svg') || path.endsWith('.ico')) {
+            res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 days
+        }
+        // Cache HTML for shorter period (update content more frequently)
+        if (path.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
+        }
+    }
+}));
 
 // --- FIX FOR MENU LINKS ---
 app.get(['/audio-formats', '/privacy', '/faq'], (req, res) => {
