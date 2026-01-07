@@ -255,6 +255,9 @@ Sitemap: ${BASE_URL}/sitemap.xml
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
+// 2. COPY ASSETS (NEW FUNCTIONALITY)
+// This ensures css/ and js/ are always copied from assets/ to public/
+copyAssets();
 
 // Copy Favicon Assets
 const faviconFiles = [
@@ -302,6 +305,37 @@ console.log('📁 All files are in the /public directory');
 console.log('🚀 Run "node server.js" to start the server\n');
 
 // --- HELPER FUNCTIONS ---
+
+function copyAssets() {
+    const assetsDir = path.join(__dirname, 'assets');
+    
+    // Define source and dest for CSS and JS
+    const mappings = [
+        { src: path.join(assetsDir, 'css'), dest: path.join(publicDir, 'css') },
+        { src: path.join(assetsDir, 'js'), dest: path.join(publicDir, 'js') }
+    ];
+
+    mappings.forEach(map => {
+        // If source exists (e.g., assets/css), copy it
+        if (fs.existsSync(map.src)) {
+            // Create destination folder (public/css)
+            if (!fs.existsSync(map.dest)) {
+                fs.mkdirSync(map.dest, { recursive: true });
+            }
+
+            // Copy all files
+            const files = fs.readdirSync(map.src);
+            files.forEach(file => {
+                const srcFile = path.join(map.src, file);
+                const destFile = path.join(map.dest, file);
+                fs.copyFileSync(srcFile, destFile);
+            });
+            console.log(`✓ Copied assets from ${path.basename(map.src)} to public/${path.basename(map.dest)}`);
+        } else {
+            console.warn(`⚠️ Warning: Source asset directory not found: ${map.src}. MAKE SURE YOU CREATED THE "assets" FOLDER!`);
+        }
+    });
+}
 
 function generateSitemap(converters) {
     const baseUrl = BASE_URL; 
@@ -367,7 +401,8 @@ function wrapStaticPageWithTemplate(sourcePath, destPath, pageTitle, baseTemplat
         .replace(/\{\{H1\}\}/g, pageTitle.split('|')[0].trim().replace(/&/g, '&amp;'))
         .replace(/\{\{DESCRIPTION\}\}/g, `${pageTitle} - Free Audio Converter`)
         .replace(/\{\{CANONICAL_URL\}\}/g, `/${path.basename(destPath)}`)
-        .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3');
+        .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3')
+        .replace(/\{\{UNIQUE_CONTENT\}\}/g, '');
 
     // Replace the Main Content area with a Two-Column Layout (Content + Sidebar)
     // This ensures the 300x250 Banner appears in the sidebar
