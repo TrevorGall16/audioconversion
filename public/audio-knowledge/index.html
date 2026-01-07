@@ -303,6 +303,95 @@
             color: #64748b;
             font-size: 0.9rem;
         }
+
+        /* GDPR Cookie Consent Banner */
+        .cookie-consent-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+            z-index: 9999;
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+        .cookie-consent-banner.active {
+            display: block;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .cookie-consent-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .cookie-consent-text {
+            flex: 1;
+            min-width: 280px;
+        }
+        .cookie-consent-text p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .cookie-consent-text a {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        .cookie-consent-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .cookie-consent-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .cookie-consent-accept {
+            background: #22c55e;
+            color: white;
+        }
+        .cookie-consent-accept:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+        .cookie-consent-decline {
+            background: transparent;
+            color: white;
+            border: 2px solid #475569;
+        }
+        .cookie-consent-decline:hover {
+            border-color: #94a3b8;
+        }
+        @media (max-width: 768px) {
+            .cookie-consent-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cookie-consent-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            .cookie-consent-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
         /* Info Bar Navigation - With Icons & Boxes */
         .info-bar {
             background: white;
@@ -413,16 +502,12 @@
             </div>
         </div>
 <div style="display: flex; justify-content: center; margin-bottom: 40px; margin-top: -10px;">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'd4eba9478fc2c0e9d207fd7a3c021d55',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/d4eba9478fc2c0e9d207fd7a3c021d55/invoke.js"></script>
+            <!-- Ad loads after cookie consent -->
+            <div class="ad-placeholder"
+                 data-ad-key="d4eba9478fc2c0e9d207fd7a3c021d55"
+                 data-ad-width="728"
+                 data-ad-height="90">
+            </div>
         </div>
         
         <div class="main-content" style="display: block;">
@@ -616,6 +701,20 @@
         <p>&copy; 2024 Free Audio Converter. Fast, private audio conversion tool.</p>
     </footer>
 
+    <!-- GDPR Cookie Consent Banner -->
+    <div class="cookie-consent-banner" id="cookieConsent">
+        <div class="cookie-consent-content">
+            <div class="cookie-consent-text">
+                <p><strong>🍪 We value your privacy</strong></p>
+                <p>We use cookies and third-party advertising to improve your experience. By clicking "Accept", you consent to our use of cookies and ads. <a href="/privacy-policy.html">Privacy Policy</a></p>
+            </div>
+            <div class="cookie-consent-buttons">
+                <button class="cookie-consent-btn cookie-consent-decline" id="cookieDecline">Decline</button>
+                <button class="cookie-consent-btn cookie-consent-accept" id="cookieAccept">Accept</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ===== SIMPLE, WORKING JAVASCRIPT - NO FANCY TRICKS =====
         let selectedFile = null;
@@ -749,7 +848,106 @@
             a.click();
             document.body.removeChild(a);
         }
+
+        // ===== GDPR COOKIE CONSENT MANAGER =====
+        (function() {
+            const CONSENT_KEY = 'cookie_consent';
+            const cookieBanner = document.getElementById('cookieConsent');
+            const acceptBtn = document.getElementById('cookieAccept');
+            const declineBtn = document.getElementById('cookieDecline');
+
+            // Check if user has already made a choice
+            function checkConsent() {
+                const consent = localStorage.getItem(CONSENT_KEY);
+                return consent; // Returns 'accepted', 'declined', or null
+            }
+
+            // Load ad scripts after consent is given
+            function loadAdScripts() {
+                console.log('Loading ad scripts after consent...');
+
+                // Load Adsterra banner ads (key-based)
+                const adPlaceholders = document.querySelectorAll('.ad-placeholder');
+                adPlaceholders.forEach(placeholder => {
+                    const key = placeholder.getAttribute('data-ad-key');
+                    const width = placeholder.getAttribute('data-ad-width');
+                    const height = placeholder.getAttribute('data-ad-height');
+
+                    // Create atOptions configuration
+                    const script1 = document.createElement('script');
+                    script1.type = 'text/javascript';
+                    script1.textContent = `
+                        atOptions = {
+                            'key': '${key}',
+                            'format': 'iframe',
+                            'height': ${height},
+                            'width': ${width},
+                            'params': {}
+                        };
+                    `;
+                    placeholder.appendChild(script1);
+
+                    // Load the invoke.js script
+                    const script2 = document.createElement('script');
+                    script2.type = 'text/javascript';
+                    script2.src = `https://www.highperformanceformat.com/${key}/invoke.js`;
+                    placeholder.appendChild(script2);
+                });
+
+                // Load native banner ads (src-based)
+                const nativeAds = document.querySelectorAll('.ad-placeholder-native');
+                nativeAds.forEach(nativeAd => {
+                    const src = nativeAd.getAttribute('data-ad-src');
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.setAttribute('data-cfasync', 'false');
+                    script.src = src;
+                    nativeAd.appendChild(script);
+                });
+
+                // Load footer ad script
+                const footerScript = document.createElement('script');
+                footerScript.src = 'https://pl28379552.effectivegatecpm.com/04/60/59/046059e670d164f784b22304c4c2a92b.js';
+                document.body.appendChild(footerScript);
+            }
+
+            // Show cookie banner
+            function showBanner() {
+                cookieBanner.classList.add('active');
+            }
+
+            // Hide cookie banner
+            function hideBanner() {
+                cookieBanner.classList.remove('active');
+            }
+
+            // Handle accept
+            acceptBtn.addEventListener('click', function() {
+                localStorage.setItem(CONSENT_KEY, 'accepted');
+                hideBanner();
+                loadAdScripts();
+            });
+
+            // Handle decline
+            declineBtn.addEventListener('click', function() {
+                localStorage.setItem(CONSENT_KEY, 'declined');
+                hideBanner();
+                console.log('User declined cookies. Ads will not load.');
+            });
+
+            // Initialize on page load
+            const currentConsent = checkConsent();
+            if (currentConsent === 'accepted') {
+                // User previously accepted - load ads immediately
+                loadAdScripts();
+            } else if (currentConsent === 'declined') {
+                // User previously declined - do nothing
+                console.log('User has declined cookies. Ads blocked.');
+            } else {
+                // No choice made yet - show banner
+                showBanner();
+            }
+        })();
     </script>
-    <script src="https://pl28379552.effectivegatecpm.com/04/60/59/046059e670d164f784b22304c4c2a92b.js"></script>
 </body>
 </html>

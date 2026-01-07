@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load environment variables
+const DOMAIN = process.env.DOMAIN || 'convertaudiofast.com';
+const BASE_URL = `https://www.${DOMAIN}`;
+
 // Define all converter pages we want to generate
 const converters = [
     {
@@ -156,7 +160,7 @@ console.log('✓ Created: /sitemap.xml');
 const robotsTxt = `User-agent: *
 Allow: /
 
-Sitemap: https://www.convertaudiofast.com/sitemap.xml
+Sitemap: ${BASE_URL}/sitemap.xml
 `;
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
@@ -210,7 +214,7 @@ console.log('🚀 Run "node server.js" to start the server\n');
 // --- HELPER FUNCTIONS ---
 
 function generateSitemap(converters) {
-    const baseUrl = 'https://www.convertaudiofast.com'; 
+    const baseUrl = BASE_URL; 
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';

@@ -367,6 +367,54 @@
         }
         .nav-links a:hover { color: #0f172a; }
 
+        /* COOKIE BANNER STYLES (GDPR) */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+            display: none; /* Hidden by default, JS shows it */
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            z-index: 9999;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-top: 1px solid #334155;
+        }
+        .cookie-text {
+            font-size: 0.95rem;
+            max-width: 800px;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .cookie-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cookie-accept {
+            background: #22c55e;
+            color: white;
+        }
+        .cookie-accept:hover { background: #16a34a; }
+        .cookie-decline {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+        }
+        .cookie-decline:hover { border-color: #cbd5e1; color: white; }
+
         /* Mobile */
         @media (max-width: 768px) {
             body { padding: 24px 16px 40px; }
@@ -380,6 +428,7 @@
                 font-size: 0.85rem;
                 padding: 8px 14px;
             }
+            .cookie-banner { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -412,24 +461,27 @@
                 </a>
             </div>
         </div>
-<div style="display: flex; justify-content: center; margin-bottom: 40px; margin-top: -10px;">
+
+        <div style="display: flex; justify-content: center; margin-bottom: 40px; margin-top: -10px;">
             <script type="text/javascript">
-                atOptions = {
-                    'key' : 'd4eba9478fc2c0e9d207fd7a3c021d55',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
+              atOptions = {
+                'key' : 'd4eba9478fc2c0e9d207fd7a3c021d55',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
             </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/d4eba9478fc2c0e9d207fd7a3c021d55/invoke.js"></script>
+            <script class="adsterra-script" type="text/plain" src="https://www.highperformanceformat.com/d4eba9478fc2c0e9d207fd7a3c021d55/invoke.js"></script>
         </div>
+
         <div class="main-content">
             <div>
                 <div class="conversion-section">
                     <h2>Upload & Convert Your Audio</h2>
+                    
                     <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                        <script>
+                        <script type="text/javascript">
                           atOptions = {
                             'key' : '05d0e9b58c013b9da55a137fc3ddb730',
                             'format' : 'iframe',
@@ -438,8 +490,9 @@
                             'params' : {}
                           };
                         </script>
-                        <script src="https://www.highperformanceformat.com/05d0e9b58c013b9da55a137fc3ddb730/invoke.js"></script>
+                        <script class="adsterra-script" type="text/plain" src="https://www.highperformanceformat.com/05d0e9b58c013b9da55a137fc3ddb730/invoke.js"></script>
                     </div>
+
                     <div class="error-message" id="errorMessage"></div>
 
                     <div class="upload-area" id="uploadArea">
@@ -499,7 +552,7 @@
                 </div>
 
                 <div style="margin: 30px 0; display: flex; justify-content: center;">
-                    <script async="async" data-cfasync="false" src="https://pl28362942.effectivegatecpm.com/e47ed53060fddab9bd61ace6c036baf8/invoke.js"></script>
+                    <script async="async" data-cfasync="false" class="adsterra-script" type="text/plain" src="https://pl28362942.effectivegatecpm.com/e47ed53060fddab9bd61ace6c036baf8/invoke.js"></script>
                     <div id="container-e47ed53060fddab9bd61ace6c036baf8"></div>
                 </div>
 
@@ -530,24 +583,6 @@
                             <p>When email attachments or cloud storage limits are a concern, converting high-quality audio to smaller formats becomes necessary. A 40MB WAV file can become a 4MB MP3 file while maintaining acceptable quality for most listening situations.</p>
                         </div>
                     </div>
-
-                    <h3>Quality Considerations</h3>
-                    <p>When converting between audio formats, understanding the concept of lossy versus lossless compression is crucial. Lossless formats (FLAC, ALAC, WAV) preserve the original audio data completely, allowing you to convert back and forth without degradation. Lossy formats (MP3, AAC, OGG) permanently discard some audio information to achieve smaller file sizes. Converting from one lossy format to another compounds quality loss, so it's best to keep original high-quality versions when possible.</p>
-
-                    <p>Bitrate selection significantly impacts both quality and file size. For music, 320 kbps MP3 is considered transparent to most listeners, meaning it's indistinguishable from the original. For spoken content like podcasts or audiobooks, 96-128 kbps provides excellent clarity while minimizing file size. Voice-only recordings can use even lower bitrates (64 kbps) without noticeable quality degradation.</p>
-
-                    <h3>Technical Insights: How Conversion Works</h3>
-                    <p>Audio conversion involves decoding the source format into raw audio data (PCM samples), then encoding it into the target format using the selected codec. Modern converters like this one use FFmpeg, an industry-standard multimedia framework that supports virtually every audio format. The conversion process preserves metadata like artist names, album titles, and embedded artwork when the target format supports such information.</p>
-
-                    <p>Sample rate and bit depth are fundamental properties that define audio quality. CD-quality audio uses 44.1 kHz sample rate and 16-bit depth. Higher rates (96 kHz, 192 kHz) and depths (24-bit) capture more audio information but create proportionally larger files. Most conversion tools automatically match the source file's properties or allow you to specify these parameters for precise control over the output.</p>
-
-                    <h3>Privacy and Security</h3>
-                    <p>Online audio converters vary significantly in how they handle your files. Browser-based converters that process files locally (client-side) offer maximum privacy because your audio never leaves your device. Server-based converters upload files for processing, which may pose privacy concerns for sensitive content. This tool processes conversions on our server but immediately deletes files after conversion, ensuring your audio content remains private and secure.</p>
-
-                    <h3>Best Practices for Audio Conversion</h3>
-                    <p>Always keep your original high-quality source files archived. Converting creates a copy in the new format, leaving your original intact. This allows you to create different versions for different purposes without re-ripping or re-recording. For example, maintain FLAC versions at home while creating MP3 versions for portable devices.</p>
-
-                    <p>Match your format to your use case. Use lossless formats for editing, archival, and critical listening. Use lossy formats for everyday listening, sharing, and storage-constrained situations. Consider OGG Vorbis or Opus for streaming applications, as they offer better quality-to-bitrate ratios than MP3. AAC provides excellent quality for Apple ecosystem devices and modern applications.</p>
                 </div>
             </div>
 
@@ -562,7 +597,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script type="text/javascript" src="https://www.highperformanceformat.com/fd100a56284a7742ca2c8f546b7e338a/invoke.js"></script>
+                    <script class="adsterra-script" type="text/plain" src="https://www.highperformanceformat.com/fd100a56284a7742ca2c8f546b7e338a/invoke.js"></script>
                 </div>
 
                 <div class="features-box">
@@ -586,8 +621,68 @@
         <p>&copy; 2024 Free Audio Converter. Fast, private audio conversion tool.</p>
     </footer>
 
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-text">
+            <strong>🍪 We use cookies and ads.</strong><br>
+            We use third-party cookies to show personalized ads and analyze our traffic. 
+            By clicking "Accept", you agree to our use of cookies as described in our 
+            <a href="/privacy-policy.html" style="color:#86efac;">Privacy Policy</a>.
+        </div>
+        <div class="cookie-buttons">
+            <button id="acceptCookies" class="cookie-btn cookie-accept">Accept & Enable Ads</button>
+            <button id="declineCookies" class="cookie-btn cookie-decline">Decline</button>
+        </div>
+    </div>
+
+    <script class="adsterra-script" type="text/plain" src="https://pl28379552.effectivegatecpm.com/04/60/59/046059e670d164f784b22304c4c2a92b.js"></script>
+
     <script>
-        // ===== SIMPLE, WORKING JAVASCRIPT - NO FANCY TRICKS =====
+        // ===== COOKIE CONSENT LOGIC =====
+        document.addEventListener("DOMContentLoaded", function() {
+            const banner = document.getElementById('cookieBanner');
+            const consent = localStorage.getItem('cookie_consent');
+
+            if (consent === 'accepted') {
+                enableAds(); // Load ads immediately
+            } else if (consent === 'declined') {
+                // Do nothing (ads remain blocked)
+            } else {
+                // Show banner if no choice made
+                banner.style.display = 'flex';
+            }
+
+            document.getElementById('acceptCookies').addEventListener('click', () => {
+                localStorage.setItem('cookie_consent', 'accepted');
+                banner.style.display = 'none';
+                enableAds();
+            });
+
+            document.getElementById('declineCookies').addEventListener('click', () => {
+                localStorage.setItem('cookie_consent', 'declined');
+                banner.style.display = 'none';
+                // Ads remain blocked
+            });
+        });
+
+        function enableAds() {
+            // Find all ad scripts blocked by type="text/plain"
+            const blockedScripts = document.querySelectorAll('.adsterra-script');
+            
+            blockedScripts.forEach(script => {
+                const newScript = document.createElement('script');
+                // Copy attributes
+                newScript.src = script.src;
+                newScript.async = script.async;
+                newScript.dataset.cfasync = script.dataset.cfasync;
+                // Important: Insert new script next to old one so it works with document.write placement
+                script.parentNode.insertBefore(newScript, script);
+                // Remove old placeholder
+                script.remove();
+            });
+            console.log("✅ Ads enabled due to user consent.");
+        }
+
+        // ===== CONVERSION LOGIC (Vanilla JS) =====
         let selectedFile = null;
         let convertedFileUrl = null;
 
@@ -643,7 +738,7 @@
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
 
-        // SIMPLE CONVERSION - No fake progress, just real feedback
+        // SIMPLE CONVERSION
         convertBtn.addEventListener('click', async function startConversion() {
             if (!selectedFile) return;
 
@@ -654,7 +749,7 @@
             document.getElementById('resultSection').classList.remove('active');
             errorMessage.classList.remove('active');
 
-            // Show 10% immediately so user knows something is happening
+            // Show 10% immediately
             updateProgress(10);
 
             const formData = new FormData();
@@ -662,7 +757,7 @@
             formData.append('format', document.getElementById('outputFormat').value);
 
             try {
-                // THE ACTUAL REQUEST (simple, no wrappers)
+                // THE ACTUAL REQUEST
                 const response = await fetch('/convert', {
                     method: 'POST',
                     body: formData
@@ -677,7 +772,7 @@
                     throw new Error(msg);
                 }
 
-                // Success! Jump to 100%
+                // Success!
                 updateProgress(100);
                 const blob = await response.blob();
                 convertedFileUrl = URL.createObjectURL(blob);
@@ -720,6 +815,5 @@
             document.body.removeChild(a);
         }
     </script>
-    <script src="https://pl28379552.effectivegatecpm.com/04/60/59/046059e670d164f784b22304c4c2a92b.js"></script>
 </body>
 </html>
