@@ -207,12 +207,23 @@ console.log('\n🏗️  Building SEO-optimized landing pages...\n');
 
 // Generate homepage (index.html in public/)
 const homepageHtml = template
-    .replace(/\{\{TITLE\}\}/g, 'Free Audio Converter - Convert MP3, WAV, FLAC & More')
-    .replace(/\{\{H1\}\}/g, '🎵 Free Audio Converter')
-    .replace(/\{\{DESCRIPTION\}\}/g, 'Free online audio converter. Convert MP3, WAV, FLAC, AAC, M4A, OGG and more. Fast, simple, no signup required.')
+    .replace(/\{\{TITLE\}\}/g, 'Convert Audio Fast - The Fastest Online Audio Converter')
+    .replace(/\{\{H1\}\}/g, '⚡ Convert Audio Fast')
+    .replace(/\{\{DESCRIPTION\}\}/g, 'The fastest free online audio converter. Convert MP3, WAV, FLAC, AAC, M4A, OGG and more. Server-side processing for maximum speed.')
     .replace(/\{\{CANONICAL_URL\}\}/g, '/')
     .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3')
-    .replace(/\{\{UNIQUE_CONTENT\}\}/g, ''); // Homepage has no unique content
+    .replace(/\{\{UNIQUE_CONTENT\}\}/g, `
+        <div class="educational-content">
+            <h2>Why is Convert Audio Fast so... fast?</h2>
+            <p>Most online converters run inside your browser (using technologies like "WASM"), which makes your computer do all the heavy lifting. This is slow, drains your battery, and often crashes if you upload large files.</p>
+            <p><strong>Convert Audio Fast</strong> is different. We use enterprise-grade <strong>Server-Side FFmpeg</strong> processing. When you upload a file, our powerful dedicated servers handle the conversion instantly and send it back. This means:</p>
+            <ul>
+                <li><strong>Zero Lag:</strong> We process files in milliseconds, not minutes.</li>
+                <li><strong>No Crashes:</strong> Convert 50MB files as easily as 1MB files.</li>
+                <li><strong>Save Battery:</strong> Your phone or laptop doesn't do the work—our servers do.</li>
+            </ul>
+        </div>
+    `);
 
 fs.writeFileSync(path.join(publicDir, 'index.html'), homepageHtml);
 console.log('✓ Created: /index.html (Homepage)');
