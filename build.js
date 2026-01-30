@@ -3,6 +3,7 @@ const path = require('path');
 
 // Load environment variables
 const DOMAIN = process.env.DOMAIN || 'convertaudiofast.com';
+const BASE_URL = `https://www.${DOMAIN}`;
 
 // Define REAL converter pages (No "Use Cases")
 const converters = [
@@ -155,4 +156,56 @@ function copyAssets() {
     });
 }
 copyAssets();
+
+// --- SITEMAP GENERATION ---
+const today = new Date().toISOString().split('T')[0];
+const staticPages = [
+    '/',
+    '/privacy-policy.html',
+    '/legal-disclaimer.html',
+    '/formats-details.html',
+    '/audio-knowledge/'
+];
+
+let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+
+// Add static pages
+staticPages.forEach(page => {
+    sitemapXml += `  <url>
+    <loc>${BASE_URL}${page}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${page === '/' ? '1.0' : '0.5'}</priority>
+  </url>
+`;
+});
+
+// Add converter pages
+converters.forEach(c => {
+    sitemapXml += `  <url>
+    <loc>${BASE_URL}/${c.slug}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+});
+
+sitemapXml += `</urlset>`;
+
+fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemapXml);
+console.log('✓ Created: /sitemap.xml');
+
+// --- ROBOTS.TXT GENERATION ---
+const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: ${BASE_URL}/sitemap.xml
+`;
+
+fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
+console.log('✓ Created: /robots.txt');
+
 console.log('✅ Clean Build complete.');
