@@ -123,7 +123,7 @@
         <style>
             /* Specific formatting for Knowledge Page */
             .knowledge-page-container { max-width: 1000px; margin: 0 auto; }
-            
+
             .content-section {
                 background: white;
                 border-radius: 20px;
@@ -132,24 +132,24 @@
                 box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
                 border: 1px solid #e2e8f0;
             }
-            .content-section h2 { 
-                font-size: 1.8rem; color: #0f172a; margin-bottom: 30px; 
-                padding-bottom: 15px; border-bottom: 2px solid #f1f5f9; 
+            .content-section h2 {
+                font-size: 1.8rem; color: #0f172a; margin-bottom: 30px;
+                padding-bottom: 15px; border-bottom: 2px solid #f1f5f9;
             }
-            .content-section h3 { 
-                font-size: 1.4rem; color: #334155; margin-top: 35px; margin-bottom: 15px; 
+            .content-section h3 {
+                font-size: 1.4rem; color: #334155; margin-top: 35px; margin-bottom: 15px;
             }
-            .content-section p, .content-section li { 
-                font-size: 1.1rem; line-height: 1.7; color: #475569; margin-bottom: 15px; 
+            .content-section p, .content-section li {
+                font-size: 1.1rem; line-height: 1.7; color: #475569; margin-bottom: 15px;
             }
-            
+
             /* FAQ Cards */
             .faq-item {
                 background: #f8fafc; border: 1px solid #e2e8f0;
                 padding: 24px; border-radius: 16px; margin-bottom: 20px;
             }
             .faq-question { font-weight: 700; color: #0f172a; font-size: 1.15rem; margin-bottom: 10px; }
-            
+
             /* Tables */
             .table-wrapper { overflow-x: auto; margin: 25px 0; }
             .comparison-table { width: 100%; border-collapse: collapse; min-width: 600px; }
@@ -162,7 +162,7 @@
             .knowledge-term strong { display: block; font-size: 1.1rem; color: #0f172a; margin-bottom: 8px; }
         </style>
     
-            
+
             <section class="content-section">
                 <h2>📚 How Audio Conversion Works</h2>
                 <p>Audio conversion is the process of changing an audio file from one format to another using specialized software called a <strong>codec</strong> (compressor-decompressor). This process involves decoding the original file and re-encoding it into the desired format.</p>
@@ -210,6 +210,24 @@
                                 <td>Apple devices</td>
                                 <td>Better than MP3</td>
                             </tr>
+                            <tr>
+                                <td><strong>AIFF</strong></td>
+                                <td>Uncompressed</td>
+                                <td>Mac/Pro audio</td>
+                                <td>Perfect (original)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ALAC</strong></td>
+                                <td>Lossless Compressed</td>
+                                <td>Apple ecosystem</td>
+                                <td>Perfect (no loss)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OPUS</strong></td>
+                                <td>Lossy Compressed</td>
+                                <td>VoIP, web audio</td>
+                                <td>Excellent at low bitrate</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -236,6 +254,11 @@
                 <div class="faq-item">
                     <div class="faq-question">Which format is best for music production?</div>
                     <div class="faq-answer">WAV or FLAC are best for music production and editing. These lossless formats preserve all audio data, giving you the highest quality for processing and editing. Use MP3 or AAC only for final distribution.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I extract audio from video files?</div>
+                    <div class="faq-answer">Yes! We now support extracting audio from MP4, MOV, MKV, WebM, and AVI video files. Simply upload your video and select your desired audio output format. Our server extracts the audio track and converts it for you.</div>
                 </div>
 
                 <div class="faq-item">
