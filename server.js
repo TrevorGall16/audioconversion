@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const winston = require('winston');
 
 const app = express();
+app.set('trust proxy', 1); 
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.DOMAIN || 'convertaudiofast.com';
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -40,13 +41,6 @@ const convertLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-app.use((req, res, next) => {
-    const host = req.get('host');
-    if (host && !host.startsWith('www.') && !host.includes('localhost') && NODE_ENV === 'production') {
-        return res.redirect(301, `https://www.${DOMAIN}${req.originalUrl}`);
-    }
-    next();
-});
 
 const upload = multer({
     dest: 'uploads/',
