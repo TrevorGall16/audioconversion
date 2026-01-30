@@ -55,6 +55,25 @@ console.log('\n🏗️  Building Clean Pages...\n');
 // Helper: Determine if format is video
 const VIDEO_FORMATS = ['mp4', 'mov', 'mkv', 'webm', 'avi'];
 
+// SEO Format Descriptions for unique page content
+const FORMAT_DESCRIPTIONS = {
+    mp3: 'MP3 is the universal standard for digital audio, offering small file sizes with good quality. It\'s compatible with virtually every device and media player.',
+    wav: 'WAV is an uncompressed audio format that preserves full sound quality. It\'s the professional choice for audio editing and music production.',
+    flac: 'FLAC is a lossless compression format that reduces file size without any quality loss. It\'s perfect for audiophiles who want pristine sound in a smaller package.',
+    aac: 'AAC is Apple\'s preferred audio format, delivering better quality than MP3 at similar file sizes. It\'s widely used for iTunes, YouTube, and streaming services.',
+    m4a: 'M4A is an audio-only container using AAC or ALAC codecs, commonly used by Apple devices. It offers excellent quality and is ideal for music libraries.',
+    ogg: 'OGG Vorbis is a free, open-source audio format with excellent compression efficiency. It\'s popular in gaming, streaming, and open-source applications.',
+    wma: 'WMA is Microsoft\'s proprietary audio format designed for Windows Media Player. It offers good compression but has limited compatibility outside Windows.',
+    opus: 'Opus is a modern, open-source codec optimized for both speech and music. It provides superior quality at low bitrates, making it ideal for VoIP and streaming.',
+    mp4: 'MP4 is the most widely used video format, compatible with almost all players and devices. It efficiently combines video, audio, and subtitles in one container.',
+    mov: 'MOV is Apple\'s QuickTime video format, known for high quality and professional editing support. It\'s commonly used in video production and Apple ecosystems.',
+    mkv: 'MKV (Matroska) is a flexible container that can hold unlimited video, audio, and subtitle tracks. It\'s favored by enthusiasts for storing high-quality media.',
+    webm: 'WebM is Google\'s open video format optimized for web streaming and HTML5 playback. It delivers excellent quality with efficient compression for online use.',
+    avi: 'AVI is a classic Windows video format with broad compatibility across older systems. While dated, it remains useful for legacy applications and simple video storage.',
+    aiff: 'AIFF is Apple\'s uncompressed audio format equivalent to WAV. It\'s widely used in professional Mac-based audio production environments.',
+    alac: 'ALAC (Apple Lossless) compresses audio without quality loss, designed for Apple devices. It integrates seamlessly with iTunes and iOS for lossless music playback.'
+};
+
 function getUploadUI(inputFormat) {
     const isVideo = VIDEO_FORMATS.includes(inputFormat);
     const formatUpper = inputFormat.toUpperCase();
@@ -120,7 +139,24 @@ converters.forEach(converter => {
     const converterDir = path.join(publicDir, converter.slug);
     if (!fs.existsSync(converterDir)) fs.mkdirSync(converterDir, { recursive: true });
 
-    const content = converter.uniqueContent || `<div class="educational-content"><h2>${converter.h1}</h2><p>${converter.description}</p></div>`;
+    // Generate unique content from format descriptions
+    const inputDesc = FORMAT_DESCRIPTIONS[converter.inputFormat] || '';
+    const outputDesc = FORMAT_DESCRIPTIONS[converter.outputFormat] || '';
+    const inputUpper = converter.inputFormat.toUpperCase();
+    const outputUpper = converter.outputFormat.toUpperCase();
+
+    const uniqueContent = `
+        <div class="educational-content">
+            <h2>${converter.h1}</h2>
+            <p>This tool converts <strong>${inputUpper}</strong> to <strong>${outputUpper}</strong> quickly and easily.</p>
+            <h3>About ${inputUpper}</h3>
+            <p>${inputDesc}</p>
+            <h3>About ${outputUpper}</h3>
+            <p>${outputDesc}</p>
+        </div>
+    `;
+
+    const content = converter.uniqueContent || uniqueContent;
 
     // Get dynamic upload UI based on input format
     const uploadUI = getUploadUI(converter.inputFormat);
