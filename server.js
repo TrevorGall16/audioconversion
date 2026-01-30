@@ -54,6 +54,28 @@ app.use(express.static('public', {
     }
 }));
 
+// --- STATIC PAGE ROUTES ---
+
+// Serve specific HTML files from the root
+app.get('/privacy-policy.html', (req, res) => {
+    res.sendFile(__dirname + '/privacy-policy.html');
+});
+
+app.get('/formats-details.html', (req, res) => {
+    res.sendFile(__dirname + '/formats-details.html');
+});
+
+app.get('/legal-disclaimer.html', (req, res) => {
+    res.sendFile(__dirname + '/legal-disclaimer.html');
+});
+
+app.get('/file-handling.html', (req, res) => {
+    res.sendFile(__dirname + '/file-handling.html');
+});
+
+// Serve the Audio Knowledge folder as a static directory
+app.use('/audio-knowledge', express.static(path.join(__dirname, 'audio-knowledge')));
+
 app.get(['/audio-formats', '/privacy', '/faq'], (req, res) => res.redirect('/'));
 
 // --- CONVERSION LOGIC (RAW SHELL) ---
