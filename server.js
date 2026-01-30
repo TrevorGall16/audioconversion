@@ -47,35 +47,35 @@ const upload = multer({
     limits: { fileSize: 2 * 1024 * 1024 * 1024 } // 2GB
 });
 
-app.use(express.static('public', {
+// --- STATIC FILE SETUP ---
+
+// 1. Serve 'public' folder first so /css/styles.css works for EVERY page
+app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: '7d',
-    setHeaders: (res, path) => {
-        if (path.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=3600');
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=3600');
     }
 }));
 
-// --- STATIC PAGE ROUTES ---
+// 2. Serve root directory for static HTML pages (privacy-policy.html, etc.)
+app.use(express.static(__dirname, {
+    extensions: ['html'],
+    index: false // Don't serve index.html from root, let public handle it
+}));
 
-// Serve specific HTML files from the root
-app.get('/privacy-policy.html', (req, res) => {
-    res.sendFile(__dirname + '/privacy-policy.html');
+// 3. Fix Audio Knowledge route (serve index.html from the folder)
+app.get('/audio-knowledge', (req, res) => {
+    res.redirect('/audio-knowledge/');
 });
 
-app.get('/formats-details.html', (req, res) => {
-    res.sendFile(__dirname + '/formats-details.html');
+app.get('/audio-knowledge/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'audio-knowledge', 'index.html'));
 });
 
-app.get('/legal-disclaimer.html', (req, res) => {
-    res.sendFile(__dirname + '/legal-disclaimer.html');
-});
-
-app.get('/file-handling.html', (req, res) => {
-    res.sendFile(__dirname + '/file-handling.html');
-});
-
-// Serve the Audio Knowledge folder as a static directory
+// Serve other files in audio-knowledge folder (images, etc.)
 app.use('/audio-knowledge', express.static(path.join(__dirname, 'audio-knowledge')));
 
+// 4. Legacy redirects
 app.get(['/audio-formats', '/privacy', '/faq'], (req, res) => res.redirect('/'));
 
 // --- CONVERSION LOGIC (RAW SHELL) ---
