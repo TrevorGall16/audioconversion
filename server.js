@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const winston = require('winston');
-
+const path = require('path');
 const app = express();
 app.set('trust proxy', 1); 
 const PORT = process.env.PORT || 3000;
@@ -63,20 +63,29 @@ app.use(express.static(__dirname, {
     index: false // Don't serve index.html from root, let public handle it
 }));
 
-// 3. Fix Audio Knowledge route (serve index.html from the folder)
 app.get('/audio-knowledge', (req, res) => {
-    res.redirect('/audio-knowledge/');
+    res.sendFile(path.join(__dirname, 'audio-knowledge', 'index.html'));
 });
-
 app.get('/audio-knowledge/', (req, res) => {
     res.sendFile(path.join(__dirname, 'audio-knowledge', 'index.html'));
 });
 
-// Serve other files in audio-knowledge folder (images, etc.)
-app.use('/audio-knowledge', express.static(path.join(__dirname, 'audio-knowledge')));
+// Fix for Root Files (Privacy, Legal, Formats)
+app.get('/privacy-policy.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'privacy-policy.html'));
+});
 
-// 4. Legacy redirects
-app.get(['/audio-formats', '/privacy', '/faq'], (req, res) => res.redirect('/'));
+app.get('/formats-details.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'formats-details.html'));
+});
+
+app.get('/legal-disclaimer.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'legal-disclaimer.html'));
+});
+
+app.get('/file-handling.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'file-handling.html'));
+});
 
 // --- CONVERSION LOGIC (RAW SHELL) ---
 app.post('/convert', convertLimiter, upload.single('audioFile'), (req, res) => {
