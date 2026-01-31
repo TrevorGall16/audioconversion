@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const winston = require('winston');
-const path = require('path');
+
 const app = express();
 app.set('trust proxy', 1); 
 const PORT = process.env.PORT || 3000;
