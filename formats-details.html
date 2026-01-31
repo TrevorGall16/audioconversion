@@ -1,219 +1,170 @@
-<style>
-    .static-page-content h2 {
-        color: #0f172a;
-        font-size: 2rem;
-        margin-bottom: 10px;
-        margin-top: 0;
-        text-align: center;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Format Details - ConvertAudioFast</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     
-    .static-page-content .subtitle {
-        text-align: center;
-        color: #64748b;
-        font-size: 1.1rem;
-        margin-bottom: 40px;
-    }
+    <style>
+        /* EMBEDDED DESIGN - GUARANTEED TO WORK */
+        body {
+            background-color: #121212; /* Dark Background */
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        /* Navigation Bar */
+        .main-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #86efac; }
 
-    .static-page-content .format-section {
-        margin-bottom: 40px;
-        padding-bottom: 30px;
-        border-bottom: 1px solid #e2e8f0;
-    }
+        /* The "Rectangles" (Cards) */
+        .content-wrapper { padding: 40px 20px; }
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .page-title {
+            text-align: center;
+            color: #86efac; /* Green Title */
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
 
-    .static-page-content h3 {
-        color: #0f172a;
-        font-size: 1.5rem;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        font-weight: 700;
-    }
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
 
-    /* Force readable spacing */
-    .static-page-content p, 
-    .static-page-content li {
-        color: #475569;
-        font-size: 1.05rem;
-        line-height: 1.8 !important; /* Forces breathing room */
-        margin-bottom: 16px;
-    }
+        .format-card {
+            background: #1f1f1f; /* Dark Grey Rectangle */
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .format-card:hover {
+            transform: translateY(-5px);
+            border-color: #86efac;
+        }
+        .format-card h3 {
+            color: #fff;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
 
-    .static-page-content ul {
-        margin-left: 20px;
-        margin-bottom: 20px;
-    }
+        /* Buttons */
+        .btn-primary {
+            display: inline-block;
+            background: #86efac;
+            color: #000;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 40px;
+        }
+        .btn-primary:hover { background: #4ade80; }
 
-    .static-page-content strong {
-        color: #0f172a;
-    }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            border-top: 1px solid #222;
+            margin-top: 60px;
+        }
+        .footer-links a { color: #666; margin: 0 10px; text-decoration: none; }
+        .footer-links a:hover { color: #86efac; }
+    </style>
+</head>
+<body>
 
-    /* Comparison Table Styling */
-    .static-page-content table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 0.95rem;
-    }
-
-    .static-page-content th {
-        background: #f1f5f9;
-        text-align: left;
-        padding: 12px;
-        border-bottom: 2px solid #e2e8f0;
-        color: #0f172a;
-    }
-
-    .static-page-content td {
-        padding: 12px;
-        border-bottom: 1px solid #e2e8f0;
-        color: #475569;
-    }
-
-    /* Modern Back Button Styling */
-    .static-page-content .back-btn-wrapper {
-        text-align: center;
-        margin-top: 60px;
-        margin-bottom: 20px;
-    }
-
-    .static-page-content .custom-back-btn {
-        display: inline-block;
-        background-color: #0f172a; /* Dark Blue */
-        color: #ffffff !important;
-        padding: 16px 32px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .static-page-content .custom-back-btn:hover {
-        background-color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-</style>
-
-<div class="static-page-content">
-    <header>
-        <h2>🎵 Audio Format Details</h2>
-        <p class="subtitle">Technical Specifications & Use Cases</p>
+    <header class="main-header">
+        <div class="logo">
+            <a href="/"><span>ConvertAudioFast</span></a>
+        </div>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/audio-knowledge/">Audio Knowledge</a>
+            <a href="/formats-details.html">Audio Formats</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+        </nav>
     </header>
 
-    <div class="format-section">
-        <h3>MP3 (MPEG Audio Layer III)</h3>
-        
-        <p><strong>Type:</strong> Lossy Compression</p>
-        <p>MP3 uses lossy compression, which means some audio data is permanently removed to reduce file size. It is the most common audio format in the world.</p>
-        
-        <p><strong>Bitrate Range:</strong> 32 kbps to 320 kbps (most common: 128, 192, 320 kbps)</p>
+    <main class="content-wrapper">
+        <div class="page-container">
+            <h1 class="page-title">Supported Audio Formats</h1>
+            
+            <div class="format-grid">
+                <div class="format-card">
+                    <h3>🎵 MP3</h3>
+                    <p><strong>Best for:</strong> Music & Podcasts</p>
+                    <p>The universal standard. Balances decent quality with small file size. Works on every device in the world.</p>
+                </div>
 
-        <p><strong>Use Cases:</strong></p>
-        <ul>
-            <li>Music streaming and portable devices</li>
-            <li>Podcasts and audiobooks</li>
-            <li>General audio sharing where file size matters</li>
-        </ul>
-        
-        <p><strong>Compatibility:</strong> Universal. Works on virtually every device, operating system, and web browser in existence.</p>
-    </div>
+                <div class="format-card">
+                    <h3>🎼 WAV</h3>
+                    <p><strong>Best for:</strong> Professional Editing</p>
+                    <p>Uncompressed and lossless. The files are huge, but the audio quality is perfect.</p>
+                </div>
 
-    <div class="format-section">
-        <h3>WAV (Waveform Audio File Format)</h3>
+                <div class="format-card">
+                    <h3>🎧 FLAC</h3>
+                    <p><strong>Best for:</strong> Audiophiles</p>
+                    <p>Lossless compression. You get the perfect quality of WAV, but the file size is about 50% smaller.</p>
+                </div>
 
-        <p><strong>Type:</strong> Uncompressed (Lossless)</p>
-        <p>WAV stores audio data without any compression. It is an exact copy of the source audio, preserving original quality perfectly.</p>
+                <div class="format-card">
+                    <h3>🍏 M4A / AAC</h3>
+                    <p><strong>Best for:</strong> Apple Devices</p>
+                    <p>Higher quality than MP3 at the same file size. The standard format for iPhones and iTunes.</p>
+                </div>
+            </div>
 
-        <p><strong>Bitrate Range:</strong> ~1411 kbps (CD quality)</p>
+            <div style="text-align: center;">
+                <a href="/" class="btn-primary">Start Converting Now</a>
+            </div>
+        </div>
+    </main>
 
-        <p><strong>Use Cases:</strong></p>
-        <ul>
-            <li>Professional audio production and editing</li>
-            <li>Recording studios and mastering</li>
-            <li>High-fidelity archival storage</li>
-        </ul>
-        
-        <p><strong>Compatibility:</strong> Excellent. Supported natively by Windows and most professional audio software.</p>
-    </div>
+    <footer>
+        <p>&copy; 2025 ConvertAudioFast. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/legal-disclaimer.html">Legal Disclaimer</a>
+        </div>
+    </footer>
 
-    <div class="format-section">
-        <h3>FLAC (Free Lossless Audio Codec)</h3>
-
-        <p><strong>Type:</strong> Lossless Compression</p>
-        <p>FLAC compresses audio without losing a single bit of data, similar to how a ZIP file works. You get perfect quality with a smaller file size than WAV.</p>
-
-        <p><strong>Bitrate Range:</strong> Variable (typically 700-1000 kbps)</p>
-
-        <p><strong>Use Cases:</strong></p>
-        <ul>
-            <li>Audiophile music collections</li>
-            <li>Archiving music with perfect quality</li>
-            <li>Streaming services offering Hi-Fi audio</li>
-        </ul>
-        
-        <p><strong>Compatibility:</strong> Good on modern devices (Android, Windows 10+, macOS). Limited support on older players.</p>
-    </div>
-    
-    <div class="format-section">
-        <h3>AAC (Advanced Audio Coding)</h3>
-
-        <p><strong>Type:</strong> Lossy Compression</p>
-        <p>Designed as the successor to MP3, AAC achieves better sound quality than MP3 at the same bitrate.</p>
-
-        <p><strong>Bitrate Range:</strong> 8 kbps to 529 kbps</p>
-
-        <p><strong>Use Cases:</strong></p>
-        <ul>
-            <li>Apple ecosystem (iTunes, Apple Music, iPhone)</li>
-            <li>YouTube audio streaming</li>
-            <li>Mobile applications</li>
-        </ul>
-        
-        <p><strong>Compatibility:</strong> Excellent on modern devices, especially Apple products and web browsers.</p>
-    </div>
-
-    <div class="format-section" style="border-bottom: none;">
-        <h3>Quick Comparison</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Format</th>
-                    <th>Type</th>
-                    <th>Size (per min)</th>
-                    <th>Best For</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>MP3</strong></td>
-                    <td>Lossy</td>
-                    <td>~1 MB</td>
-                    <td>General use</td>
-                </tr>
-                <tr>
-                    <td><strong>WAV</strong></td>
-                    <td>Lossless</td>
-                    <td>~10 MB</td>
-                    <td>Editing</td>
-                </tr>
-                <tr>
-                    <td><strong>FLAC</strong></td>
-                    <td>Lossless</td>
-                    <td>~5 MB</td>
-                    <td>Archiving</td>
-                </tr>
-                <tr>
-                    <td><strong>AAC</strong></td>
-                    <td>Lossy</td>
-                    <td>~1 MB</td>
-                    <td>Apple/Web</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="back-btn-wrapper">
-        <a href="/" class="custom-back-btn">← Back to Converter</a>
-    </div>
-</div>
+</body>
+</html>

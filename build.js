@@ -244,4 +244,63 @@ Sitemap: ${BASE_URL}/sitemap.xml
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
+// --- STATIC ASSET MIGRATION ---
+console.log('Migrating root static files to output directory...');
+
+// 1. Copy loose HTML files (Privacy, Legal, Formats, File Handling)
+const rootStaticFiles = [
+    'privacy-policy.html',
+    'legal-disclaimer.html',
+    'formats-details.html',
+    'file-handling.html'
+];
+
+rootStaticFiles.forEach(fileName => {
+    const source = path.join(__dirname, fileName);
+    const destination = path.join(publicDir, fileName);
+
+    if (fs.existsSync(source)) {
+        fs.copyFileSync(source, destination);
+        console.log(`✓ Copied to public: ${fileName}`);
+    } else {
+        console.warn(`! Warning: Source file ${fileName} not found.`);
+    }
+});
+
+// 2. Copy 'audio-knowledge' folder
+const knowledgeSource = path.join(__dirname, 'audio-knowledge');
+const knowledgeDest = path.join(publicDir, 'audio-knowledge');
+
+if (fs.existsSync(knowledgeSource)) {
+    // Recursive copy for folders (Node 16+)
+    fs.cpSync(knowledgeSource, knowledgeDest, { recursive: true });
+    console.log('✓ Copied audio-knowledge folder');
+}
+
+// --- ASSET MIGRATION (CSS, IMAGES, JS) ---
+const assetFolders = ['css', 'images', 'js'];
+
+assetFolders.forEach(folder => {
+    const src = path.join(__dirname, folder);
+    const dest = path.join(publicDir, folder);
+
+    if (fs.existsSync(src)) {
+        // Create destination folder
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+
+        // Copy all files inside
+        fs.readdirSync(src).forEach(file => {
+            const srcFile = path.join(src, file);
+            const destFile = path.join(dest, file);
+            // Only copy files, not sub-folders for simplicity
+            if (fs.statSync(srcFile).isFile()) {
+                fs.copyFileSync(srcFile, destFile);
+            }
+        });
+        console.log(`✓ Copied ${folder}/ folder`);
+    } else {
+        console.warn(`! Warning: ${folder}/ folder not found.`);
+    }
+});
+
 console.log('✅ Clean Build complete.');

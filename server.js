@@ -43,31 +43,14 @@ const convertLimiter = rateLimit({
 });
 
 // =========================================================================
-// 1. ASSET PIPELINE (FIXES "UGLY" PAGES)
+// STATIC FILE SETUP - All assets served from 'public' directory
 // =========================================================================
-// Serving 'public' first ensures /css/styles.css is found immediately
-app.use(express.static(path.join(__dirname, 'public')));
-
-// =========================================================================
-// 2. STATIC PAGE ROUTES (FIXES "NOT FOUND" & LOOPS)
-// =========================================================================
-
-// Audio Knowledge (Folder)
-app.use('/audio-knowledge', express.static(path.join(__dirname, 'audio-knowledge')));
-
-// Root HTML Files (Privacy, Legal, etc.)
-const rootPages = [
-    'privacy-policy.html',
-    'legal-disclaimer.html',
-    'formats-details.html',
-    'file-handling.html'
-];
-
-rootPages.forEach(page => {
-    app.get('/' + page, (req, res) => {
-        res.sendFile(path.join(__dirname, page));
-    });
-});
+// Build process copies all static files (HTML, CSS, JS, audio-knowledge) to public/
+// This single middleware handles everything - no manual routes needed
+app.use(express.static(path.join(__dirname, 'public'), {
+    extensions: ['html'],
+    index: 'index.html'
+}));
 
 // =========================================================================
 // 3. CONVERSION ENGINE
