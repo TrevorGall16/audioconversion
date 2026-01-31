@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { exec } = require('child_process'); // <--- USING EXEC (Shell)
+const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
@@ -9,10 +9,10 @@ const compression = require('compression');
 const morgan = require('morgan');
 const winston = require('winston');
 
+// --- APP SETUP ---
 const app = express();
-app.set('trust proxy', 1); 
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
-const DOMAIN = process.env.DOMAIN || 'convertaudiofast.com';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // --- LOGGING ---
@@ -24,172 +24,102 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'combined.log' }),
     ],
 });
-if (NODE_ENV !== 'production') logger.add(new winston.transports.Console({ format: winston.format.simple() }));
+if (NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({ format: winston.format.simple() }));
+}
 app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 
 // --- MIDDLEWARE ---
-app.use(compression({ level: 6 }));
-app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+app.use(compression());
+app.use(helmet({
+    contentSecurityPolicy: false, // Allow inline scripts/ads
+}));
 
+// --- RATE LIMITING ---
 const convertLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 50,
-    message: { message: 'Too many requests. Please try again later.' },
-    standardHeaders: true,
-    legacyHeaders: false,
+    max: 100,
+    message: 'Too many conversions. Please try again later.'
 });
 
+// =========================================================================
+// 1. ASSET PIPELINE (FIXES "UGLY" PAGES)
+// =========================================================================
+// Serving 'public' first ensures /css/styles.css is found immediately
+app.use(express.static(path.join(__dirname, 'public')));
 
+// =========================================================================
+// 2. STATIC PAGE ROUTES (FIXES "NOT FOUND" & LOOPS)
+// =========================================================================
+
+// Audio Knowledge (Folder)
+app.use('/audio-knowledge', express.static(path.join(__dirname, 'audio-knowledge')));
+
+// Root HTML Files (Privacy, Legal, etc.)
+const rootPages = [
+    'privacy-policy.html',
+    'legal-disclaimer.html',
+    'formats-details.html',
+    'file-handling.html'
+];
+
+rootPages.forEach(page => {
+    app.get('/' + page, (req, res) => {
+        res.sendFile(path.join(__dirname, page));
+    });
+});
+
+// =========================================================================
+// 3. CONVERSION ENGINE
+// =========================================================================
 const upload = multer({
     dest: 'uploads/',
-    limits: { fileSize: 2 * 1024 * 1024 * 1024 } // 2GB
+    limits: { fileSize: 2000 * 1024 * 1024 } // 2GB Limit
 });
 
-// --- STATIC FILE SETUP ---
-
-// 1. Serve 'public' folder first so /css/styles.css works for EVERY page
-app.use(express.static(path.join(__dirname, 'public'), {
-    maxAge: '7d',
-    setHeaders: (res, filePath) => {
-        if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'public, max-age=3600');
-    }
-}));
-
-// 2. Serve root directory for static HTML pages (privacy-policy.html, etc.)
-app.use(express.static(__dirname, {
-    extensions: ['html'],
-    index: false // Don't serve index.html from root, let public handle it
-}));
-
-app.get('/audio-knowledge', (req, res) => {
-    res.sendFile(path.join(__dirname, 'audio-knowledge', 'index.html'));
-});
-app.get('/audio-knowledge/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'audio-knowledge', 'index.html'));
-});
-
-// Fix for Root Files (Privacy, Legal, Formats)
-app.get('/privacy-policy.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'privacy-policy.html'));
-});
-
-app.get('/formats-details.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'formats-details.html'));
-});
-
-app.get('/legal-disclaimer.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'legal-disclaimer.html'));
-});
-
-app.get('/file-handling.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'file-handling.html'));
-});
-
-// --- CONVERSION LOGIC (RAW SHELL) ---
 app.post('/convert', convertLimiter, upload.single('audioFile'), (req, res) => {
-    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded.' });
 
-    // 1. PATH SETUP
-    const tempPath = req.file.path;
-    const fileExtension = path.extname(req.file.originalname).toLowerCase();
-    
-    // Validate Extension
-    const ALLOWED_EXTENSIONS = ['.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma', '.aiff', '.aif', '.opus', '.alac', '.mp4', '.m4v', '.mov', '.mkv', '.webm', '.avi'];
-    if (!ALLOWED_EXTENSIONS.includes(fileExtension)) {
-        try { fs.unlinkSync(tempPath); } catch(e){}
-        return res.status(400).json({ message: 'Invalid file extension.' });
-    }
-
-    // Validate Output Format
+    const inputPath = req.file.path;
+    const originalName = req.file.originalname;
     const outputFormat = req.body.format || 'mp3';
-    const ALLOWED_FORMATS = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'aiff', 'opus', 'alac'];
-    if (!ALLOWED_FORMATS.includes(outputFormat)) {
-        try { fs.unlinkSync(tempPath); } catch(e){}
-        return res.status(400).json({ message: 'Invalid output format' });
+    const outputFilename = `converted_${Date.now()}.${outputFormat}`;
+    const outputPath = path.join('uploads', outputFilename);
+
+    // Security Check
+    const allowedFormats = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'opus', 'aiff', 'alac'];
+    if (!allowedFormats.includes(outputFormat)) {
+        try { fs.unlinkSync(inputPath); } catch(e){}
+        return res.status(400).json({ message: 'Invalid format.' });
     }
 
-    // RENAME INPUT
-    const inputPath = tempPath + fileExtension;
-    try {
-        fs.renameSync(tempPath, inputPath);
-    } catch (err) {
-        logger.error(`Rename Error: ${err}`);
-        return res.status(500).json({ message: 'File processing error' });
+    // Build FFmpeg Command
+    let cmd = `ffmpeg -i "${inputPath}" -y`;
+    if (['mp3', 'aac', 'm4a', 'wma'].includes(outputFormat)) {
+        cmd += ` -b:a 192k`;
     }
+    cmd += ` "${outputPath}"`;
 
-    // 2. OUTPUT SETUP
-    const outputDir = path.join(__dirname, 'outputs');
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-    
-    const crypto = require('crypto');
-    const uniqueId = crypto.randomBytes(16).toString('hex');
-    const outputFilename = `converted-${uniqueId}.${outputFormat}`;
-    const outputPath = path.join(outputDir, outputFilename);
+    logger.info(`Starting conversion: ${originalName} -> ${outputFormat}`);
 
-    // 3. NUCLEAR PATH FIX: Force Forward Slashes and Quotes
-    const safeInput = `"${inputPath.replace(/\\/g, '/')}"`;
-    const safeOutput = `"${outputPath.replace(/\\/g, '/')}"`;
-
-    // 4. AUDIO STREAM CHECK (Prevent silent video crash)
-    const VIDEO_EXTENSIONS = ['.mp4', '.m4v', '.mov', '.mkv', '.webm', '.avi'];
-    if (VIDEO_EXTENSIONS.includes(fileExtension)) {
-        const probeCmd = `ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 ${safeInput}`;
-
-        exec(probeCmd, (probeError, probeStdout, probeStderr) => {
-            if (probeError || !probeStdout.trim()) {
-                logger.error(`No audio track found in video: ${req.file.originalname}`);
-                try { fs.unlinkSync(inputPath); } catch(e){}
-                return res.status(400).json({ message: 'This video has no audio track to extract.' });
-            }
-            // Audio exists, proceed with conversion
-            runConversion();
-        });
-    } else {
-        // Audio file, skip probe
-        runConversion();
-    }
-
-    function runConversion() {
-        let cmd = `ffmpeg -i ${safeInput} -y`;
-
-        if (['mp3', 'aac', 'm4a', 'wma'].includes(outputFormat)) {
-            cmd += ` -b:a 192k`;
+    exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+            logger.error(`Conversion Error: ${error.message}`);
+            try { fs.unlinkSync(inputPath); } catch(e){}
+            try { fs.unlinkSync(outputPath); } catch(e){}
+            return res.status(500).json({ message: 'Conversion failed.' });
         }
 
-        if (outputFormat === 'alac') cmd += ` -c:a alac`;
-        else if (outputFormat === 'aiff') cmd += ` -c:a pcm_s16be`;
-        else if (outputFormat === 'opus') cmd += ` -c:a libopus`;
-
-        cmd += ` ${safeOutput}`;
-
-        logger.info(`Running Raw Command: ${cmd}`);
-
-        // EXECUTE SHELL COMMAND
-        exec(cmd, (error, stdout, stderr) => {
-            if (error) {
-                logger.error(`Exec Error: ${error.message}`);
-                logger.error(`FFmpeg Stderr: ${stderr}`);
-
-                try { fs.unlinkSync(inputPath); } catch(e){}
-                try { fs.unlinkSync(outputPath); } catch(e){}
-                return res.status(500).json({ message: 'Conversion failed.' });
-            }
-
-            logger.info(`Conversion success: ${outputFilename}`);
-            res.download(outputPath, outputFilename, (err) => {
-                try { fs.unlinkSync(inputPath); } catch(e){}
-                try { fs.unlinkSync(outputPath); } catch(e){}
-                if (err) logger.error(`Download error: ${err}`);
-            });
+        res.download(outputPath, outputFilename, (err) => {
+            // Cleanup after download
+            try { fs.unlinkSync(inputPath); } catch(e){}
+            try { fs.unlinkSync(outputPath); } catch(e){}
+            if (err) logger.error(`Download Error: ${err.message}`);
         });
-    }
+    });
 });
 
-if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
-if (!fs.existsSync('outputs')) fs.mkdirSync('outputs');
-
+// --- SERVER START ---
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
 });
