@@ -252,7 +252,8 @@ const rootStaticFiles = [
     'privacy-policy.html',
     'legal-disclaimer.html',
     'formats-details.html',
-    'file-handling.html'
+    'file-handling.html',
+    'audio-knowledge.html'
 ];
 
 rootStaticFiles.forEach(fileName => {
