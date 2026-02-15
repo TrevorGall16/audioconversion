@@ -86,10 +86,10 @@ fileInput.addEventListener('change', (e) => {
 });
 
 function handleFile(file) {
-    // Validate file size (2GB limit)
-    const maxSize = 2 * 1024 * 1024 * 1024;
+    // Validate file size (200MB default, configurable by backend env)
+    const maxSize = 200 * 1024 * 1024;
     if (file.size > maxSize) {
-        errorMessage.textContent = '❌ File too large! Maximum size is 2GB.';
+        errorMessage.textContent = '❌ File too large! Maximum size is 200MB.';
         errorMessage.classList.add('active');
         return;
     }
