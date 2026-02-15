@@ -274,17 +274,7 @@ rootStaticFiles.forEach(fileName => {
     }
 });
 
-rootAssetFiles.forEach(fileName => {
-    const source = path.join(__dirname, fileName);
-    const destination = path.join(publicDir, fileName);
 
-    if (fs.existsSync(source)) {
-        fs.copyFileSync(source, destination);
-        console.log(`✓ Copied asset to public: ${fileName}`);
-    } else {
-        console.warn(`! Warning: Asset file ${fileName} not found.`);
-    }
-});
 
 // 2. Copy 'audio-knowledge' folder
 const knowledgeSource = path.join(__dirname, 'audio-knowledge');
