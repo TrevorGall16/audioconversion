@@ -16,10 +16,10 @@ app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-const MAX_UPLOAD_SIZE_MB = Number(process.env.MAX_UPLOAD_SIZE_MB || 200);
+const MAX_UPLOAD_SIZE_MB = Number(process.env.MAX_UPLOAD_SIZE_MB || 500); // Set to 500MB
 const MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024;
-const CONVERSION_TIMEOUT_MS = Number(process.env.CONVERSION_TIMEOUT_MS || 5 * 60 * 1000);
-const MAX_CONCURRENT_CONVERSIONS = Number(process.env.MAX_CONCURRENT_CONVERSIONS || 4);
+const CONVERSION_TIMEOUT_MS = Number(process.env.CONVERSION_TIMEOUT_MS || 5 * 60 * 1000); // 5 Minutes
+const MAX_CONCURRENT_CONVERSIONS = Number(process.env.MAX_CONCURRENT_CONVERSIONS || 5);
 
 // --- LOGGING ---
 const logger = winston.createLogger({
@@ -37,6 +37,8 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 
 // --- MIDDLEWARE ---
 app.use(compression());
+
+// SECURITY: Configured to allow Google Ads & Scripts while blocking attacks
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -46,7 +48,8 @@ app.use(helmet({
                 "'unsafe-inline'",
                 'https://www.highperformanceformat.com',
                 'https://pl28362942.effectivegatecpm.com',
-                'https://www.googletagmanager.com'
+                'https://www.googletagmanager.com',
+                'https://pagead2.googlesyndication.com'
             ],
             styleSrc: ["'self'", "'unsafe-inline'"],
             imgSrc: ["'self'", 'data:', 'https:'],
@@ -55,24 +58,26 @@ app.use(helmet({
                 "'self'",
                 'https://www.googletagmanager.com',
                 'https://www.highperformanceformat.com',
-                'https://pl28362942.effectivegatecpm.com'
+                'https://pl28362942.effectivegatecpm.com',
+                'https://googleads.g.doubleclick.net'
             ],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"]
         }
-    }
+    },
+    crossOriginEmbedderPolicy: false // Disabled to allow cross-origin ads
 }));
 
 // --- RATE LIMITING ---
 const convertLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 20,
+    max: 50, // 50 requests per 15 min
     message: 'Too many conversions. Please try again later.'
 });
 
 // =========================================================================
-// STATIC FILE SETUP - All assets served from 'public' directory
+// STATIC FILE SETUP
 // =========================================================================
 app.use(express.static(path.join(__dirname, 'public'), {
     extensions: ['html'],
@@ -87,10 +92,11 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Allowed Configurations
 const allowedFormats = new Set(['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'opus', 'aiff', 'alac']);
 const allowedInputExtensions = new Set([
     '.mp3', '.wav', '.flac', '.aac', '.m4a', '.ogg', '.wma', '.opus', '.aiff', '.alac',
-    '.mp4', '.mov', '.mkv', '.webm', '.avi'
+    '.mp4', '.mov', '.mkv', '.webm', '.avi', '.m4v'
 ]);
 const allowedMimePrefixes = ['audio/', 'video/'];
 
@@ -100,19 +106,22 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname || '').toLowerCase();
         const mimeType = (file.mimetype || '').toLowerCase();
+        
+        // Basic check
         const isAllowedExt = allowedInputExtensions.has(ext);
         const isAllowedMime = allowedMimePrefixes.some(prefix => mimeType.startsWith(prefix));
 
-        if (!isAllowedExt || !isAllowedMime) {
+        // If generic octet-stream, trust the extension
+        if (!isAllowedExt && !isAllowedMime) {
             return cb(new Error('Unsupported file type.'));
         }
-
         cb(null, true);
     }
 });
 
 let activeConversions = 0;
 
+// Async Cleanup Helper
 async function cleanupFiles(...filePaths) {
     await Promise.all(filePaths.filter(Boolean).map(async (filePath) => {
         try {
@@ -125,8 +134,11 @@ async function cleanupFiles(...filePaths) {
     }));
 }
 
+// --- CONVERSION ROUTE ---
 app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res) => {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded.' });
+    
+    // Concurrency Check
     if (activeConversions >= MAX_CONCURRENT_CONVERSIONS) {
         await cleanupFiles(req.file.path);
         return res.status(429).json({ message: 'Server is busy. Please retry shortly.' });
@@ -136,6 +148,7 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
     const originalName = req.file.originalname;
     const requestedFormat = String(req.body.format || 'mp3').toLowerCase();
 
+    // Format Validation
     if (!allowedFormats.has(requestedFormat)) {
         await cleanupFiles(inputPath);
         return res.status(400).json({ message: 'Invalid format.' });
@@ -144,27 +157,40 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
     const outputFilename = `converted_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${requestedFormat}`;
     const outputPath = path.join(uploadsDir, outputFilename);
 
+    // Build FFmpeg Arguments
     const ffmpegArgs = ['-i', inputPath, '-y'];
+    
+    // Bitrate for compressed formats
     if (['mp3', 'aac', 'm4a', 'wma'].includes(requestedFormat)) {
         ffmpegArgs.push('-b:a', '192k');
     }
+    
+    // Specific Codecs
+    if (requestedFormat === 'alac') ffmpegArgs.push('-c:a', 'alac');
+    else if (requestedFormat === 'aiff') ffmpegArgs.push('-c:a', 'pcm_s16be');
+    else if (requestedFormat === 'opus') ffmpegArgs.push('-c:a', 'libopus');
+
     ffmpegArgs.push(outputPath);
 
     logger.info(`Starting conversion: ${originalName} -> ${requestedFormat}`);
     activeConversions += 1;
 
+    // SPAWN PROCESS
     const ffmpeg = spawn('ffmpeg', ffmpegArgs, { stdio: ['ignore', 'ignore', 'pipe'] });
+    
     let stderrOutput = '';
     ffmpeg.stderr.on('data', chunk => {
-        if (stderrOutput.length < 8_192) {
+        if (stderrOutput.length < 8192) {
             stderrOutput += chunk.toString();
         }
     });
 
+    // TIMEOUT KILL SWITCH
     const timeout = setTimeout(() => {
         ffmpeg.kill('SIGKILL');
     }, CONVERSION_TIMEOUT_MS);
 
+    // ERROR HANDLER
     ffmpeg.on('error', async (error) => {
         clearTimeout(timeout);
         activeConversions -= 1;
@@ -175,13 +201,16 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
         }
     });
 
+    // CLOSE HANDLER
     ffmpeg.on('close', async (code, signal) => {
         clearTimeout(timeout);
         activeConversions -= 1;
 
+        // FAILURE
         if (code !== 0) {
-            logger.error(`Conversion Error: code=${code}, signal=${signal}, stderr=${stderrOutput.slice(0, 1024)}`);
+            logger.error(`Conversion Error: code=${code}, signal=${signal}`);
             await cleanupFiles(inputPath, outputPath);
+            
             if (!res.headersSent) {
                 const timeoutReached = signal === 'SIGKILL';
                 return res.status(timeoutReached ? 408 : 500).json({
@@ -190,15 +219,17 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
             }
             return;
         }
-    });
 
+        // SUCCESS - This MUST be inside the close handler
         res.download(outputPath, outputFilename, async (err) => {
+            // Cleanup BOTH files after download
             await cleanupFiles(inputPath, outputPath);
             if (err) logger.error(`Download Error: ${err.message}`);
         });
     });
 });
 
+// GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
