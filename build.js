@@ -255,19 +255,13 @@ const rootStaticFiles = [
     'legal-disclaimer.html',
     'formats-details.html',
     'file-handling.html',
-    'audio-knowledge.html'
+    'audio-knowledge.html', // Ensure this is here
+    'favicon.ico',          // Fix 404
+    'site.webmanifest',     // Fix 404
+    'favicon-96x96.png',    // Fix 404
+    'favicon.svg',          // Fix 404
+    'apple-touch-icon.png'  // Fix 404
 ];
-
-const rootAssetFiles = [
-    'favicon.ico',
-    'favicon.svg',
-    'favicon-96x96.png',
-    'apple-touch-icon.png',
-    'web-app-manifest-192x192.png',
-    'web-app-manifest-512x512.png',
-    'site.webmanifest'
-];
-
 rootStaticFiles.forEach(fileName => {
     const source = path.join(__dirname, fileName);
     const destination = path.join(publicDir, fileName);
