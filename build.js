@@ -247,9 +247,9 @@ fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
 // --- STATIC ASSET MIGRATION ---
-console.log('Migrating root static files to output directory...');
+console.log('Migrating root static files...');
 
-// 1. Copy loose HTML files (Privacy, Legal, Formats, File Handling)
+// Unified list of ALL files to copy (HTML + Favicons + Manifests)
 const rootStaticFiles = [
     'privacy-policy.html',
     'legal-disclaimer.html',
@@ -268,9 +268,9 @@ rootStaticFiles.forEach(fileName => {
 
     if (fs.existsSync(source)) {
         fs.copyFileSync(source, destination);
-        console.log(`✓ Copied to public: ${fileName}`);
+        console.log(`✓ Copied: ${fileName}`);
     } else {
-        console.warn(`! Warning: Source file ${fileName} not found.`);
+        console.warn(`! Missing: ${fileName}`);
     }
 });
 
