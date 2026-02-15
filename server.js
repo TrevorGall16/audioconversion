@@ -38,8 +38,30 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 // --- MIDDLEWARE ---
 app.use(compression());
 app.use(helmet({
-    contentSecurityPolicy: false, // Fixes Broken Downloads & Missing Ads
-    crossOriginEmbedderPolicy: false
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                'https://www.highperformanceformat.com',
+                'https://pl28362942.effectivegatecpm.com',
+                'https://www.googletagmanager.com'
+            ],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+            connectSrc: ["'self'", 'https:'],
+            frameSrc: [
+                "'self'",
+                'https://www.googletagmanager.com',
+                'https://www.highperformanceformat.com',
+                'https://pl28362942.effectivegatecpm.com'
+            ],
+            objectSrc: ["'none'"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"]
+        }
+    }
 }));
 
 // --- RATE LIMITING ---
@@ -168,6 +190,7 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
             }
             return;
         }
+    });
 
         res.download(outputPath, outputFilename, async (err) => {
             await cleanupFiles(inputPath, outputPath);
