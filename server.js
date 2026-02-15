@@ -190,6 +190,7 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
             }
             return;
         }
+    });
 
         res.download(outputPath, outputFilename, async (err) => {
             await cleanupFiles(inputPath, outputPath);
