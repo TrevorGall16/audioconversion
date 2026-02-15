@@ -102,7 +102,8 @@ const homepageHtml = template
     .replace(/\{\{TITLE\}\}/g, 'Convert Audio Fast - The Fastest Online Audio Converter')
     .replace(/\{\{H1\}\}/g, '⚡ Convert Audio Fast')
     .replace(/\{\{DESCRIPTION\}\}/g, 'The fastest free online audio converter. Server-side processing for maximum speed.')
-    .replace(/\{\{CANONICAL_URL\}\}/g, '/')
+    .replace(/\{\{CANONICAL_URL\}\}/g, `${BASE_URL}/`)
+    .replace(/\{\{SITE_ORIGIN\}\}/g, BASE_URL)
     .replace(/\{\{DEFAULT_OUTPUT\}\}/g, 'mp3')
     .replace(/\{\{UPLOAD_HEADLINE\}\}/g, 'Upload & Convert Your File')
     .replace(/\{\{DRAG_DROP_TEXT\}\}/g, 'Drag & Drop your audio or video file here')
@@ -165,7 +166,8 @@ converters.forEach(converter => {
         .replace(/\{\{TITLE\}\}/g, converter.title)
         .replace(/\{\{H1\}\}/g, converter.h1)
         .replace(/\{\{DESCRIPTION\}\}/g, converter.description)
-        .replace(/\{\{CANONICAL_URL\}\}/g, `/${converter.slug}/`)
+        .replace(/\{\{CANONICAL_URL\}\}/g, `${BASE_URL}/${converter.slug}/`)
+        .replace(/\{\{SITE_ORIGIN\}\}/g, BASE_URL)
         .replace(/\{\{DEFAULT_OUTPUT\}\}/g, converter.outputFormat)
         .replace(/\{\{UPLOAD_HEADLINE\}\}/g, uploadUI.headline)
         .replace(/\{\{DRAG_DROP_TEXT\}\}/g, uploadUI.dragDropText)
@@ -200,7 +202,7 @@ const staticPages = [
     '/privacy-policy.html',
     '/legal-disclaimer.html',
     '/formats-details.html',
-    '/audio-knowledge/'
+    '/audio-knowledge.html'
 ];
 
 let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -245,15 +247,22 @@ fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
 console.log('✓ Created: /robots.txt');
 
 // --- STATIC ASSET MIGRATION ---
-console.log('Migrating root static files to output directory...');
+console.log('Migrating root static files...');
 
-// 1. Copy loose HTML files (Privacy, Legal, Formats, File Handling)
+// Unified list of ALL files to copy (HTML + Favicons + Manifests)
 const rootStaticFiles = [
     'privacy-policy.html',
     'legal-disclaimer.html',
     'formats-details.html',
     'file-handling.html',
-    'audio-knowledge.html'
+    'audio-knowledge.html',
+    'favicon.ico',
+    'site.webmanifest',
+    'favicon-96x96.png',
+    'favicon.svg',
+    'apple-touch-icon.png',
+    'web-app-manifest-192x192.png',
+    'web-app-manifest-512x512.png'
 ];
 
 rootStaticFiles.forEach(fileName => {
@@ -262,9 +271,9 @@ rootStaticFiles.forEach(fileName => {
 
     if (fs.existsSync(source)) {
         fs.copyFileSync(source, destination);
-        console.log(`✓ Copied to public: ${fileName}`);
+        console.log(`✓ Copied: ${fileName}`);
     } else {
-        console.warn(`! Warning: Source file ${fileName} not found.`);
+        console.warn(`! Missing: ${fileName}`);
     }
 });
 
