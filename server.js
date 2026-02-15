@@ -16,7 +16,7 @@ app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-const MAX_UPLOAD_SIZE_MB = Number(process.env.MAX_UPLOAD_SIZE_MB || 500); // Set to 500MB
+const MAX_UPLOAD_SIZE_MB = Number(process.env.MAX_UPLOAD_SIZE_MB || 500); // 500MB
 const MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024;
 const CONVERSION_TIMEOUT_MS = Number(process.env.CONVERSION_TIMEOUT_MS || 5 * 60 * 1000); // 5 Minutes
 const MAX_CONCURRENT_CONVERSIONS = Number(process.env.MAX_CONCURRENT_CONVERSIONS || 5);
@@ -38,41 +38,17 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 // --- MIDDLEWARE ---
 app.use(compression());
 
-// SECURITY: Configured to allow Google Ads & Scripts while blocking attacks
+// SECURITY: DISABLE CSP (Fixes Ads and Download Buttons)
+// We turn this OFF so the browser accepts your inline scripts and third-party ads.
 app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                'https://www.highperformanceformat.com',
-                'https://pl28362942.effectivegatecpm.com',
-                'https://www.googletagmanager.com',
-                'https://pagead2.googlesyndication.com'
-            ],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", 'data:', 'https:'],
-            connectSrc: ["'self'", 'https:'],
-            frameSrc: [
-                "'self'",
-                'https://www.googletagmanager.com',
-                'https://www.highperformanceformat.com',
-                'https://pl28362942.effectivegatecpm.com',
-                'https://googleads.g.doubleclick.net'
-            ],
-            objectSrc: ["'none'"],
-            baseUri: ["'self'"],
-            formAction: ["'self'"]
-        }
-    },
-    crossOriginEmbedderPolicy: false // Disabled to allow cross-origin ads
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
 }));
 
 // --- RATE LIMITING ---
 const convertLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 50, // 50 requests per 15 min
+    max: 100, // Relaxed limit
     message: 'Too many conversions. Please try again later.'
 });
 
@@ -220,7 +196,7 @@ app.post('/convert', convertLimiter, upload.single('audioFile'), async (req, res
             return;
         }
 
-        // SUCCESS - This MUST be inside the close handler
+        // SUCCESS
         res.download(outputPath, outputFilename, async (err) => {
             // Cleanup BOTH files after download
             await cleanupFiles(inputPath, outputPath);
