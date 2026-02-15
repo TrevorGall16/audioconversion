@@ -202,7 +202,7 @@ const staticPages = [
     '/privacy-policy.html',
     '/legal-disclaimer.html',
     '/formats-details.html',
-    '/audio-knowledge/'
+    '/audio-knowledge.html'
 ];
 
 let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -271,6 +271,18 @@ rootStaticFiles.forEach(fileName => {
         console.log(`✓ Copied to public: ${fileName}`);
     } else {
         console.warn(`! Warning: Source file ${fileName} not found.`);
+    }
+});
+
+rootAssetFiles.forEach(fileName => {
+    const source = path.join(__dirname, fileName);
+    const destination = path.join(publicDir, fileName);
+
+    if (fs.existsSync(source)) {
+        fs.copyFileSync(source, destination);
+        console.log(`✓ Copied asset to public: ${fileName}`);
+    } else {
+        console.warn(`! Warning: Asset file ${fileName} not found.`);
     }
 });
 
